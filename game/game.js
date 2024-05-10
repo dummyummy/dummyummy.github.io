@@ -47,11 +47,9 @@ export default class Game {
     }
 
     /**
-     * @param {{a:number,s:number,d:number}} key_status
      * @param {number} elapsed
      */
-    async update(key_status, elapsed) {
-        await this.processInput(key_status);
+    async update(elapsed) {
         let collisions = testCollision();
         collisions.forEach((value) => {
             let gameObj1 = value.object1;
@@ -106,7 +104,6 @@ export default class Game {
     }
 
     /**
-     * @private
      * @param {{a:number,s:number,d:number}} key_status
      */
     async processInput(key_status) {
