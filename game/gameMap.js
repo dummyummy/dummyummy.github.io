@@ -33,7 +33,7 @@ class Level {
      * @private
      */
     addWalls() {
-        const wall_left_width = Math.floor(Math.random() * (this.w - this.breach_width));
+        const wall_left_width = Math.ceil(Math.random() * (this.w - this.breach_width));
         this.wall_left = new StaticWall(new Rectangle(0, this.height, wall_left_width, this.player_size * 1.2), true);
         this.wall_right = new StaticWall(new Rectangle(wall_left_width + this.breach_width, this.height, 
             this.w - wall_left_width - this.breach_width, this.player_size * 1.2), true);
