@@ -75,9 +75,9 @@ class Level {
                 this.blocks.push(block2);
                 break;
             case 3:
-                let big_block_x = wall_left_width - 3 * this.player_size + Math.random() * (3 * this.player_size + this.breach_width);
+                let big_block_x = wall_left_width - 1.5 * this.player_size + Math.random() * (this.breach_width);
                 while (big_block_x < 0 || big_block_x > this.w - 3 * this.player_size) {
-                    big_block_x = wall_left_width - 3 * this.player_size + Math.random() * (3 * this.player_size + this.breach_width);
+                    big_block_x = wall_left_width - 1.5 * this.player_size + Math.random() * (this.breach_width);
                 }
                 const big_block = new StaticWall(new Rectangle(
                     big_block_x, 
