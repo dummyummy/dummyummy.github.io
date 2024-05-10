@@ -25,14 +25,23 @@ export function setupInput() {
     });
     listener.listen();
     // click events
-    window.addEventListener("click", (ev) => {
+    // window.addEventListener("click", (ev) => {
+    //     key_status.s++;
+    //     if (ev.clientX < window.innerWidth / 2) {
+    //         key_status.a++;
+    //     } else {
+    //         key_status.d++;
+    //     }
+    // })
+    // touch events
+    window.addEventListener("touchstart", (ev) => {
         key_status.s++;
-        if (ev.clientX < window.innerWidth / 2) {
+        if (ev.targetTouches[0].clientX < window.innerWidth / 2) {
             key_status.a++;
         } else {
             key_status.d++;
         }
-    })
+    }, false);
 }
 
 /**
