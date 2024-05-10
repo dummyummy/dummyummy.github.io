@@ -113,7 +113,7 @@ export default class Game {
         if (key_status.a + key_status.d > 0 && (this.state === GameState.MENU || this.state === GameState.PLAYING)) {
             this.state = GameState.PLAYING;
             const dir = key_status.a > 0 ? -1 : 1;
-            this.player.vel = new Victor(dir * this.w * 0.5, -this.player_size * 25);
+            this.player.vel = new Victor(dir * this.w * 0.33, -this.player_size * 25);
             this.player.acc = new Victor(0, this.player_size * 55);
         } else if (key_status.s > 0 && this.state === GameState.RESTART) {
             await this.reset();
