@@ -1,3 +1,4 @@
+import { getRandomInt, random } from "../utils/randomUtils.js";
 import { removeCollideable } from "./collision.js";
 import { GameObject, StaticWall } from "./gameObject.js";
 import { Rectangle } from "./shape.js";
@@ -33,17 +34,18 @@ class Level {
      * @private
      */
     addWalls() {
-        const wall_left_width = Math.ceil(Math.random() * (this.w - this.breach_width));
-        this.wall_left = new StaticWall(new Rectangle(0, this.height, wall_left_width, this.player_size * 1.2), true);
-        this.wall_right = new StaticWall(new Rectangle(wall_left_width + this.breach_width, this.height, 
-            this.w - wall_left_width - this.breach_width, this.player_size * 1.2), true);
+        const wall_left_end = getRandomInt(Math.floor(0.05 * this.w), 
+                                           Math.ceil(0.95 * this.w - this.breach_width));
+        this.wall_left = new StaticWall(new Rectangle(0, this.height, wall_left_end, this.player_size * 1.2), true);
+        this.wall_right = new StaticWall(new Rectangle(wall_left_end + this.breach_width, this.height, 
+            this.w - wall_left_end - this.breach_width, this.player_size * 1.2), true);
         switch (this.rule) {
             case 0:
                 break;
             case 1: // 1 small block
-                let single_block_x = wall_left_width - this.player_size + Math.random() * (this.player_size + this.breach_width);
+                let single_block_x = wall_left_end - this.player_size + Math.random() * (this.player_size + this.breach_width);
                 while (single_block_x < 0 || single_block_x > this.w - this.player_size) {
-                    single_block_x = wall_left_width - this.player_size + Math.random() * (this.player_size + this.breach_width);
+                    single_block_x = wall_left_end - this.player_size + Math.random() * (this.player_size + this.breach_width);
                 }
                 const single_block = new StaticWall(new Rectangle(
                     single_block_x, 
@@ -53,18 +55,18 @@ class Level {
                 this.blocks.push(single_block);
                 break;
             case 2:
-                let block1_x = wall_left_width - this.player_size + Math.random() * (this.player_size + this.breach_width);
+                let block1_x = wall_left_end - this.player_size + Math.random() * (this.player_size + this.breach_width);
                 while (block1_x < 0 || block1_x > this.w - this.player_size) {
-                    block1_x = wall_left_width - this.player_size + Math.random() * (this.player_size + this.breach_width);
+                    block1_x = wall_left_end - this.player_size + Math.random() * (this.player_size + this.breach_width);
                 }
                 const block1 = new StaticWall(new Rectangle(
                     block1_x, 
                     this.height - 3.625 * this.player_size, 
                     this.player_size, 
                     this.player_size), true);
-                let block2_x = wall_left_width - this.player_size + Math.random() * (this.player_size + this.breach_width);
+                let block2_x = wall_left_end - this.player_size + Math.random() * (this.player_size + this.breach_width);
                 while (block2_x < 0 || block2_x > this.w - this.player_size) {
-                    block2_x = wall_left_width - this.player_size + Math.random() * (this.player_size + this.breach_width);
+                    block2_x = wall_left_end - this.player_size + Math.random() * (this.player_size + this.breach_width);
                 }
                 const block2 = new StaticWall(new Rectangle(
                     block2_x, 
@@ -75,9 +77,9 @@ class Level {
                 this.blocks.push(block2);
                 break;
             case 3:
-                let big_block_x = wall_left_width - 1.5 * this.player_size + Math.random() * (this.breach_width);
+                let big_block_x = wall_left_end - 1.5 * this.player_size + Math.random() * (this.breach_width);
                 while (big_block_x < 0 || big_block_x > this.w - 3 * this.player_size) {
-                    big_block_x = wall_left_width - 1.5 * this.player_size + Math.random() * (this.breach_width);
+                    big_block_x = wall_left_end - 1.5 * this.player_size + Math.random() * (this.breach_width);
                 }
                 const big_block = new StaticWall(new Rectangle(
                     big_block_x, 
@@ -229,7 +231,6 @@ export default class GameMap {
     sampleRule() {
         let sum = this.index_count.reduce((acc, cur) => acc + cur);
         let acc = sum * Math.random();
-        console.log(sum, this.index_count);
         let ind = 0, sum1 = 0, sum2 = this.index_count[0];
         for (let i = 0; i <= this.max_rule_index; i++) {
             if (acc >= sum1 && acc < sum2) {
