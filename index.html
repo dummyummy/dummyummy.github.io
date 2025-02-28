@@ -71,6 +71,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-PreZ技术" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/02/28/PreZ%E6%8A%80%E6%9C%AF/" class="article-date">
+  <time class="dt-published" datetime="2025-02-28T05:59:01.000Z" itemprop="datePublished">2025-02-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/">计算机图形学</a>►<a class="article-category-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/">CG</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/02/28/PreZ%E6%8A%80%E6%9C%AF/">PreZ技术</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>PreZ技术的全称是Pre-depth Pass，从这个名字中大概就能得知该技术的一些要点如2-pass和depth pass。PreZ是为了防止开启Alpha Test时可能出现的渲染顺序错误。假如现在我们开启了Alpha Test并且启用了Early-Z来提高渲染效率，由于在片元着色器运行之前我们并不知道哪些片元会被Alpha Test所剔除，提前进行深度测试很可能会导致错误。</p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p>PreZ的思路也很简单，既然将深度测试提前的终极目标就是尽可能地减少渲染的开销，那能不能在保持Alpha Test开启的情况下只渲染最低限度的信息？既然Alpha Test会导致深度信息错误，那不如直接把depth buffer取出来单独渲染，得到正确的深度信息后再进行更复杂的光照计算。这样我们就构想出了一个两趟的算法：</p>
+<ol>
+<li><p>Pass 1：保持Alpha Test开启渲染深度图</p>
+</li>
+<li><p>Pass 2：关闭Alpha Test，开启Early-Z并将深度测试的条件设置为EQUAL，运行片元着色</p>
+</li>
+</ol>
+<h1 id="总结与思考"><a href="#总结与思考" class="headerlink" title="总结与思考"></a>总结与思考</h1><p>整体算法的思路清晰简单，单独渲染深度图的开销一般也很小。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dummyummy.github.io/2025/02/28/PreZ%E6%8A%80%E6%9C%AF/" data-id="cm7oe2h0z0000j0v44ipfdd2z" data-title="PreZ技术" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/" rel="tag">渲染管线</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2025/02/23/hello-world/" class="article-date">
@@ -110,7 +163,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dummyummy.github.io/2025/02/23/hello-world/" data-id="cm7h94vw600001gv4aukl086l" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
+      <a data-url="https://dummyummy.github.io/2025/02/23/hello-world/" data-id="cm7oe2h130001j0v4g3g4439c" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
       
       
       
@@ -129,12 +182,33 @@
           <aside id="sidebar">
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/">计算机图形学</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/">CG</a></li></ul></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/" rel="tag">渲染管线</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/" style="font-size: 10px;">渲染管线</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
@@ -151,6 +225,10 @@
     <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2025/02/28/PreZ%E6%8A%80%E6%9C%AF/">PreZ技术</a>
+          </li>
         
           <li>
             <a href="/2025/02/23/hello-world/">Hello World</a>
