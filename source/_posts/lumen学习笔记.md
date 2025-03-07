@@ -29,7 +29,7 @@ Lumen支持各种粗糙度材质反射，包括清漆（clear coat）和不透�
 即基础层上覆盖了薄薄的一层透明涂料，比如车漆[2]。Clear coat材质也可以使用Cook-Torrance microfacet BRDF来表示[3]。
 ## 双面树叶
 允许光线在树叶中的次表面散射，效果出奇的好。下图右边是开启Two-Sided Foliage之后的效果
-![](/external/lumen-foliage-1.png)
+![](https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/lumen-foliage-1.png)
 
 # 设置（略）
 
