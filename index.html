@@ -98,7 +98,7 @@
     <div class="e-content article-entry" itemprop="articleBody">
       
         <p>该文章内容主要来自于虚幻5的官方文档[4]。</p>
-<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>一开始只觉得Lumen听起来很高大上，以为它除了渲染之外还有一些内容，最后发现是和Nanite搞混了（难绷）。按照文档的介绍，Lumen其实就是UE5新推出的全局光照(GI)和反射系统。最离谱的是，Lumen可以近似反射了无限次的漫反射光照和高光光照，甚至能在复杂环境中达成实时渲染。Lumen是此前各种屏幕空间技术(SSGI)和距离场环境光遮蔽(DFAO)的替代品。P.S. DFAO是虚幻4中所用的环境光遮蔽方法，文档里描述其与SSAO最大的区别是<code>遮蔽在场景空间遮挡物中进行计算，因此出屏丢失数据不会导致瑕疵</code>，至于原理吗，我猜与GAMES202中所讲的距离场类似。</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>一开始只觉得Lumen听起来很高大上，以为它除了渲染之外还有一些内容，最后发现是和Nanite搞混了（难绷）。按照文档的介绍，Lumen其实就是UE5新推出的全局光照(GI)和反射系统。最离谱的是，Lumen可以近似反射了无限次的漫反射光照和高光光照，甚至能在复杂环境中达成实时渲染。Lumen是此前各种屏幕空间技术(SSGI)和距离场环境光遮蔽(DFAO)的替代品。P.S. DFAO是虚幻4中所用的环境光遮蔽方法，文档里描述其与SSAO最大的区别是<code>遮蔽在场景空间遮挡物中进行计算，因此出屏丢失数据不会导致瑕疵</code>，至于原理吗，我猜与GAMES202中所讲的距离场阴影类似。</p>
 <p>要启用Lumen，需要在Project Settings-&gt;Rnedering中启用Dynamic Global Illumination和Reflections这两项（新项目应该是默认启用的）。</p>
 <h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><h2 id="全局光照"><a href="#全局光照" class="headerlink" title="全局光照"></a>全局光照</h2><ul>
 <li>不限制弹射次数的间接漫反射光照</li>
