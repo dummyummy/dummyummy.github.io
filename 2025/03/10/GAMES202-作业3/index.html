@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"بحث...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="GAMES202 HW3的完成记录~ 总览在延迟渲染管线下，为一个光源为方向光，材质为漫反射 (Diffuse) 的场景实现屏幕空间下的全局光照效果（两次反射）。 作业3共分为三个部分：  实现对场景直接光照的着色 (考虑阴影)。 实现屏幕空间下光线的求交 (SSR)。 实现对场景间接光照的着色。  作业文档里使用的术语是BSDF，不过既然本次作业只会涉及到漫反射材质，下文可能会出现BSDF和BR">
 <meta property="og:type" content="article">
@@ -25,7 +25,7 @@
 <meta property="og:url" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/index.html">
 <meta property="og:site_name" content="dummyummy的博客">
 <meta property="og:description" content="GAMES202 HW3的完成记录~ 总览在延迟渲染管线下，为一个光源为方向光，材质为漫反射 (Diffuse) 的场景实现屏幕空间下的全局光照效果（两次反射）。 作业3共分为三个部分：  实现对场景直接光照的着色 (考虑阴影)。 实现屏幕空间下光线的求交 (SSR)。 实现对场景间接光照的着色。  作业文档里使用的术语是BSDF，不过既然本次作业只会涉及到漫反射材质，下文可能会出现BSDF和BR">
-<meta property="og:locale">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/games202-hw3-ssr.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/games202-hw3-leak-1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/games202-hw3-leak-2.png">
@@ -43,7 +43,7 @@
 <link rel="canonical" href="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh","comments":true,"permalink":"https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/","path":"2025/03/10/GAMES202-作业3/","title":"GAMES202-作业3"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/","path":"2025/03/10/GAMES202-作业3/","title":"GAMES202-作业3"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>GAMES202-作业3 | dummyummy的博客</title>
@@ -68,7 +68,7 @@
     <div class="column">
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="تشغيل شريط التصفح" role="button">
+    <div class="toggle" aria-label="切换导航栏" role="button">
     </div>
   </div>
 
@@ -82,7 +82,7 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="بحث" role="button">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
     </div>
   </div>
 </div>
@@ -101,10 +101,10 @@
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
-          المحتويات
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          عام
+          站点概览
         </li>
       </ul>
 
@@ -125,16 +125,16 @@
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
           <span class="site-state-item-count">4</span>
-          <span class="site-state-item-name">المقالات</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
         <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">التصنيفات</span>
+        <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
         <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">الوسوم</span>
+        <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
@@ -159,7 +159,7 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -187,26 +187,26 @@
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">نُشر في</span>
+      <span class="post-meta-item-text">发表于</span>
 
-      <time title="أُنشأ: 2025-03-10 22:14:51" itemprop="dateCreated datePublished" datetime="2025-03-10T22:14:51+08:00">2025-03-10</time>
+      <time title="创建时间：2025-03-10 22:14:51" itemprop="dateCreated datePublished" datetime="2025-03-10T22:14:51+08:00">2025-03-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
-      <span class="post-meta-item-text">عُدل في</span>
-      <time title="عُدل: 2025-03-11 00:52:27" itemprop="dateModified" datetime="2025-03-11T00:52:27+08:00">2025-03-11</time>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-11 00:52:27" itemprop="dateModified" datetime="2025-03-11T00:52:27+08:00">2025-03-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">في</span>
+      <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
         </span>
-          ، 
+          ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/" itemprop="url" rel="index"><span itemprop="name">CG</span></a>
         </span>
@@ -322,7 +322,7 @@
     </span>
     <span class="author" itemprop="copyrightHolder">dummyummy</span>
   </div>
-  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
     </div>
@@ -335,7 +335,7 @@
     <span class="toggle-line"></span>
   </div>
   <div class="sidebar-dimmer"></div>
-  <div class="back-to-top" role="button" aria-label="Back to top">
+  <div class="back-to-top" role="button" aria-label="返回顶部">
     <i class="fa fa-arrow-up fa-lg"></i>
     <span>0%</span>
   </div>
