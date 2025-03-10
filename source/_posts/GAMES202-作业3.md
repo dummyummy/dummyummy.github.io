@@ -102,7 +102,7 @@ bool RayMarch(vec3 ori, vec3 dir, out vec3 hitPos) {
 
 其中关于threshold会放在第三部分之后解释。其实在其他同学的实现中，只需要判断`ray_depth > geo_depth`就足够了，不过我这边如果这么写的话阴影部分会出现严重的噪点。分析了一下发现遮挡物如果是背朝光线的话一定不会对最终的结果有贡献，就额外增加了一个判断光线与法线夹角的判断。按照文档的提示验证镜面反射效果：
 
-![](/external/games202-hw3-ssr.png)
+![](https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/games202-hw3-ssr.png)
 
 由于步长并不是非常小，所以在图像中间会有明显的瑕疵（跳变），不过整体效果是对的，说明实现基本正确。
 
@@ -140,11 +140,11 @@ vec3 EvalIndirectLight(vec3 wo, vec2 uv, vec3 worldPos, vec3 lightDir, inout flo
 
 终于可以看到结果了，却大失所望，画面中有很多的噪点，而且不同角度下的渲染结果非常不一致，尤其是在圈出的部分有漏光现象：
 
-![](/external/games202-hw3-leak-1.png)
+![](https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/games202-hw3-leak-1.png)
 
 转动视角后更加明显：
 
-![](/external/games202-hw3-leak-2.png)
+![](https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/games202-hw3-leak-2.png)
 
 来探究一下原因，其实与老师上课讲的是一样的：屏幕空间会丢失信息。具体来讲，由于GBuffer只会记录位于最前面的表面的信息，当前视角中被遮挡的表面的任何信息都是未知的。在RayMarching的过程中，由于判断交点存在的条件只是深度更大，所以会出现对于遮挡关系的误判。算法错误地认为某个可见的表面会对结果产生贡献，其实真正的交点在更远处的表面上或根本不存在。为了减少误判，[1]中使用了加threshold并动态调整步长的方式在优化。在试验中发现只需要threshold就能达到较好的效果，所需的改动就是如果某一次判断时光线的深度与GBuffer中的深度相差较大就认为交点不可见并返回false，改进后的算法如下：
 
@@ -175,13 +175,13 @@ bool RayMarch(vec3 ori, vec3 dir, out vec3 hitPos) {
 # 最终的结果如下
 
 场景1，采样数=8, stride=0.1, max_steps=50：
-![](/external/games202-hw3-scene-1.png)
+![](https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/games202-hw3-scene-1.png)
 
 场景1，采样数=8, stride=0.1, max_steps=50：
-![](/external/games202-hw3-scene-2.png)
+![](https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/games202-hw3-scene-2.png)
 
 场景3，采样数=8, stride=0.6, max_steps=30（记得在engine.js中切换灯光，要么场景会很暗）：
-![](/external/games202-hw3-scene-3.png)
+![](https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/games202-hw3-scene-3.png)
 
 暗处的噪点说实话并不明显，场景三还是很震撼的，除了硬阴影的锯齿有点扎眼外。
 
