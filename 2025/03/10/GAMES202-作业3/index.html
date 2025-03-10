@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"সার্চ করা হচ্ছে...","empty":"আমরা উক্ত অনুসন্ধানের জন্য কোন ফলাফল খুঁজে পাইনি: ${query}","hits_time":"${hits} টি ফলাফল ${time} মিলিসেকেন্ড এ পাওয়া গেছে","hits":"${hits} টি ফলাফল পাওয়া গেছে"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="GAMES202 HW3的完成记录~ 总览在延迟渲染管线下，为一个光源为方向光，材质为漫反射 (Diffuse) 的场景实现屏幕空间下的全局光照效果（两次反射）。 作业3共分为三个部分：  实现对场景直接光照的着色 (考虑阴影)。 实现屏幕空间下光线的求交 (SSR)。 实现对场景间接光照的着色。  作业文档里使用的术语是BSDF，不过既然本次作业只会涉及到漫反射材质，下文可能会出现BSDF和BR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GAMES202-作业3">
+<meta property="og:url" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/index.html">
+<meta property="og:site_name" content="dummyummy的博客">
+<meta property="og:description" content="GAMES202 HW3的完成记录~ 总览在延迟渲染管线下，为一个光源为方向光，材质为漫反射 (Diffuse) 的场景实现屏幕空间下的全局光照效果（两次反射）。 作业3共分为三个部分：  实现对场景直接光照的着色 (考虑阴影)。 实现屏幕空间下光线的求交 (SSR)。 实现对场景间接光照的着色。  作业文档里使用的术语是BSDF，不过既然本次作业只会涉及到漫反射材质，下文可能会出现BSDF和BR">
+<meta property="og:locale">
+<meta property="og:image" content="https://dummyummy.github.io/games202-hw3-ssr.png">
+<meta property="og:image" content="https://dummyummy.github.io/games202-hw3-leak-1.png">
+<meta property="og:image" content="https://dummyummy.github.io/games202-hw3-leak-2.png">
+<meta property="og:image" content="https://dummyummy.github.io/games202-hw3-scene-1.png">
+<meta property="og:image" content="https://dummyummy.github.io/games202-hw3-scene-2.png">
+<meta property="og:image" content="https://dummyummy.github.io/games202-hw3-scene-3.png">
+<meta property="article:published_time" content="2025-03-10T14:14:51.000Z">
+<meta property="article:modified_time" content="2025-03-10T16:44:53.568Z">
+<meta property="article:author" content="dummyummy">
+<meta property="article:tag" content="GAMES202">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dummyummy.github.io/games202-hw3-ssr.png">
+
+
+<link rel="canonical" href="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh","comments":true,"permalink":"https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/","path":"2025/03/10/GAMES202-作业3/","title":"GAMES202-作业3"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>GAMES202-作业3 | dummyummy的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="নেভিগেশন বারের দৃশ্যমানতা টগল করুন" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">dummyummy的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="সার্চ" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          সূচীপত্র
+        </li>
+        <li class="sidebar-nav-overview">
+          সারাংশ
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E8%A7%88"><span class="nav-number">1.</span> <span class="nav-text">总览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-1%EF%BC%9A%E7%9B%B4%E6%8E%A5%E5%85%89%E7%85%A7"><span class="nav-number">2.</span> <span class="nav-text">Part 1：直接光照</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%AB%E5%8F%8D%E5%B0%84BSDF"><span class="nav-number">2.1.</span> <span class="nav-text">漫反射BSDF</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-2%EF%BC%9ARay-Marching"><span class="nav-number">3.</span> <span class="nav-text">Part 2：Ray Marching</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-3%EF%BC%9A%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7"><span class="nav-number">4.</span> <span class="nav-text">Part 3：间接光照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B"><span class="nav-number">5.</span> <span class="nav-text">改进</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E7%9A%84%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B"><span class="nav-number">6.</span> <span class="nav-text">最终的结果如下</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dummyummy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">পোস্ট এর তালিকা</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">ক্যাটাগরি এর তালিকা</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">ট্যাগ এর তালিকা</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="GAMES202-作业3 | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GAMES202-作业3
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2025-03-10 22:14:51" itemprop="dateCreated datePublished" datetime="2025-03-10T22:14:51+08:00">2025-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2025-03-11 00:44:53" itemprop="dateModified" datetime="2025-03-11T00:44:53+08:00">2025-03-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/" itemprop="url" rel="index"><span itemprop="name">CG</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>GAMES202 HW3的完成记录~</p>
+<h1 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h1><p>在延迟渲染管线下，为一个光源为方向光，材质为漫反射 (Diffuse) 的场景实现屏幕空间下的全局光照效果（两次反射）。</p>
+<p>作业3共分为三个部分：</p>
+<ol>
+<li>实现对场景直接光照的着色 (考虑阴影)。</li>
+<li>实现屏幕空间下光线的求交 (SSR)。</li>
+<li>实现对场景间接光照的着色。</li>
+</ol>
+<p>作业文档里使用的术语是BSDF，不过既然本次作业只会涉及到漫反射材质，下文可能会出现BSDF和BRDF的互换。</p>
+<h1 id="Part-1：直接光照"><a href="#Part-1：直接光照" class="headerlink" title="Part 1：直接光照"></a>Part 1：直接光照</h1><p>这部分的两个子任务是计算漫反射材质BSDF的值以及光照的强度（包含可见性），非常简单。</p>
+<p>首先是EvalDiffuse函数的实现。虽然EvalDiffuse接收了三个参数$w_i, w_o$和$uv$，但是对于漫反射材质来说，前两个代表方向的参数都是不需要的。作业说明中提示要用到保存在G-Buffer中的法线信息，意味着计算出来的BSDF是cosine weighted的。知道了这些之后，实现EvalDiffuse就是随手的事啦：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">vec3</span> EvalDiffuse(<span class="type">vec3</span> wi, <span class="type">vec3</span> wo, <span class="type">vec2</span> uv) &#123;</span><br><span class="line">  <span class="type">vec3</span> albedo = GetGBufferDiffuse(uv);</span><br><span class="line">  <span class="type">vec3</span> n = GetGBufferNormalWorld(uv);</span><br><span class="line">  <span class="type">float</span> cos_theta = <span class="built_in">dot</span>(n, wi);</span><br><span class="line">  <span class="type">vec3</span> bsdf = albedo * <span class="built_in">max</span>(<span class="number">0.0</span>, cos_theta) * INV_PI;</span><br><span class="line">  <span class="keyword">return</span> bsdf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="漫反射BSDF"><a href="#漫反射BSDF" class="headerlink" title="漫反射BSDF"></a>漫反射BSDF</h2><p>要注意的一点是，对于最终的漫反射值我们要乘上$\pi$才能保证BSDF的能量守恒。这个结论之前是知道的，下面给出一个简单的推导。首先根据反射率$\rho$的定义有（$E_i$和$E_o$分别代表irradiance和radiant exitance）：</p>
+<p>$$E_o&#x3D;\int_\Omega L(\omega_o)\cos \theta_o \mathrm{d}\omega&#x3D;\rho E_i$$</p>
+<p>由BRDF的定义可得：</p>
+<p>$$\mathrm{d}L(\omega_o) &#x3D; f_r \mathrm{d}E(\omega_i)$$</p>
+<p>我们知道漫反射材质的$f_r$是常数，两边同时积分可得（注意$E(\omega_i)$和$E_i$不是一个东西）：</p>
+<p>$$L(\omega_o) &#x3D; f_r E_i$$</p>
+<p>带入到反射率的定义后：</p>
+<p>$$\rho E_i &#x3D; \int_\Omega f_r E_i \cos\theta_o \mathrm{d}\omega &#x3D; f_r E_i \int_\Omega \cos\theta_o \mathrm{d}\omega &#x3D; \pi f_r E_i$$</p>
+<p>从上式可知：</p>
+<p>$$f_r &#x3D; \frac{\rho}{\pi}$$</p>
+<p>然后是EvalDirectionalLight的实现，需要考虑可见性项，也就是要从GBuffer中提取阴影信息：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">vec3</span> EvalDirectionalLight(<span class="type">vec2</span> uv) &#123;</span><br><span class="line">  <span class="type">vec3</span> Le = <span class="type">vec3</span>(<span class="number">0.0</span>); <span class="comment">// 自发光项</span></span><br><span class="line">  <span class="type">vec3</span> Ld = uLightRadiance * GetGBufferuShadow(uv);</span><br><span class="line">  <span class="keyword">return</span> Le + Ld;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此第一部分就结束了。</p>
+<h1 id="Part-2：Ray-Marching"><a href="#Part-2：Ray-Marching" class="headerlink" title="Part 2：Ray Marching"></a>Part 2：Ray Marching</h1><p>第二部分需要实现一个RayMarching算法来完成屏幕空间的求交，基本思路就是从某个像素对应的世界坐标出发，沿着给定的方向按照一定的步长行进若干步，直到当前坐标在屏幕空间中被遮挡，说明找到了交点。</p>
+<p>由于我们不知道光线会行进多远，所以必须设置一个最大的行进步数。同时我们也不知道光线每步要走多远，所以这个值也是个超参数。当然，这种所谓线性搜索地方法是很慢的，老师在课上提到了使用HiZ方法来自适应地调整步长进而提高求交效率，不过在作业框架中实现HiZ是很困难的，这里就先留个坑，有意实现可以参考[2]。</p>
+<p>回到算法的实现上来，其实就是一个步进光线然后与深度图比较的过程：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> RayMarch(<span class="type">vec3</span> ori, <span class="type">vec3</span> dir, <span class="keyword">out</span> <span class="type">vec3</span> hitPos) &#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="type">float</span> threshold = MARCH_STRIDE * <span class="number">2.0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; MARCH_MAX_STEPS; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    ori += dir * MARCH_STRIDE;</span><br><span class="line">    <span class="type">float</span> ray_depth = GetDepth(ori);</span><br><span class="line">    <span class="type">vec2</span> uv = GetScreenCoordinate(ori);</span><br><span class="line">    <span class="type">float</span> geo_depth = GetGBufferDepth(uv);</span><br><span class="line">    <span class="keyword">if</span> (ray_depth &gt; geo_depth) &#123; <span class="comment">// intersection found</span></span><br><span class="line">      <span class="keyword">if</span> (ray_depth - geo_depth &gt; threshold)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">dot</span>(dir, GetGBufferNormalWorld(uv)) &gt;= <span class="number">0.0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">      hitPos = ori;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中关于threshold会放在第三部分之后解释。其实在其他同学的实现中，只需要判断<code>ray_depth &gt; geo_depth</code>就足够了，不过我这边如果这么写的话阴影部分会出现严重的噪点。分析了一下发现遮挡物如果是背朝光线的话一定不会对最终的结果有贡献，就额外增加了一个判断光线与法线夹角的判断。按照文档的提示验证镜面反射效果：</p>
+<p><img src="/games202-hw3-ssr.png"></p>
+<p>由于步长并不是非常小，所以在图像中间会有明显的瑕疵（跳变），不过整体效果是对的，说明实现基本正确。</p>
+<h1 id="Part-3：间接光照"><a href="#Part-3：间接光照" class="headerlink" title="Part 3：间接光照"></a>Part 3：间接光照</h1><p>Part 3是最有意思的一部分，需要实现支持one-bounce的间接光照。当然，如SSRT的名字所暗示的，采样是不可避免的。对于每个像素点，我们采样一条光线，然后使用Part 2实现的方法来完成屏幕空间内的求交，计算该交点的直接光照后加权并累加到最终的间接光照中去，按照给出的伪代码实现即可。框架提供了均匀采样和按照余弦分布采样两种半球采样方式，后者算是一种重要性采样了，直接无脑选择。代码如下：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">vec3</span> EvalIndirectLight(<span class="type">vec3</span> wo, <span class="type">vec2</span> uv, <span class="type">vec3</span> worldPos, <span class="type">vec3</span> lightDir, <span class="keyword">inout</span> <span class="type">float</span> s) &#123;</span><br><span class="line">  <span class="type">vec3</span> n = GetGBufferNormalWorld(uv);</span><br><span class="line">  <span class="type">vec3</span> t, b;</span><br><span class="line">  LocalBasis(n, t, b);</span><br><span class="line">  <span class="type">float</span> pdf;</span><br><span class="line">  <span class="type">vec3</span> hitPos;</span><br><span class="line">  <span class="type">vec2</span> uv1;</span><br><span class="line">  <span class="type">vec3</span> L = <span class="type">vec3</span>(<span class="number">0.0</span>); <span class="comment">// one bounce</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; SAMPLE_NUM; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="type">vec3</span> dir = <span class="built_in">normalize</span>(<span class="type">mat3</span>(t, b, n) * SampleHemisphereCos(s, pdf));</span><br><span class="line">    <span class="keyword">if</span> (RayMarch(worldPos, dir, hitPos))</span><br><span class="line">    &#123;</span><br><span class="line">      uv1 = GetScreenCoordinate(hitPos);</span><br><span class="line">      L += EvalDiffuse(dir, wo, uv) * EvalDiffuse(lightDir, -dir, uv1) * </span><br><span class="line">           EvalDirectionalLight(uv1) / pdf;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  L /= <span class="type">float</span>(SAMPLE_NUM);</span><br><span class="line">  <span class="keyword">return</span> L;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于采样出来的方向向量是在局部空间的，所以需要构造局部坐标系的基向量并将方向向量转换到世界坐标系中。<code>LocalBasis</code>所用的方法似乎是叫Frisvad方法（GPT说的），很容易验证它是对的，但是不知道原理是什么。</p>
+<h1 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h1><p>终于可以看到结果了，却大失所望，画面中有很多的噪点，而且不同角度下的渲染结果非常不一致，尤其是在圈出的部分有漏光现象：</p>
+<p><img src="/games202-hw3-leak-1.png"></p>
+<p>转动视角后更加明显：</p>
+<p><img src="/games202-hw3-leak-2.png"></p>
+<p>来探究一下原因，其实与老师上课讲的是一样的：屏幕空间会丢失信息。具体来讲，由于GBuffer只会记录位于最前面的表面的信息，当前视角中被遮挡的表面的任何信息都是未知的。在RayMarching的过程中，由于判断交点存在的条件只是深度更大，所以会出现对于遮挡关系的误判。算法错误地认为某个可见的表面会对结果产生贡献，其实真正的交点在更远处的表面上或根本不存在。为了减少误判，[1]中使用了加threshold并动态调整步长的方式在优化。在试验中发现只需要threshold就能达到较好的效果，所需的改动就是如果某一次判断时光线的深度与GBuffer中的深度相差较大就认为交点不可见并返回false，改进后的算法如下：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> RayMarch(<span class="type">vec3</span> ori, <span class="type">vec3</span> dir, <span class="keyword">out</span> <span class="type">vec3</span> hitPos) &#123;</span><br><span class="line">  <span class="type">vec3</span> last_ori;</span><br><span class="line">  <span class="keyword">const</span> <span class="type">float</span> threshold = MARCH_STRIDE * <span class="number">2.0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; MARCH_MAX_STEPS; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    last_ori = ori;</span><br><span class="line">    ori += dir * MARCH_STRIDE;</span><br><span class="line">    <span class="type">float</span> ray_depth = GetDepth(ori);</span><br><span class="line">    <span class="type">vec2</span> uv = GetScreenCoordinate(ori);</span><br><span class="line">    <span class="type">float</span> geo_depth = GetGBufferDepth(uv);</span><br><span class="line">    <span class="keyword">if</span> (ray_depth &gt; geo_depth) &#123; <span class="comment">// intersection found</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">dot</span>(dir, GetGBufferNormalWorld(uv)) &gt;= <span class="number">0.0</span> || ray_depth - geo_depth &gt; threshold)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">      hitPos = ori;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中threshold的大小与STRIDE呈正相关，降低在某些STRIDE较大的场景中错误地舍弃交点的几率。</p>
+<h1 id="最终的结果如下"><a href="#最终的结果如下" class="headerlink" title="最终的结果如下"></a>最终的结果如下</h1><p>场景1，采样数&#x3D;8, stride&#x3D;0.1, max_steps&#x3D;50：<br><img src="/games202-hw3-scene-1.png"></p>
+<p>场景1，采样数&#x3D;8, stride&#x3D;0.1, max_steps&#x3D;50：<br><img src="/games202-hw3-scene-2.png"></p>
+<p>场景3，采样数&#x3D;8, stride&#x3D;0.6, max_steps&#x3D;30（记得在engine.js中切换灯光，要么场景会很暗）：<br><img src="/games202-hw3-scene-3.png"></p>
+<p>暗处的噪点说实话并不明显，场景三还是很震撼的，除了硬阴影的锯齿有点扎眼外。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://remoooo.com/202hw3/">Games202 作业三 SSR实现</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/599842851">GAMES202-作业3</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GAMES202/" rel="tag"># GAMES202</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="UE5 Lumen 学习笔记">
+                  <i class="fa fa-angle-left"></i> UE5 Lumen 学习笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">dummyummy</span>
+  </div>
+  <div class="powered-by"><a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> এর সাহায্যে চলছে
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="উপরে ফিরে যান">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

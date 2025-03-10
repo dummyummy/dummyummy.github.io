@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"সার্চ করা হচ্ছে...","empty":"আমরা উক্ত অনুসন্ধানের জন্য কোন ফলাফল খুঁজে পাইনি: ${query}","hits_time":"${hits} টি ফলাফল ${time} মিলিসেকেন্ড এ পাওয়া গেছে","hits":"${hits} টি ফলাফল পাওয়া গেছে"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="该文章内容主要来自于虚幻5的官方文档[4]。 介绍一开始只觉得Lumen听起来很高大上，以为它除了渲染之外还有一些内容，最后发现是和Nanite搞混了（难绷）。按照文档的介绍，Lumen其实就是UE5新推出的全局光照(GI)和反射系统。最离谱的是，Lumen可以近似反射了无限次的漫反射光照和高光光照，甚至能在复杂环境中达成实时渲染。Lumen是此前各种屏幕空间技术(SSGI)和距离场环境光遮蔽(D">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE5 Lumen 学习笔记">
+<meta property="og:url" content="https://dummyummy.github.io/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="dummyummy的博客">
+<meta property="og:description" content="该文章内容主要来自于虚幻5的官方文档[4]。 介绍一开始只觉得Lumen听起来很高大上，以为它除了渲染之外还有一些内容，最后发现是和Nanite搞混了（难绷）。按照文档的介绍，Lumen其实就是UE5新推出的全局光照(GI)和反射系统。最离谱的是，Lumen可以近似反射了无限次的漫反射光照和高光光照，甚至能在复杂环境中达成实时渲染。Lumen是此前各种屏幕空间技术(SSGI)和距离场环境光遮蔽(D">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/lumen-foliage-1.png">
+<meta property="article:published_time" content="2025-03-06T15:10:03.000Z">
+<meta property="article:modified_time" content="2025-03-09T09:04:17.587Z">
+<meta property="article:author" content="dummyummy">
+<meta property="article:tag" content="UE5">
+<meta property="article:tag" content="Lumen">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/lumen-foliage-1.png">
+
+
+<link rel="canonical" href="https://dummyummy.github.io/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh","comments":true,"permalink":"https://dummyummy.github.io/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/","path":"2025/03/06/lumen学习笔记/","title":"UE5 Lumen 学习笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>UE5 Lumen 学习笔记 | dummyummy的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="নেভিগেশন বারের দৃশ্যমানতা টগল করুন" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">dummyummy的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="সার্চ" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          সূচীপত্র
+        </li>
+        <li class="sidebar-nav-overview">
+          সারাংশ
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E5%85%89%E7%85%A7"><span class="nav-number">2.1.</span> <span class="nav-text">全局光照</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A9%E5%85%89-Sky-Lighting"><span class="nav-number">2.2.</span> <span class="nav-text">天光(Sky Lighting)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8F%91%E5%85%89%E6%9D%90%E8%B4%A8"><span class="nav-number">2.3.</span> <span class="nav-text">自发光材质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-number">2.4.</span> <span class="nav-text">反射</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Clear-Coat%E6%9D%90%E8%B4%A8"><span class="nav-number">2.4.1.</span> <span class="nav-text">Clear Coat材质</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E9%9D%A2%E6%A0%91%E5%8F%B6"><span class="nav-number">2.5.</span> <span class="nav-text">双面树叶</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%EF%BC%88%E7%95%A5%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">设置（略）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="nav-number">4.</span> <span class="nav-text">补充说明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lumen%E7%9A%84%E6%9B%B4%E6%96%B0%E9%80%9F%E5%BA%A6"><span class="nav-number">4.1.</span> <span class="nav-text">Lumen的更新速度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lumen%E5%8F%8D%E5%B0%84"><span class="nav-number">4.2.</span> <span class="nav-text">Lumen反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%90%E8%B4%A8%E7%8E%AF%E5%A2%83%E5%85%89%E9%81%AE%E8%94%BD%EF%BC%88AO%E8%B4%B4%E5%9B%BE%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">材质环境光遮蔽（AO贴图）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dummyummy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">পোস্ট এর তালিকা</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">ক্যাটাগরি এর তালিকা</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">ট্যাগ এর তালিকা</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="UE5 Lumen 学习笔记 | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE5 Lumen 学习笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2025-03-06 23:10:03" itemprop="dateCreated datePublished" datetime="2025-03-06T23:10:03+08:00">2025-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2025-03-09 17:04:17" itemprop="dateModified" datetime="2025-03-09T17:04:17+08:00">2025-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/" itemprop="url" rel="index"><span itemprop="name">CG</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/%E5%BC%95%E6%93%8E/" itemprop="url" rel="index"><span itemprop="name">引擎</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>该文章内容主要来自于虚幻5的官方文档[4]。</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>一开始只觉得Lumen听起来很高大上，以为它除了渲染之外还有一些内容，最后发现是和Nanite搞混了（难绷）。按照文档的介绍，Lumen其实就是UE5新推出的全局光照(GI)和反射系统。最离谱的是，Lumen可以近似反射了无限次的漫反射光照和高光光照，甚至能在复杂环境中达成实时渲染。Lumen是此前各种屏幕空间技术(SSGI)和距离场环境光遮蔽(DFAO)的替代品。P.S. DFAO是虚幻4中所用的环境光遮蔽方法，文档里描述其与SSAO最大的区别是<code>遮蔽在场景空间遮挡物中进行计算，因此出屏丢失数据不会导致瑕疵</code>，至于原理吗，我猜与GAMES202中所讲的距离场阴影类似。</p>
+<p>要启用Lumen，需要在Project Settings-&gt;Rnedering中启用Dynamic Global Illumination和Reflections这两项（新项目应该是默认启用的）。</p>
+<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><h2 id="全局光照"><a href="#全局光照" class="headerlink" title="全局光照"></a>全局光照</h2><ul>
+<li>不限制弹射次数的间接漫反射光照</li>
+<li>真实阴影（在光线追踪器中，阴影就不需要用传统方法去做了）</li>
+<li>要求实时性的情况下会以较低的分辨率来计算间接光照</li>
+</ul>
+<h2 id="天光-Sky-Lighting"><a href="#天光-Sky-Lighting" class="headerlink" title="天光(Sky Lighting)"></a>天光(Sky Lighting)</h2><p>天光在UE中负责模拟来自天空或远景的间接光照[1]，Skylight计算的光照会填充场景中的阴影部分，增强环境光照。Lumen也会为半透明材质和体积雾计算一个低质量的全局光照。</p>
+<h2 id="自发光材质"><a href="#自发光材质" class="headerlink" title="自发光材质"></a>自发光材质</h2><p>自发光材质的贡献在Lumen的Final Gather Process中被计算。目前Final Gather还不太理解，留个坑。</p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>Lumen支持各种粗糙度材质反射，包括清漆（clear coat）和不透明材质的glossy反射，打开对应选项后也能渲染出半透明材质在最前面一层surface上的反射。Lumen还支持渲染单层水面的镜面反射。</p>
+<h3 id="Clear-Coat材质"><a href="#Clear-Coat材质" class="headerlink" title="Clear Coat材质"></a>Clear Coat材质</h3><p>即基础层上覆盖了薄薄的一层透明涂料，比如车漆[2]。Clear coat材质也可以使用Cook-Torrance microfacet BRDF来表示[3]。</p>
+<h2 id="双面树叶"><a href="#双面树叶" class="headerlink" title="双面树叶"></a>双面树叶</h2><p>允许光线在树叶中的次表面散射，效果出奇的好。下图右边是开启Two-Sided Foliage之后的效果<br><img src="https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/lumen-foliage-1.png"></p>
+<h1 id="设置（略）"><a href="#设置（略）" class="headerlink" title="设置（略）"></a>设置（略）</h1><h1 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h1><h2 id="Lumen的更新速度"><a href="#Lumen的更新速度" class="headerlink" title="Lumen的更新速度"></a>Lumen的更新速度</h2><p>因为lumen似乎使用的是类似光照探针的技术并将计算压力分摊到多帧上来保证实时性的，所以局部光照条件的变化会快速传播，而全局的光照变化（如禁用阳光）需要一定的时间才能收敛。实测如果在项目中将主要的平行光设置为不可见的话，场景会缓慢变暗。而且如果仔细观察的话，直接光照会立即消失，间接光照则是缓慢黯淡。</p>
+<h2 id="Lumen反射"><a href="#Lumen反射" class="headerlink" title="Lumen反射"></a>Lumen反射</h2><p>Lumen Reflections没有与Lumen GI耦合，可以单独拿出来配合静态烘焙光照（Lightmap）来使用。</p>
+<h2 id="材质环境光遮蔽（AO贴图）"><a href="#材质环境光遮蔽（AO贴图）" class="headerlink" title="材质环境光遮蔽（AO贴图）"></a>材质环境光遮蔽（AO贴图）</h2><p>由于使用了光线追踪，屏幕空间的AO和AO贴图也就没有必要了，不过还是可以在项目设置中启用的。<br>P.S.1 UE编辑器界面中Buffer Visualization-&gt;Ambient Occulusion似乎指的是SSAO，此时由于未启用SSAO所以应该只能观察到纯白色。<br>P.S.2 [5]中提到，Buffer Visualization其实就是绘制了G-Buffer中的内容，但是材质里面的AO贴图并不会被写入到G-buffer中，而是会被叠加到Lightmap，Stationary sky light和Reflection capture specular中去，因此预览Material Ambient Occlusion无法得到正确的内容。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://forums.unrealengine.com/t/what-exactly-is-a-skylight-in-ue4/113646">What exactly is a Skylight in UE4?</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xing_1337/article/details/128866637">车漆渲染做法Clear-Coat</a></li>
+<li><a target="_blank" rel="noopener" href="https://google.github.io/filament/Filament.html#materialsystem/clearcoatmodel/clearcoatspecularbrdf">Physically Based Rendering in Filament#Clear coat model</a></li>
+<li><a target="_blank" rel="noopener" href="https://dev.epicgames.com/documentation/en-us/unreal-engine/lumen-global-illumination-and-reflections-in-unreal-engine">Lumen Global Illumination and Reflections</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/357083123">Unreal | AO那些事</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UE5/" rel="tag"># UE5</a>
+              <a href="/tags/Lumen/" rel="tag"># Lumen</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/03/06/hello-world/" rel="prev" title="Hello World">
+                  <i class="fa fa-angle-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/" rel="next" title="GAMES202-作业3">
+                  GAMES202-作业3 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">dummyummy</span>
+  </div>
+  <div class="powered-by"><a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> এর সাহায্যে চলছে
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="উপরে ফিরে যান">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
