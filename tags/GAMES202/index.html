@@ -4,19 +4,14 @@
   <meta charset="utf-8">
   
   
-  <title>PreZ技术 | dummyummy的博客</title>
+  <title>Tag: GAMES202 | dummyummy的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="背景PreZ技术的全称是Pre-depth Pass，从这个名字中大概就能得知该技术的一些要点如2-pass和depth pass。PreZ是为了防止开启Alpha Test时可能出现的渲染顺序错误。假如现在我们开启了Alpha Test并且启用了Early-Z来提高渲染效率，由于在片元着色器运行之前我们并不知道哪些片元会被Alpha Test所剔除，提前进行深度测试很可能会导致错误。 方法Pre">
-<meta property="og:type" content="article">
-<meta property="og:title" content="PreZ技术">
-<meta property="og:url" content="https://dummyummy.github.io/2025/02/28/PreZ%E6%8A%80%E6%9C%AF/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="dummyummy的博客">
+<meta property="og:url" content="https://dummyummy.github.io/tags/GAMES202/index.html">
 <meta property="og:site_name" content="dummyummy的博客">
-<meta property="og:description" content="背景PreZ技术的全称是Pre-depth Pass，从这个名字中大概就能得知该技术的一些要点如2-pass和depth pass。PreZ是为了防止开启Alpha Test时可能出现的渲染顺序错误。假如现在我们开启了Alpha Test并且启用了Early-Z来提高渲染效率，由于在片元着色器运行之前我们并不知道哪些片元会被Alpha Test所剔除，提前进行深度测试很可能会导致错误。 方法Pre">
 <meta property="og:locale">
-<meta property="article:published_time" content="2025-02-28T05:59:01.000Z">
-<meta property="article:modified_time" content="2025-03-06T15:02:50.551Z">
 <meta property="article:author" content="dummyummy">
-<meta property="article:tag" content="渲染管线">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="dummyummy的博客" type="application/atom+xml">
@@ -74,76 +69,39 @@
 </header>
 
       <div class="outer">
-        <section id="main"><article id="post-PreZ技术" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2025/02/28/PreZ%E6%8A%80%E6%9C%AF/" class="article-date">
-  <time class="dt-published" datetime="2025-02-28T05:59:01.000Z" itemprop="datePublished">2025-02-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/">计算机图形学</a>►<a class="article-category-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/">CG</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="p-name article-title" itemprop="headline name">
-      PreZ技术
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2025" class="archive-year">2025</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/" class="archive-article-date">
+  <time class="dt-published" datetime="2025-03-10T14:14:51.000Z" itemprop="datePublished">Mar 10</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">GAMES202-作业3</a>
     </h1>
   
 
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>PreZ技术的全称是Pre-depth Pass，从这个名字中大概就能得知该技术的一些要点如2-pass和depth pass。PreZ是为了防止开启Alpha Test时可能出现的渲染顺序错误。假如现在我们开启了Alpha Test并且启用了Early-Z来提高渲染效率，由于在片元着色器运行之前我们并不知道哪些片元会被Alpha Test所剔除，提前进行深度测试很可能会导致错误。</p>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p>PreZ的思路也很简单，既然将深度测试提前的终极目标就是尽可能地减少渲染的开销，那能不能在保持Alpha Test开启的情况下只渲染最低限度的信息？既然Alpha Test会导致深度信息错误，那不如直接把depth buffer取出来单独渲染，得到正确的深度信息后再进行更复杂的光照计算。这样我们就构想出了一个两趟的算法：</p>
-<ol>
-<li><p>Pass 1：保持Alpha Test开启渲染深度图</p>
-</li>
-<li><p>Pass 2：关闭Alpha Test，开启Early-Z并将深度测试的条件设置为EQUAL，运行片元着色</p>
-</li>
-</ol>
-<h1 id="总结与思考"><a href="#总结与思考" class="headerlink" title="总结与思考"></a>总结与思考</h1><p>整体算法的思路清晰简单，单独渲染深度图的开销一般也很小。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dummyummy.github.io/2025/02/28/PreZ%E6%8A%80%E6%9C%AF/" data-id="cm7oe2h0z0000j0v44ipfdd2z" data-title="PreZ技术" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/" rel="tag">渲染管线</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          UE5 Lumen 学习笔记
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2025/02/23/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
 
 
 </section>
