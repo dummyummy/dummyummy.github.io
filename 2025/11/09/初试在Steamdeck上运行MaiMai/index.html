@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="引子说在前面，本人并非wmc，同样也是音游苦手。本次只是为了探索Steamdeck的潜力，因此对于一些关于Maimai的概念解释和术语可能不准确，请见谅。 目前的效果是，能在Steamdeck的桌面模式下进行竖屏的游玩，只显示P1，解锁全曲目和难度，支持Freeplay但只能以Guest模式进入游戏，同时MelonLoader无法加载，因此没办法加载Mod如AquaMai。 另外请注意，这只是一次">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初试在Steamdeck上运行MaiMai">
+<meta property="og:url" content="https://dummyummy.github.io/2025/11/09/%E5%88%9D%E8%AF%95%E5%9C%A8Steamdeck%E4%B8%8A%E8%BF%90%E8%A1%8CMaiMai/index.html">
+<meta property="og:site_name" content="dummyummy的博客">
+<meta property="og:description" content="引子说在前面，本人并非wmc，同样也是音游苦手。本次只是为了探索Steamdeck的潜力，因此对于一些关于Maimai的概念解释和术语可能不准确，请见谅。 目前的效果是，能在Steamdeck的桌面模式下进行竖屏的游玩，只显示P1，解锁全曲目和难度，支持Freeplay但只能以Guest模式进入游戏，同时MelonLoader无法加载，因此没办法加载Mod如AquaMai。 另外请注意，这只是一次">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-09T08:14:13.000Z">
+<meta property="article:modified_time" content="2025-11-09T08:14:13.533Z">
+<meta property="article:author" content="dummyummy">
+<meta property="article:tag" content="MaiMai DX">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://dummyummy.github.io/2025/11/09/%E5%88%9D%E8%AF%95%E5%9C%A8Steamdeck%E4%B8%8A%E8%BF%90%E8%A1%8CMaiMai/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://dummyummy.github.io/2025/11/09/%E5%88%9D%E8%AF%95%E5%9C%A8Steamdeck%E4%B8%8A%E8%BF%90%E8%A1%8CMaiMai/","path":"2025/11/09/初试在Steamdeck上运行MaiMai/","title":"初试在Steamdeck上运行MaiMai"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>初试在Steamdeck上运行MaiMai | dummyummy的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">dummyummy的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E5%AD%90"><span class="nav-number">1.</span> <span class="nav-text">引子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B5%84%E6%96%99%E9%80%9F%E8%A7%88"><span class="nav-number">2.</span> <span class="nav-text">资料速览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97"><span class="nav-number">3.</span> <span class="nav-text">部署指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Steamdeck%E7%9A%84%E5%88%9D%E6%AD%A5%E9%85%8D%E7%BD%AE"><span class="nav-number">3.1.</span> <span class="nav-text">Steamdeck的初步配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%92%8C%E9%85%8D%E7%BD%AESDEZ"><span class="nav-number">3.2.</span> <span class="nav-text">下载和配置SDEZ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SDEZ%E5%9C%A8Steamdeck%E4%B8%8A%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">3.3.</span> <span class="nav-text">SDEZ在Steamdeck上的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E5%8A%9F%E5%91%8A%E6%88%90"><span class="nav-number">3.4.</span> <span class="nav-text">大功告成</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dummyummy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/11/09/%E5%88%9D%E8%AF%95%E5%9C%A8Steamdeck%E4%B8%8A%E8%BF%90%E8%A1%8CMaiMai/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="初试在Steamdeck上运行MaiMai | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          初试在Steamdeck上运行MaiMai
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-11-09 16:14:13" itemprop="dateCreated datePublished" datetime="2025-11-09T16:14:13+08:00">2025-11-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Steamdeck/" itemprop="url" rel="index"><span itemprop="name">Steamdeck</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h1><p>说在前面，本人并非wmc，同样也是音游苦手。本次只是为了探索Steamdeck的潜力，因此对于一些关于Maimai的概念解释和术语可能不准确，请见谅。</p>
+<p>目前的效果是，能在Steamdeck的桌面模式下进行竖屏的游玩，只显示P1，解锁全曲目和难度，支持Freeplay但只能以Guest模式进入游戏，同时MelonLoader无法加载，因此没办法加载Mod如AquaMai。</p>
+<p>另外请注意，这只是一次探索，并非最优雅的解决方式。</p>
+<p>在开始前请速览下一节列出的资料。</p>
+<h1 id="资料速览"><a href="#资料速览" class="headerlink" title="资料速览"></a>资料速览</h1><ul>
+<li><p>Maimai版本与Dump的对应关系：<a target="_blank" rel="noopener" href="https://web.archive.org/web/20230730211439/http://teknoparrot.link.free.fr/multi/maimai%20finale.html">https://web.archive.org/web/20230730211439/http://teknoparrot.link.free.fr/multi/maimai%20finale.html</a></p>
+</li>
+<li><p>SDEZ 1.55 DX Prism Plus Download：<a target="_blank" rel="noopener" href="https://www.emuline.org/topic/3489-reposted-maimai-finale-dx-dx-splash-universe-festival-sega-ringedge/page/12/#comment-165666">https://www.emuline.org/topic/3489-reposted-maimai-finale-dx-dx-splash-universe-festival-sega-ringedge/page/12/#comment-165666</a></p>
+</li>
+<li><p>SDEZ 1.56 Download：<a target="_blank" rel="noopener" href="https://dc.evilleaker.com/?lang=zh-cn">https://dc.evilleaker.com/?lang=zh-cn</a></p>
+</li>
+<li><p>SDEZ配置指南1：<a target="_blank" rel="noopener" href="https://performai.evilleaker.com/manual/games/maimai_dx/setup/">https://performai.evilleaker.com/manual/games/maimai_dx/setup/</a></p>
+</li>
+<li><p>SDEZ配置指南2（主要看评论区）：<a target="_blank" rel="noopener" href="https://www.94joy.cn/maimai/267/">https://www.94joy.cn/maimai/267/</a></p>
+</li>
+<li><p>Segatools Git Repo：<a target="_blank" rel="noopener" href="https://gitea.tendokyu.moe/TeamTofuShop/segatools">https://gitea.tendokyu.moe/TeamTofuShop/segatools</a></p>
+</li>
+</ul>
+<p>建议首先遵循<strong>SDEZ配置指南1</strong>完成相关资源的下载和配置，出现问题后再从<strong>Emuline</strong>和<strong>SDEZ配置指南2</strong>的评论区中寻找解决方案。</p>
+<p>P.S. Emuline目前已经关闭了注册渠道。</p>
+<h1 id="部署指南"><a href="#部署指南" class="headerlink" title="部署指南"></a>部署指南</h1><h2 id="Steamdeck的初步配置"><a href="#Steamdeck的初步配置" class="headerlink" title="Steamdeck的初步配置"></a>Steamdeck的初步配置</h2><ol>
+<li><p>进入Desktop Mode，打开应用商店，安装ProtonUp-Qt和ProtonTricks。</p>
+</li>
+<li><p>打开ProtonUp-Qt安装GE-Proton，这是Proton的一个开源的增强版本，添加了若干的Patch。另外补充一下，Proton是在Wine的基础上改动的，因此如果要在Linux跑游戏的话还是首选Proton，不行了可以再尝试Wine。</p>
+<p><strong>P.S.</strong> 在GE-Proton的<a target="_blank" rel="noopener" href="https://github.com/GloriousEggroll/proton-ge-custom?tab=readme-ov-file">官方Repo</a>中看到说在Proton是会跑在容器中的，如果要在Steam之外运行程序的话只能借助某个特定Launcher才能做到。不过本人并没有使用该Launcher，我猜是该容器只是为Proton配置好了对应的环境变量和文件系统，当然可以借助其他的方式完成。</p>
+</li>
+</ol>
+<h2 id="下载和配置SDEZ"><a href="#下载和配置SDEZ" class="headerlink" title="下载和配置SDEZ"></a>下载和配置SDEZ</h2><ol>
+<li>在电脑上下载1.55或1.56版本的SDEZ，如果是在evilleaker下载的话，请按照<strong>SDEZ配置指南1</strong>解压和配置Segatools，在Emuline提供的Pixeldrain下载的则是已经配置好的版本。</li>
+<li>配置好后可以先在PC上试试，如果OK的话说明配置大体没问题，这里不用虚拟Aime卡并注册AquaDX和MuNet也行，因为目前来看Deck上也用不了。</li>
+<li>将配置好的传输到Deck，由于文件不小，建议的传输方式为使用Wrapinator，如果网络的好的话用SMB或SFTP也行。</li>
+</ol>
+<h2 id="SDEZ在Steamdeck上的配置"><a href="#SDEZ在Steamdeck上的配置" class="headerlink" title="SDEZ在Steamdeck上的配置"></a>SDEZ在Steamdeck上的配置</h2><p>注意，<strong>下面的所有操作都在桌面模式中进行！</strong></p>
+<ol>
+<li><p>将Package&#x2F;Sinmai.exe右键添加到Non Steam Game，打开Steam，首先将游戏执行文件的路径改为Package文件夹中的Start.bat或Launch.bat，注意路径中不能有中文；然后设置兼容性，改为GE-Proton。</p>
+</li>
+<li><p>此时试着启动游戏，Sinmai会闪退，只有bat和inject的命令行窗口出现，在Steam中停止游戏即可。</p>
+</li>
+<li><p>打开刚才安装好的ProtonTricks，进入到SDEZ默认的Wine容器，选择第一项即安装Windows DLL或组件，安装下面的功能：</p>
+<ul>
+<li>dotnet 3.5</li>
+<li>dotnet 4.0</li>
+<li>dotnet 4.8</li>
+<li>dxvk</li>
+<li>ucrtbase2019</li>
+<li>vcrun2012</li>
+<li>vcrun2019</li>
+</ul>
+</li>
+<li><p>装好后还是使用ProtonTrick对SDEZ的容器运行Wine配置程序，选择驱动器一栏，删除掉根目录到Z盘的映射，添加容器根目录到D盘的映射。</p>
+</li>
+<li><p>修改Package&#x2F;segatools.ini，dns一栏中的default填aquadx.hydev.org或play.mumur.net都行，keychip请留空，否则游戏会卡死。</p>
+</li>
+<li><p>修改config_client.json，lan_install&#x2F;server和net_delivery&#x2F;enable都修改为true，否则会卡配信サーバーcheck过不去。</p>
+</li>
+<li><p>修改config_common.json，找到credit项修改为如下所示的内容，开启freeplay：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;credit&quot;</span><span class="punctuation">:</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="attr">&quot;enable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;max_credit&quot;</span><span class="punctuation">:</span> <span class="number">24</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;config&quot;</span><span class="punctuation">:</span></span><br><span class="line">	<span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;coin_chute_type_common&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;service_type_common&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;freeplay&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;coin_chute_multiplier&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">1</span> <span class="punctuation">]</span><span class="punctuation">,</span> </span><br><span class="line">		<span class="attr">&quot;coin_to_credit&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;bonus_adder&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;game_cost&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="number">1</span><span class="punctuation">,</span><span class="number">2</span><span class="punctuation">,</span><span class="number">2</span> <span class="punctuation">]</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改Start.bat（或Launch.bat），将Sinmai的启动参数改为：</p>
+<p><code>-screen-fullscreen 1 -screen-width 1600 -screen-height 1280</code></p>
+</li>
+<li><p>因为没有找到让窗口变成portrait的方法，最抽象的一步要来了：打开系统设置，找到显示和监视器一栏，将屏幕的方向调整为第一个也就是800x1280。由于这一步的存在，之后进行游玩时也只能在桌面模式下玩。如果有人能找到旋转屏幕的方法就好了，实测config_common.json中video一栏的配置不会生效。</p>
+</li>
+<li><p>打开Steam，完成最后的按键映射，新建一个控制器布局，将<code>ABXY</code>和<code>D-Pad</code>一一映射到键盘的<code>QWEADZXC</code>八键上，分别对应洗衣机（bushi）的每个按钮，同时建议把背面握持键也做一下映射，比如<code>R5</code>映射到<code>Esc</code>，这样可以方便退出游戏。</p>
+</li>
+</ol>
+<h2 id="大功告成"><a href="#大功告成" class="headerlink" title="大功告成"></a>大功告成</h2><p>可以开玩了！</p>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ul>
+<li>游玩前请进入到桌面模式，并调整为竖屏。</li>
+<li>长按右侧手柄的三道杠按钮可以切换按键绑定，在游戏中需要使用我们之前配置好的布局。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MaiMai-DX/" rel="tag"># MaiMai DX</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/11/06/ECS%E7%B3%BB%E7%BB%9F/" rel="prev" title="ECS系统">
+                  <i class="fa fa-angle-left"></i> ECS系统
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">dummyummy</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
