@@ -16,10 +16,8 @@ PreZ技术的全称是Pre-depth Pass，从这个名字中大概就能得知该�
 
 PreZ的思路也很简单，既然将深度测试提前的终极目标就是尽可能地减少渲染的开销，那能不能在保持Alpha Test开启的情况下只渲染最低限度的信息？既然Alpha Test会导致深度信息错误，那不如直接把depth buffer取出来单独渲染，得到正确的深度信息后再进行更复杂的光照计算。这样我们就构想出了一个两趟的算法：
 
-1. Pass 1：保持Alpha Test开启渲染深度图
+1. Pass 1：保持Alpha Test开启，Z-Write开启，只渲染深度图
 
-2. Pass 2：关闭Alpha Test，开启Early-Z并将深度测试的条件设置为EQUAL，运行片元着色
+2. Pass 2：关闭Z-Write，将深度测试的条件设置为EQUAL，运行片元着色
 
-# 总结与思考
-
-整体算法的思路清晰简单，单独渲染深度图的开销一般也很小。
+这样因为Pass 1中已经渲染了考虑discard后正确的深度图，在Pass 2中关闭Z-Write后，由于根本不会改变深度，GPU便可以对所有物体开启Early-Z了，大大减少了Overdraw。
