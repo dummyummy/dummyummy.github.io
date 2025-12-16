@@ -203,6 +203,7 @@ Clamping很容易导致高光部分发生闪烁的问题。由于我们采用的
 #### 效果
 
 首先是不使用Clamping的效果图：
+
 ![](ghosting.png)
 
 使用Clamping并抑制闪烁后：
@@ -227,7 +228,7 @@ Forward管线理论上也是与TAA适配的，不过为了输出Motion Vector的
 
 - 当高频的细节如草地或法线贴图与其他部分混合时Clamping会失效，如下图所示，注意下图的草地部分有淡淡的轨迹，[3]中提出了解决方法。
 
-  ![](hfreq.png)
+![](hfreq.png)
 
 - 由于采样history frame时用的是双线性插值，经过TAA的累积后图像可能会变得更加模糊，解决方式为使用5-tap的Catmull-Rom Filter来滤波，参考[1]的Blurring部分。
 

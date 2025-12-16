@@ -12,6 +12,8 @@ date: 2025-12-16 18:02:21
 
 # TAA实现小结
 
+[项目地址](https://github.com/dummyummy/LearnVue/tree/master/LearnGL)
+
 ## 前言
 
 刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：
