@@ -19,28 +19,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="TAA实现小结前言刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：  又因为跑的是defer管线，很难上MSAA，想着加一套抗锯齿进去，查了些资料后还是选择了TAA而非FXAA和SMAA等后处理抗锯齿。TAA有很多优点，比如不会随着运动而抖动，同时能够为画面中几乎所有的部分完成抗锯齿，生来就与Defer兼容等等。加入TAA后的效果如下：  锯齿肉眼可见地基本消失了">
+    <meta name="description" content="TAA实现小结项目地址 前言刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：  又因为跑的是defer管线，很难上MSAA，想着加一套抗锯齿进去，查了些资料后还是选择了TAA而非FXAA和SMAA等后处理抗锯齿。TAA有很多优点，比如不会随着运动而抖动，同时能够为画面中几乎所有的部分完成抗锯齿，生来就与Defer兼容等等。加入TAA后的效果如下：  锯齿肉眼可见地">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TAA">
 <meta property="og:url" content="https://dummyummy.github.io/2025/12/16/TAA/index.html">
 <meta property="og:site_name" content="dummyummy的博客">
-<meta property="og:description" content="TAA实现小结前言刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：  又因为跑的是defer管线，很难上MSAA，想着加一套抗锯齿进去，查了些资料后还是选择了TAA而非FXAA和SMAA等后处理抗锯齿。TAA有很多优点，比如不会随着运动而抖动，同时能够为画面中几乎所有的部分完成抗锯齿，生来就与Defer兼容等等。加入TAA后的效果如下：  锯齿肉眼可见地基本消失了">
+<meta property="og:description" content="TAA实现小结项目地址 前言刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：  又因为跑的是defer管线，很难上MSAA，想着加一套抗锯齿进去，查了些资料后还是选择了TAA而非FXAA和SMAA等后处理抗锯齿。TAA有很多优点，比如不会随着运动而抖动，同时能够为画面中几乎所有的部分完成抗锯齿，生来就与Defer兼容等等。加入TAA后的效果如下：  锯齿肉眼可见地">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
-<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
-<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/f">
-<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
-<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/png">
-<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/ion.png">
-<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/png">
-<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/ng.png">
-<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/notaa.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/taa.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/jitter.gif">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/uv.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/overview.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/disocclusion.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/ghosting.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/no-ghosting.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/hfreq.png">
 <meta property="article:published_time" content="2025-12-16T10:02:21.000Z">
-<meta property="article:modified_time" content="2025-12-16T10:02:21.458Z">
+<meta property="article:modified_time" content="2025-12-16T10:13:43.654Z">
 <meta property="article:author" content="dummyummy">
 <meta property="article:tag" content="抗锯齿">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+<meta name="twitter:image" content="https://dummyummy.github.io/2025/12/16/TAA/notaa.png">
 
 
 <link rel="canonical" href="https://dummyummy.github.io/2025/12/16/TAA/">
@@ -191,8 +191,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2025-12-16 18:02:21" itemprop="dateCreated datePublished" datetime="2025-12-16T18:02:21+08:00">2025-12-16</time>
+      <time title="创建时间：2025-12-16 18:02:21 / 修改时间：18:13:43" itemprop="dateCreated datePublished" datetime="2025-12-16T18:02:21+08:00">2025-12-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -221,10 +222,11 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="TAA实现小结"><a href="#TAA实现小结" class="headerlink" title="TAA实现小结"></a>TAA实现小结</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：</p>
-<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/"></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="TAA实现小结"><a href="#TAA实现小结" class="headerlink" title="TAA实现小结"></a>TAA实现小结</h1><p><a target="_blank" rel="noopener" href="https://github.com/dummyummy/LearnVue/tree/master/LearnGL">项目地址</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：</p>
+<p><img src="/2025/12/16/TAA/notaa.png"></p>
 <p>又因为跑的是defer管线，很难上MSAA，想着加一套抗锯齿进去，查了些资料后还是选择了TAA而非FXAA和SMAA等后处理抗锯齿。TAA有很多优点，比如不会随着运动而抖动，同时能够为画面中几乎所有的部分完成抗锯齿，生来就与Defer兼容等等。加入TAA后的效果如下：</p>
-<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/"></p>
+<p><img src="/2025/12/16/TAA/taa.png"></p>
 <p>锯齿肉眼可见地基本消失了。</p>
 <h2 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h2><p>TAA作为经典算法已经有很多教程了，GDC和Siggraph Course上各大厂商也给出了很完善的解决方案，如果要从头学习的话，建议是先看知乎上的介绍[4]，然后是[1]和[5]这两篇很好的教程，另外[1]、[4]和[5]中提到的的很多技巧基本都是在[2]和[3]中提出来的。</p>
 <p>TAA的流程大致可分为三个部分，分别是<strong>Jitter</strong>、<strong>Motion Vector</strong>和<strong>Resolve</strong>。</p>
@@ -239,7 +241,7 @@
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec2</span> fragTexCoord;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec3</span> fragNormal;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec4</span> fragTangent;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec3</span> fragPos;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec4</span> fragPosClip;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec4</span> fragPrevPosClip;</span><br></pre></td></tr></table></figure>
 
 <p>做完这一部分后，如果进行可视化，可以看到画面是抖动的：</p>
-<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/f"></p>
+<p><img src="/2025/12/16/TAA/jitter.gif"></p>
 <h3 id="Motion-Vector"><a href="#Motion-Vector" class="headerlink" title="Motion Vector"></a>Motion Vector</h3><p>在将当前帧的画面与历史颜色进行混合之前，我们还要去计算屏幕空间内的Motion Vector。在一个动态的场景中，运动可能来自于以下的几个方面：</p>
 <ul>
 <li>相机的运动</li>
@@ -252,15 +254,15 @@
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">// Vertex Shader</span></span><br><span class="line">fragPosClip = matrix_VP * <span class="type">vec4</span>(fragPos, <span class="number">1.0</span>);</span><br><span class="line">   fragPrevPosClip = matrix_Prev_VP * <span class="type">vec4</span>(fragPos, <span class="number">1.0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*********************************************************/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Fragment Shader</span></span><br><span class="line"><span class="comment">// Motion vector</span></span><br><span class="line">   <span class="type">vec2</span> prevNDCCoord = fragPrevPosClip.xy / fragPrevPosClip.w;</span><br><span class="line">   <span class="type">vec2</span> currNDCCoord = fragPosClip.xy / fragPosClip.w;</span><br><span class="line">   <span class="type">vec2</span> motionVec = (currNDCCoord - prevNDCCoord) * <span class="number">0.5</span>;</span><br><span class="line"></span><br><span class="line">   GBuffer3 = <span class="type">vec4</span>(motionVec, <span class="number">0.0</span>, <span class="number">0.0</span>);</span><br></pre></td></tr></table></figure>
 
 <p>注意这里一定要是<strong>未Jitter</strong>的Motion Vector，否则可能会错误采样到别的像素。原因也不难理解，Motion Vector代表的是像素间的对应关系，考虑Jitter就不合理了。</p>
-<p>[3]也包含了UV动画产生的Motion Vector的计算方法，简单张贴一下：<br><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/"></p>
+<p>[3]也包含了UV动画产生的Motion Vector的计算方法，简单张贴一下：<br><img src="/2025/12/16/TAA/uv.png"></p>
 <h3 id="Resolve"><a href="#Resolve" class="headerlink" title="Resolve"></a>Resolve</h3><p>Resolve负责进行帧间的累加，大致流程如下，图源[5]：</p>
-<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/png"></p>
+<p><img src="/2025/12/16/TAA/overview.png"></p>
 <p>Resolve实际上很简单，就是利用Motion Vector算出当前像素在上一帧对应的位置，采样历史颜色并按一定的权重做混合，这样产生的画面就成功完成了抗锯齿，关键代码如下：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">   <span class="type">vec2</span> uv = fragTexCoord;</span><br><span class="line">   <span class="type">vec2</span> <span class="keyword">offset</span> = <span class="number">1.0</span> / <span class="type">vec2</span>(<span class="built_in">textureSize</span>(currentFrame, <span class="number">0</span>));</span><br><span class="line">   <span class="type">vec2</span> mv = <span class="built_in">texture</span>(GBuffer3, uv).xy;</span><br><span class="line">   <span class="type">vec3</span> currentColorHDR = <span class="built_in">texture</span>(currentFrame, uv).rgb;</span><br><span class="line">   <span class="type">vec2</span> jitteredUV = uv - mv;</span><br><span class="line">   <span class="type">vec3</span> historyColorHDR;</span><br><span class="line">   <span class="keyword">if</span> (jitteredUV.x &lt; <span class="number">0.0</span> || jitteredUV.x &gt; <span class="number">1.0</span> || jitteredUV.y &lt; <span class="number">0.0</span> || jitteredUV.y &gt; <span class="number">1.0</span>) &#123;</span><br><span class="line">       historyColorHDR = currentColorHDR;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       historyColorHDR = <span class="built_in">texture</span>(historyFrame, jitteredUV).rgb;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">FragColor = <span class="type">vec4</span>(<span class="built_in">mix</span>(currentColorHDR, historyColorHDR, historyWeight), <span class="number">1.0</span>);</span><br></pre></td></tr></table></figure>
 
 <p>但是这样会有几个问题，下面逐一来解决。</p>
 <h4 id="遮挡造成的鬼影"><a href="#遮挡造成的鬼影" class="headerlink" title="遮挡造成的鬼影"></a>遮挡造成的鬼影</h4><p>这里借助以下FSR的图进行说明，在场景发生运动时，遮挡关系也会随之发生变化，如下图所示，Disocclusion Mask的黑色部分是没有历史信息的。如果我们还是拿着Motion Vector去采样便会造成错误的结果。</p>
-<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/ion.png"></p>
+<p><img src="/2025/12/16/TAA/disocclusion.png"></p>
 <p>解决方式也不难，在当前帧中采样3x3邻域内的颜色，并计算这些颜色构成的AABB，然后将historyColor Clamp到对应的AABB中。另外在[2]中UE也提到在YCoCg颜色空间中进行Clamp会更好，最终代码如下：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Clamping history color to avoid disocclusion artifacts</span></span><br><span class="line"><span class="type">vec3</span> minColor = RGBToYCoCg(currentColorHDR.rgb);</span><br><span class="line"><span class="type">vec3</span> maxColor = minColor;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> x = <span class="number">-1</span>; x &lt;= <span class="number">1</span>; x++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> y = <span class="number">-1</span>; y &lt;= <span class="number">1</span>; y++) &#123;</span><br><span class="line">        <span class="type">vec3</span> sampledColorHDR = <span class="built_in">texture</span>(currentFrame, uv + <span class="type">vec2</span>(x, y) * <span class="keyword">offset</span>).rgb;</span><br><span class="line">        sampledColorHDR = RGBToYCoCg(sampledColorHDR);</span><br><span class="line">        minColor = <span class="built_in">min</span>(minColor, sampledColorHDR.rgb);</span><br><span class="line">        maxColor = <span class="built_in">max</span>(maxColor, sampledColorHDR.rgb);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">historyColorHDR.rgb = <span class="built_in">clamp</span>(RGBToYCoCg(historyColorHDR.rgb), minColor, maxColor);</span><br><span class="line">historyColorHDR.rgb = YCoCgToRGB(historyColorHDR.rgb);</span><br></pre></td></tr></table></figure>
 
@@ -268,15 +270,15 @@
 <h4 id="闪烁"><a href="#闪烁" class="headerlink" title="闪烁"></a>闪烁</h4><p>Clamping很容易导致高光部分发生闪烁的问题。由于我们采用的是周期性指数平均的混合方式并开启了HDR，某些亮点可能会周期性出现并主导混合结果进而导致闪烁。有两个解决这个瑕疵的Trick，第一个是在混合前进行可逆的临时性Tonemapping，第二个则是[2]中提出的根据Luminance降低高亮度样本的权重。两个方法都能一定程度上抑制闪烁，随便用一种即可。当然代价也是有的，高亮部分会稍显黯淡。Shader代码如下：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Tonemapping</span></span><br><span class="line"><span class="type">vec3</span> currentColor = Tonemapping(currentColorHDR); </span><br><span class="line"><span class="type">vec3</span> historyColor = Tonemapping(historyColorHDR);</span><br><span class="line"><span class="type">vec3</span> blendedColor = currentColor * (<span class="number">1.0</span> - historyWeight) + historyColor * historyWeight;</span><br><span class="line">FragColor = <span class="type">vec4</span>(InverseTonemapping(blendedColor), <span class="number">1.0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Weighted blending</span></span><br><span class="line"><span class="type">vec4</span> currentColor = AdjustHDRColor(currentColorHDR); </span><br><span class="line"><span class="type">vec4</span> historyColor = AdjustHDRColor(historyColorHDR);</span><br><span class="line"><span class="type">vec4</span> blendedColor = currentColor * (<span class="number">1.0</span> - historyWeight) + historyColor * historyWeight;</span><br><span class="line">FragColor = <span class="type">vec4</span>(RestoreHDRColor(blendedColor), <span class="number">1.0</span>);</span><br></pre></td></tr></table></figure>
 
-<h4 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h4><p>首先是不使用Clamping的效果图：<br><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/png"></p>
+<h4 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h4><p>首先是不使用Clamping的效果图：<br><img src="/2025/12/16/TAA/ghosting.png"></p>
 <p>使用Clamping并抑制闪烁后：</p>
-<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/ng.png"></p>
+<p><img src="/2025/12/16/TAA/no-ghosting.png"></p>
 <h3 id="渲染管线的其余部分"><a href="#渲染管线的其余部分" class="headerlink" title="渲染管线的其余部分"></a>渲染管线的其余部分</h3><h4 id="天空盒"><a href="#天空盒" class="headerlink" title="天空盒"></a>天空盒</h4><p>天空盒也要生成对应的Motion Vector。</p>
 <h4 id="SSAO"><a href="#SSAO" class="headerlink" title="SSAO"></a>SSAO</h4><p>由于此时的Depth Buffer是Jitter过的，SSAO的半球面采样点投影后也要加上Jitter才行，否则画面会整体闪烁。</p>
 <h4 id="Forward管线"><a href="#Forward管线" class="headerlink" title="Forward管线"></a>Forward管线</h4><p>Forward管线理论上也是与TAA适配的，不过为了输出Motion Vector的话需要借助MRT或Multi-Pass。</p>
 <h1 id="遗留问题"><a href="#遗留问题" class="headerlink" title="遗留问题"></a>遗留问题</h1><ul>
 <li><p>当高频的细节如草地或法线贴图与其他部分混合时Clamping会失效，如下图所示，注意下图的草地部分有淡淡的轨迹，[3]中提出了解决方法。</p>
-<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/"></p>
+<p><img src="/2025/12/16/TAA/hfreq.png"></p>
 </li>
 <li><p>由于采样history frame时用的是双线性插值，经过TAA的累积后图像可能会变得更加模糊，解决方式为使用5-tap的Catmull-Rom Filter来滤波，参考[1]的Blurring部分。</p>
 </li>
