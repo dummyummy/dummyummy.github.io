@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="TAA实现小结前言刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：  又因为跑的是defer管线，很难上MSAA，想着加一套抗锯齿进去，查了些资料后还是选择了TAA而非FXAA和SMAA等后处理抗锯齿。TAA有很多优点，比如不会随着运动而抖动，同时能够为画面中几乎所有的部分完成抗锯齿，生来就与Defer兼容等等。加入TAA后的效果如下：  锯齿肉眼可见地基本消失了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TAA">
+<meta property="og:url" content="https://dummyummy.github.io/2025/12/16/TAA/index.html">
+<meta property="og:site_name" content="dummyummy的博客">
+<meta property="og:description" content="TAA实现小结前言刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：  又因为跑的是defer管线，很难上MSAA，想着加一套抗锯齿进去，查了些资料后还是选择了TAA而非FXAA和SMAA等后处理抗锯齿。TAA有很多优点，比如不会随着运动而抖动，同时能够为画面中几乎所有的部分完成抗锯齿，生来就与Defer兼容等等。加入TAA后的效果如下：  锯齿肉眼可见地基本消失了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/f">
+<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/ion.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/ng.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+<meta property="article:published_time" content="2025-12-16T10:02:21.000Z">
+<meta property="article:modified_time" content="2025-12-16T10:02:21.458Z">
+<meta property="article:author" content="dummyummy">
+<meta property="article:tag" content="抗锯齿">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+
+
+<link rel="canonical" href="https://dummyummy.github.io/2025/12/16/TAA/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://dummyummy.github.io/2025/12/16/TAA/","path":"2025/12/16/TAA/","title":"TAA"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TAA | dummyummy的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">dummyummy的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TAA%E5%AE%9E%E7%8E%B0%E5%B0%8F%E7%BB%93"><span class="nav-number">1.</span> <span class="nav-text">TAA实现小结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">实现思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Jitter"><span class="nav-number">1.2.1.</span> <span class="nav-text">Jitter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Motion-Vector"><span class="nav-number">1.2.2.</span> <span class="nav-text">Motion Vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Resolve"><span class="nav-number">1.2.3.</span> <span class="nav-text">Resolve</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%81%AE%E6%8C%A1%E9%80%A0%E6%88%90%E7%9A%84%E9%AC%BC%E5%BD%B1"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">遮挡造成的鬼影</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AA%E7%83%81"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">闪烁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%88%E6%9E%9C"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF%E7%9A%84%E5%85%B6%E4%BD%99%E9%83%A8%E5%88%86"><span class="nav-number">1.2.4.</span> <span class="nav-text">渲染管线的其余部分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%A9%E7%A9%BA%E7%9B%92"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">天空盒</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSAO"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">SSAO</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Forward%E7%AE%A1%E7%BA%BF"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">Forward管线</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%97%E7%95%99%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">遗留问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E5%A5%BD%E7%9A%84%E6%96%B9%E6%A1%88"><span class="nav-number">3.</span> <span class="nav-text">更好的方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dummyummy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/12/16/TAA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TAA | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TAA
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-16 18:02:21" itemprop="dateCreated datePublished" datetime="2025-12-16T18:02:21+08:00">2025-12-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/" itemprop="url" rel="index"><span itemprop="name">CG</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93/" itemprop="url" rel="index"><span itemprop="name">实时渲染</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="TAA实现小结"><a href="#TAA实现小结" class="headerlink" title="TAA实现小结"></a>TAA实现小结</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：</p>
+<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/"></p>
+<p>又因为跑的是defer管线，很难上MSAA，想着加一套抗锯齿进去，查了些资料后还是选择了TAA而非FXAA和SMAA等后处理抗锯齿。TAA有很多优点，比如不会随着运动而抖动，同时能够为画面中几乎所有的部分完成抗锯齿，生来就与Defer兼容等等。加入TAA后的效果如下：</p>
+<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/"></p>
+<p>锯齿肉眼可见地基本消失了。</p>
+<h2 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h2><p>TAA作为经典算法已经有很多教程了，GDC和Siggraph Course上各大厂商也给出了很完善的解决方案，如果要从头学习的话，建议是先看知乎上的介绍[4]，然后是[1]和[5]这两篇很好的教程，另外[1]、[4]和[5]中提到的的很多技巧基本都是在[2]和[3]中提出来的。</p>
+<p>TAA的流程大致可分为三个部分，分别是<strong>Jitter</strong>、<strong>Motion Vector</strong>和<strong>Resolve</strong>。</p>
+<h3 id="Jitter"><a href="#Jitter" class="headerlink" title="Jitter"></a>Jitter</h3><p>Jitter便是TAA的核心思路。首先回想下最原始的抗锯齿即SSAA的原理：在像素内额外进行多次采样并取平均颜色。TAA本质上是做了同样的事情，不过将所有的采样分摊到了多个连续帧中去做。Jitter便是生成这些采样点的过程，TAA会用一个随机的采样点序列来表示亚像素级的偏移，每帧使用不同的偏移，并在帧间进行累积。</p>
+<p>一般来说不会使用一个全随机的Jitter Sequence而是会用低差异度序列来代替，基本上大家都用的是Halton序列。由于Jitter是个二维的向量，在生成Jitter时$x$分量的基数为2而$y$分量的基数为3。项目中使用的Halton序列生成器如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://observablehq.com/@jrus/halton</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">halton</span>(<span class="params"><span class="attr">index</span>: <span class="built_in">number</span>, <span class="attr">base</span>: <span class="built_in">number</span></span>): <span class="built_in">number</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> fraction = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">let</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (index &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        fraction /= base;</span><br><span class="line">        result += fraction * (index % base);</span><br><span class="line">        index = <span class="title class_">Math</span>.<span class="title function_">floor</span>(index / base); <span class="comment">// floor division</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span>* <span class="title function_">generateHaltonSequence1D</span>(<span class="attr">base</span>: <span class="built_in">number</span>): <span class="title class_">Generator</span>&lt;<span class="built_in">number</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">yield</span> <span class="title function_">halton</span>(index, base);</span><br><span class="line">        index++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span>* <span class="title function_">generateHaltonSequence2D</span>(<span class="attr">base1</span>: <span class="built_in">number</span> = <span class="number">2</span>, <span class="attr">base2</span>: <span class="built_in">number</span> = <span class="number">3</span>): <span class="title class_">Generator</span>&lt;[<span class="built_in">number</span>, <span class="built_in">number</span>]&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">yield</span> [<span class="title function_">halton</span>(index, base1), <span class="title function_">halton</span>(index, base2)];</span><br><span class="line">        index++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">HaltonSequence2D</span>(<span class="params"><span class="attr">count</span>: <span class="built_in">number</span>, <span class="attr">base1</span>: <span class="built_in">number</span> = <span class="number">2</span>, <span class="attr">base2</span>: <span class="built_in">number</span> = <span class="number">3</span></span>): [<span class="built_in">number</span>, <span class="built_in">number</span>][] &#123;</span><br><span class="line">    <span class="keyword">const</span> gen = <span class="title function_">generateHaltonSequence2D</span>(base1, base2);</span><br><span class="line">    <span class="keyword">const</span> <span class="attr">result</span>: [<span class="built_in">number</span>, <span class="built_in">number</span>][] = [];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">        result.<span class="title function_">push</span>(gen.<span class="title function_">next</span>().<span class="property">value</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于如何应用Jitter，有两种可选的方式，一种是直接修改投影矩阵的第三行，另一种则是修改Vertex Shader输出的Clip Space Position。第一种方法的好处在于不用修改原有的Shader逻辑，但是在计算Motion Vector时需要抵消Jitter的影响。为了逻辑的清晰，本文选择了第二种方法，伪代码[6]如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">float4 worldPos  = modelMatrix * float4(in.position, 1.0);</span><br><span class="line">float4 clipPos = viewportParams.viewProjectionMatrix * worldPos;</span><br><span class="line">    </span><br><span class="line">clipPos += viewportParams.jitter*clipPos.w; // Apply Jittering</span><br><span class="line"></span><br><span class="line">out.position = clipPos;</span><br></pre></td></tr></table></figure>
+
+<p>这里还要额外做一些说明，Jitter其实只是通过扰动NDC坐标而对光栅化产生了影响，但光栅化又与插值相关联，因此到最后下面所有的这些输出都会受到影响，进而达到了边缘抗锯齿的效果：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec2</span> fragTexCoord;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec3</span> fragNormal;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec4</span> fragTangent;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec3</span> fragPos;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec4</span> fragPosClip;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec4</span> fragPrevPosClip;</span><br></pre></td></tr></table></figure>
+
+<p>做完这一部分后，如果进行可视化，可以看到画面是抖动的：</p>
+<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/f"></p>
+<h3 id="Motion-Vector"><a href="#Motion-Vector" class="headerlink" title="Motion Vector"></a>Motion Vector</h3><p>在将当前帧的画面与历史颜色进行混合之前，我们还要去计算屏幕空间内的Motion Vector。在一个动态的场景中，运动可能来自于以下的几个方面：</p>
+<ul>
+<li>相机的运动</li>
+<li>物体的TRS运动</li>
+<li>Skinned Mesh的变化</li>
+<li>顶点动画</li>
+<li>UV动画</li>
+</ul>
+<p>前面四个的基本解决思路就是，保存历史的变换，比如对于第二种就是Previous Model Matrix，在当前帧中同时算出当前屏幕uv和历史屏幕uv，并将uv的插值累加到Motion Vector中。既然有了Jitter Offset，这一步就很好做了，直接在Vertex Shader中输出<strong>未Jitter</strong>且考虑了四种运动的Clip Space Position以及Previous Clip Space Position，在Fragment Shader中做差值即可。项目中为了方便只实现了考虑相机运动的Motion Vector，关键代码如下：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">// Vertex Shader</span></span><br><span class="line">fragPosClip = matrix_VP * <span class="type">vec4</span>(fragPos, <span class="number">1.0</span>);</span><br><span class="line">   fragPrevPosClip = matrix_Prev_VP * <span class="type">vec4</span>(fragPos, <span class="number">1.0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*********************************************************/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Fragment Shader</span></span><br><span class="line"><span class="comment">// Motion vector</span></span><br><span class="line">   <span class="type">vec2</span> prevNDCCoord = fragPrevPosClip.xy / fragPrevPosClip.w;</span><br><span class="line">   <span class="type">vec2</span> currNDCCoord = fragPosClip.xy / fragPosClip.w;</span><br><span class="line">   <span class="type">vec2</span> motionVec = (currNDCCoord - prevNDCCoord) * <span class="number">0.5</span>;</span><br><span class="line"></span><br><span class="line">   GBuffer3 = <span class="type">vec4</span>(motionVec, <span class="number">0.0</span>, <span class="number">0.0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>注意这里一定要是<strong>未Jitter</strong>的Motion Vector，否则可能会错误采样到别的像素。原因也不难理解，Motion Vector代表的是像素间的对应关系，考虑Jitter就不合理了。</p>
+<p>[3]也包含了UV动画产生的Motion Vector的计算方法，简单张贴一下：<br><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/"></p>
+<h3 id="Resolve"><a href="#Resolve" class="headerlink" title="Resolve"></a>Resolve</h3><p>Resolve负责进行帧间的累加，大致流程如下，图源[5]：</p>
+<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/png"></p>
+<p>Resolve实际上很简单，就是利用Motion Vector算出当前像素在上一帧对应的位置，采样历史颜色并按一定的权重做混合，这样产生的画面就成功完成了抗锯齿，关键代码如下：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">   <span class="type">vec2</span> uv = fragTexCoord;</span><br><span class="line">   <span class="type">vec2</span> <span class="keyword">offset</span> = <span class="number">1.0</span> / <span class="type">vec2</span>(<span class="built_in">textureSize</span>(currentFrame, <span class="number">0</span>));</span><br><span class="line">   <span class="type">vec2</span> mv = <span class="built_in">texture</span>(GBuffer3, uv).xy;</span><br><span class="line">   <span class="type">vec3</span> currentColorHDR = <span class="built_in">texture</span>(currentFrame, uv).rgb;</span><br><span class="line">   <span class="type">vec2</span> jitteredUV = uv - mv;</span><br><span class="line">   <span class="type">vec3</span> historyColorHDR;</span><br><span class="line">   <span class="keyword">if</span> (jitteredUV.x &lt; <span class="number">0.0</span> || jitteredUV.x &gt; <span class="number">1.0</span> || jitteredUV.y &lt; <span class="number">0.0</span> || jitteredUV.y &gt; <span class="number">1.0</span>) &#123;</span><br><span class="line">       historyColorHDR = currentColorHDR;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       historyColorHDR = <span class="built_in">texture</span>(historyFrame, jitteredUV).rgb;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">FragColor = <span class="type">vec4</span>(<span class="built_in">mix</span>(currentColorHDR, historyColorHDR, historyWeight), <span class="number">1.0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>但是这样会有几个问题，下面逐一来解决。</p>
+<h4 id="遮挡造成的鬼影"><a href="#遮挡造成的鬼影" class="headerlink" title="遮挡造成的鬼影"></a>遮挡造成的鬼影</h4><p>这里借助以下FSR的图进行说明，在场景发生运动时，遮挡关系也会随之发生变化，如下图所示，Disocclusion Mask的黑色部分是没有历史信息的。如果我们还是拿着Motion Vector去采样便会造成错误的结果。</p>
+<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/ion.png"></p>
+<p>解决方式也不难，在当前帧中采样3x3邻域内的颜色，并计算这些颜色构成的AABB，然后将historyColor Clamp到对应的AABB中。另外在[2]中UE也提到在YCoCg颜色空间中进行Clamp会更好，最终代码如下：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Clamping history color to avoid disocclusion artifacts</span></span><br><span class="line"><span class="type">vec3</span> minColor = RGBToYCoCg(currentColorHDR.rgb);</span><br><span class="line"><span class="type">vec3</span> maxColor = minColor;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> x = <span class="number">-1</span>; x &lt;= <span class="number">1</span>; x++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> y = <span class="number">-1</span>; y &lt;= <span class="number">1</span>; y++) &#123;</span><br><span class="line">        <span class="type">vec3</span> sampledColorHDR = <span class="built_in">texture</span>(currentFrame, uv + <span class="type">vec2</span>(x, y) * <span class="keyword">offset</span>).rgb;</span><br><span class="line">        sampledColorHDR = RGBToYCoCg(sampledColorHDR);</span><br><span class="line">        minColor = <span class="built_in">min</span>(minColor, sampledColorHDR.rgb);</span><br><span class="line">        maxColor = <span class="built_in">max</span>(maxColor, sampledColorHDR.rgb);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">historyColorHDR.rgb = <span class="built_in">clamp</span>(RGBToYCoCg(historyColorHDR.rgb), minColor, maxColor);</span><br><span class="line">historyColorHDR.rgb = YCoCgToRGB(historyColorHDR.rgb);</span><br></pre></td></tr></table></figure>
+
+<p>AABB Clamp可能会造成偏色，[2]中提出了对应的解决方法，即将historyColor Clamp到AABB的边界而非角落，项目中没有实现就不再赘述了。</p>
+<h4 id="闪烁"><a href="#闪烁" class="headerlink" title="闪烁"></a>闪烁</h4><p>Clamping很容易导致高光部分发生闪烁的问题。由于我们采用的是周期性指数平均的混合方式并开启了HDR，某些亮点可能会周期性出现并主导混合结果进而导致闪烁。有两个解决这个瑕疵的Trick，第一个是在混合前进行可逆的临时性Tonemapping，第二个则是[2]中提出的根据Luminance降低高亮度样本的权重。两个方法都能一定程度上抑制闪烁，随便用一种即可。当然代价也是有的，高亮部分会稍显黯淡。Shader代码如下：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Tonemapping</span></span><br><span class="line"><span class="type">vec3</span> currentColor = Tonemapping(currentColorHDR); </span><br><span class="line"><span class="type">vec3</span> historyColor = Tonemapping(historyColorHDR);</span><br><span class="line"><span class="type">vec3</span> blendedColor = currentColor * (<span class="number">1.0</span> - historyWeight) + historyColor * historyWeight;</span><br><span class="line">FragColor = <span class="type">vec4</span>(InverseTonemapping(blendedColor), <span class="number">1.0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Weighted blending</span></span><br><span class="line"><span class="type">vec4</span> currentColor = AdjustHDRColor(currentColorHDR); </span><br><span class="line"><span class="type">vec4</span> historyColor = AdjustHDRColor(historyColorHDR);</span><br><span class="line"><span class="type">vec4</span> blendedColor = currentColor * (<span class="number">1.0</span> - historyWeight) + historyColor * historyWeight;</span><br><span class="line">FragColor = <span class="type">vec4</span>(RestoreHDRColor(blendedColor), <span class="number">1.0</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h4><p>首先是不使用Clamping的效果图：<br><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/png"></p>
+<p>使用Clamping并抑制闪烁后：</p>
+<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/ng.png"></p>
+<h3 id="渲染管线的其余部分"><a href="#渲染管线的其余部分" class="headerlink" title="渲染管线的其余部分"></a>渲染管线的其余部分</h3><h4 id="天空盒"><a href="#天空盒" class="headerlink" title="天空盒"></a>天空盒</h4><p>天空盒也要生成对应的Motion Vector。</p>
+<h4 id="SSAO"><a href="#SSAO" class="headerlink" title="SSAO"></a>SSAO</h4><p>由于此时的Depth Buffer是Jitter过的，SSAO的半球面采样点投影后也要加上Jitter才行，否则画面会整体闪烁。</p>
+<h4 id="Forward管线"><a href="#Forward管线" class="headerlink" title="Forward管线"></a>Forward管线</h4><p>Forward管线理论上也是与TAA适配的，不过为了输出Motion Vector的话需要借助MRT或Multi-Pass。</p>
+<h1 id="遗留问题"><a href="#遗留问题" class="headerlink" title="遗留问题"></a>遗留问题</h1><ul>
+<li><p>当高频的细节如草地或法线贴图与其他部分混合时Clamping会失效，如下图所示，注意下图的草地部分有淡淡的轨迹，[3]中提出了解决方法。</p>
+<p><img src="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/"></p>
+</li>
+<li><p>由于采样history frame时用的是双线性插值，经过TAA的累积后图像可能会变得更加模糊，解决方式为使用5-tap的Catmull-Rom Filter来滤波，参考[1]的Blurring部分。</p>
+</li>
+<li><p>画面在场景发生运动时会变得模糊似乎是这类时间性抗锯齿方法的通病，既然借助于历史信息了就必定会有这个问题，不过怎么说都比发生时域上的高频闪烁好。</p>
+</li>
+</ul>
+<h1 id="更好的方案"><a href="#更好的方案" class="headerlink" title="更好的方案"></a>更好的方案</h1><p>FSR2&#x2F;3、DLSS3往上(DLAA)和TSR都可以在超分的同时抗锯齿，DLSS还能借助光流估计以及CNN或ViT的帮助来减少鬼影并提高稳定性[7]。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><p><a target="_blank" rel="noopener" href="https://www.elopezr.com/temporal-aa-and-the-quest-for-the-holy-trail/">Temporal AA and the Quest for the Holy Trail</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://advances.realtimerendering.com/s2014/epic/TemporalAA.pptx">HIGH-QUALITY TEMPORAL SUPERSAMPLING SIGGRAPH COURSE 2014</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://advances.realtimerendering.com/s2016/s16_Ke.pptx">Temporal Antialiasing In Uncharted 4</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/425233743">主流抗锯齿方案详解（二）TAA</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.gdcvault.com/play/1022970/Temporal-Reprojection-Anti-Aliasing-in">Temporal Reprojection Anti-Aliasing in INSIDE</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://sugulee.wordpress.com/2021/06/21/temporal-anti-aliasingtaa-tutorial/">Temporal Anti-Aliasing(TAA) Tutorial</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Deep_Learning_Super_Sampling#DLSS_4.0">DLSS Wikipedia Page</a></p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8A%97%E9%94%AF%E9%BD%BF/" rel="tag"># 抗锯齿</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/11/09/%E5%88%9D%E8%AF%95%E5%9C%A8Steamdeck%E4%B8%8A%E8%BF%90%E8%A1%8CMaiMai/" rel="prev" title="初试在Steamdeck上运行MaiMai">
+                  <i class="fa fa-angle-left"></i> 初试在Steamdeck上运行MaiMai
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">dummyummy</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
