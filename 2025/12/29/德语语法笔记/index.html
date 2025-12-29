@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="德语文法小记最近在用Duolingo学习德语，感觉效率有点低，而且截至Section 2了Duo也没有给出任何比较学院派的语法解释。正好最近搞了个一年免费的Gemini Pro，便想着配合网上的资料和AI补充下德语语法，也权当作为验证不用课本是否能够学好语言的一个小实验😎。 说在前面为了不产生歧义，对所用的标注订一些标准  专业名词的翻译英语用圆括号()，德语大括号{}  分类按照语言形态学(L">
+<meta property="og:type" content="article">
+<meta property="og:title" content="德语语法笔记">
+<meta property="og:url" content="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="dummyummy的博客">
+<meta property="og:description" content="德语文法小记最近在用Duolingo学习德语，感觉效率有点低，而且截至Section 2了Duo也没有给出任何比较学院派的语法解释。正好最近搞了个一年免费的Gemini Pro，便想着配合网上的资料和AI补充下德语语法，也权当作为验证不用课本是否能够学好语言的一个小实验😎。 说在前面为了不产生歧义，对所用的标注订一些标准  专业名词的翻译英语用圆括号()，德语大括号{}  分类按照语言形态学(L">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/monophthongs_ipa.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/e_special.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/diphthongs_phonetic.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/diphthongs_ipa.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/ch_palatal.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/article.png">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/tenses.webp">
+<meta property="article:published_time" content="2025-12-29T03:26:08.000Z">
+<meta property="article:modified_time" content="2025-12-29T03:26:38.054Z">
+<meta property="article:author" content="dummyummy">
+<meta property="article:tag" content="德语">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/monophthongs_ipa.png">
+
+
+<link rel="canonical" href="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/","path":"2025/12/29/德语语法笔记/","title":"德语语法笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>德语语法笔记 | dummyummy的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">dummyummy的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%B7%E8%AF%AD%E6%96%87%E6%B3%95%E5%B0%8F%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">德语文法小记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%B4%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="nav-number">2.</span> <span class="nav-text">说在前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%BB%E9%9F%B3%E8%A7%84%E5%BE%8B"><span class="nav-number">4.</span> <span class="nav-text">读音规律</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%BF%E7%9F%AD%E5%85%83%E9%9F%B3-Monophthongs"><span class="nav-number">4.1.</span> <span class="nav-text">长短元音(Monophthongs)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%BF%E5%85%83%E9%9F%B3"><span class="nav-number">4.1.1.</span> <span class="nav-text">长元音</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%AD%E5%85%83%E9%9F%B3"><span class="nav-number">4.1.2.</span> <span class="nav-text">短元音</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E8%A7%84%E5%88%99"><span class="nav-number">4.1.3.</span> <span class="nav-text">特殊规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E6%B3%95%E7%A4%BA%E6%84%8F"><span class="nav-number">4.1.4.</span> <span class="nav-text">读法示意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e%E7%9A%84%E7%89%B9%E6%AE%8A%E8%AF%BB%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">e的特殊读法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E5%85%83%E9%9F%B3-Diphthongs"><span class="nav-number">4.3.</span> <span class="nav-text">双元音(Diphthongs)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%85%E9%9F%B3"><span class="nav-number">4.4.</span> <span class="nav-text">辅音</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E5%B0%BE%E6%B8%85%E5%8C%96-Auslautverhartung"><span class="nav-number">4.4.1.</span> <span class="nav-text">词尾清化 Auslautverhärtung</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E8%BE%85%E9%9F%B3%E7%BB%84%E5%90%88"><span class="nav-number">4.5.</span> <span class="nav-text">特殊辅音组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E8%AF%8D%E7%BC%80ion"><span class="nav-number">4.6.</span> <span class="nav-text">特殊词缀ion</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%8D%E6%B3%95%E7%89%B9%E5%BE%81"><span class="nav-number">5.</span> <span class="nav-text">词法特征</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7"><span class="nav-number">5.1.</span> <span class="nav-text">性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E8%AF%8D%E7%9A%84%E6%80%A7%E8%A7%84%E5%BE%8B"><span class="nav-number">5.1.1.</span> <span class="nav-text">名词的性规律</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%89%E4%B8%BB%E9%A2%98"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">按主题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%98%B3%E6%80%A7"><span class="nav-number">5.1.1.1.1.</span> <span class="nav-text">阳性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%98%B4%E6%80%A7"><span class="nav-number">5.1.1.1.2.</span> <span class="nav-text">阴性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%AD%E6%80%A7"><span class="nav-number">5.1.1.1.3.</span> <span class="nav-text">中性</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%89%E6%8B%BC%E5%86%99"><span class="nav-number">5.1.1.2.</span> <span class="nav-text">按拼写</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%98%B3%E6%80%A7-1"><span class="nav-number">5.1.1.2.1.</span> <span class="nav-text">阳性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%98%B4%E6%80%A7-1"><span class="nav-number">5.1.1.2.2.</span> <span class="nav-text">阴性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%AD%E6%80%A7-1"><span class="nav-number">5.1.1.2.3.</span> <span class="nav-text">中性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%8D%E5%90%88%E8%AF%8D"><span class="nav-number">5.1.1.2.4.</span> <span class="nav-text">复合词</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0"><span class="nav-number">5.2.</span> <span class="nav-text">数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%BC"><span class="nav-number">5.3.</span> <span class="nav-text">格</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E6%A0%BC"><span class="nav-number">5.3.1.</span> <span class="nav-text">主格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%97%E6%A0%BC"><span class="nav-number">5.3.2.</span> <span class="nav-text">受格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E6%A0%BC"><span class="nav-number">5.3.3.</span> <span class="nav-text">与格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%A0%BC"><span class="nav-number">5.3.4.</span> <span class="nav-text">属格</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E8%AF%8D"><span class="nav-number">5.4.</span> <span class="nav-text">代词</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E7%89%B9%E5%BE%81-WIP"><span class="nav-number">6.</span> <span class="nav-text">语法特征 WIP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%80%81-Voices"><span class="nav-number">6.1.</span> <span class="nav-text">语态 Voices</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B0%94-Moods"><span class="nav-number">6.2.</span> <span class="nav-text">语气 Moods</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E6%80%81-Tenses-das-Tempus"><span class="nav-number">6.3.</span> <span class="nav-text">时态 Tenses {das Tempus}</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8EPerfekt%E5%92%8CPrateritum"><span class="nav-number">6.3.1.</span> <span class="nav-text">关于Perfekt和Präteritum</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">一些思考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dummyummy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="德语语法笔记 | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          德语语法笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-29 11:26:08 / 修改时间：11:26:38" itemprop="dateCreated datePublished" datetime="2025-12-29T11:26:08+08:00">2025-12-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">语言</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="德语文法小记"><a href="#德语文法小记" class="headerlink" title="德语文法小记"></a>德语文法小记</h1><p>最近在用Duolingo学习德语，感觉效率有点低，而且截至Section 2了Duo也没有给出任何比较学院派的语法解释。正好最近搞了个一年免费的Gemini Pro，便想着配合网上的资料和AI补充下德语语法，也权当作为验证不用课本是否能够学好语言的一个小实验😎。</p>
+<h1 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h1><p>为了不产生歧义，对所用的标注订一些标准</p>
+<ul>
+<li>专业名词的翻译英语用圆括号()，德语大括号{}</li>
+</ul>
+<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><p>按照语言形态学(Linguistic typology)的分类，大多数语言可以归为以下的两大类，分析语(Analytic)和综合语(Synthetic)，分析语又可细分为孤立语(Isolating)，而综合语又可细分为屈折语(Fusional&#x2F;Inflected)、黏着语(Agglutinative)、多式综合语(Polysynthetic)和少式综合语(Oligosynthetic)。</p>
+<p>一些典型的例子，汉语和越南语属于孤立语，日语属于黏着语，阿伊努语属于多式综合语，而德语则属于屈折语。</p>
+<p>屈折语在Wiki上的定义如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">屈折语（英语：fusional language，或称inflectional language）为综合语（synthetic language）之一种。屈折语和同为综合语的黏着语之间的分别在于屈折语的词素趋向连在一起，较为难以分割，意即屈折语的一个词缀经常同时表达多种意思，而黏着语的一个词缀一般倾向于只表达一种意思。不过黏着语和屈折语之间的界限很多时候并不明显，因此可将黏着语和屈折语之间的关系视为一个连续体，而很多语言则落于“完全的”黏着语和“高度的”屈折语之间。</span><br></pre></td></tr></table></figure>
+
+<p>[2]中定义屈折语通过单词本身的形式变化来表达语法功能，屈折语广泛存在于印欧语系中。</p>
+<p>[4]中答主提到了一个很有意思的概括：</p>
+<ul>
+<li><p>学黏着语主要是<strong>背词缀</strong></p>
+</li>
+<li><p>学屈折语主要是<strong>背表格</strong></p>
+</li>
+<li><p>学分析语主要是<strong>背字典</strong></p>
+</li>
+</ul>
+<h1 id="读音规律"><a href="#读音规律" class="headerlink" title="读音规律"></a>读音规律</h1><p>下面的内容基本来自Gemini总结和[10]，个人也大致验证了下，基本是对的。德语的音标与IPA大体是一致的。</p>
+<h2 id="长短元音-Monophthongs"><a href="#长短元音-Monophthongs" class="headerlink" title="长短元音(Monophthongs)"></a>长短元音(Monophthongs)</h2><p>德语的长短元音不仅时长不同，口型和音标也往往不同。简单来说：**长元音通常发得“紧”且“闭”，短元音通常发得“松”且“开”。**具体的读音强烈建议参考[12]。以下是发长短元音的不同情况。</p>
+<h3 id="长元音"><a href="#长元音" class="headerlink" title="长元音"></a>长元音</h3><ul>
+<li>元音后面没有任何辅音，或者只有一个辅音</li>
+<li>元音重复（双元音字母，如aa&#x2F;ee&#x2F;oo）</li>
+<li>元音后有无声的 <code>h</code> {Dehnungs-h}</li>
+<li>特殊组合 <code>ie</code> <code>ieh</code> 在德语中是长音 <code>i</code> 的标志</li>
+<li>元音后是 <code>ß</code> （相当于ss）前面的元音永远是长元音</li>
+</ul>
+<h3 id="短元音"><a href="#短元音" class="headerlink" title="短元音"></a>短元音</h3><ul>
+<li>后面有两个或更多辅音（闭音节）</li>
+<li>后面是双写辅音</li>
+<li>某些特殊辅音组合（如<code>ck</code>&#x2F; <code>tz</code>&#x2F; <code>sch</code>&#x2F; <code>ng</code>）等同于双写辅音</li>
+</ul>
+<h3 id="特殊规则"><a href="#特殊规则" class="headerlink" title="特殊规则"></a>特殊规则</h3><ul>
+<li>虚词例外（看起来像长音，实际发短音），如<code>an</code>&#x2F;<code>mit</code>&#x2F;<code>um</code>&#x2F;<code>im</code>&#x2F;<code>das</code>&#x2F;<code>es</code>&#x2F;<code>was</code>，也有一些例外，比如<code>er</code>&#x2F;<code>wir</code>&#x2F;<code>ihr</code>&#x2F;<code>wen</code>&#x2F;<code>dem</code>中的元音就发辅音</li>
+<li>词形变化保持元音长度</li>
+</ul>
+<h3 id="读法示意"><a href="#读法示意" class="headerlink" title="读法示意"></a>读法示意</h3><p>下面的表格来自[12]：</p>
+<p><img src="/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/monophthongs_ipa.png"></p>
+<h2 id="e的特殊读法"><a href="#e的特殊读法" class="headerlink" title="e的特殊读法"></a>e的特殊读法</h2><p>在某些音节中，e的读法会有变化，参考下面的表格：</p>
+<p><img src="/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/e_special.png"></p>
+<h2 id="双元音-Diphthongs"><a href="#双元音-Diphthongs" class="headerlink" title="双元音(Diphthongs)"></a>双元音(Diphthongs)</h2><p>德语中的双元音一共有4个，分别是<code>ei(ai,ay,ey)</code>&#x2F;<code>au</code>&#x2F;<code>eu</code>&#x2F;<code>äu</code>。[12]中给出的音标如下图所示，其中<code>eu</code>&#x2F;<code>äu</code>的音标在Netzverb Dictionary中一般标注为<code>[ɔɪ̯]</code>，<code>ai</code>&#x2F;<code>ay</code>&#x2F;<code>ey</code>的读音与<code>ei</code>保持一致。</p>
+<p><img src="/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/diphthongs_phonetic.png"></p>
+<p>对应的IPA示意图如下：</p>
+<p><img src="/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/diphthongs_ipa.png"></p>
+<h2 id="辅音"><a href="#辅音" class="headerlink" title="辅音"></a>辅音</h2><p>与英语存在着一些不同，需要注意看到W读V，看到V读F，看到Z读Ts。V只有在某些外来词中才会都V，如Vase。</p>
+<h3 id="词尾清化-Auslautverhartung"><a href="#词尾清化-Auslautverhartung" class="headerlink" title="词尾清化 Auslautverhärtung"></a>词尾清化 Auslautverhärtung</h3><p>浊辅音（包含爆破音(plosives)、擦音(fricatives)和塞擦音(affricates)）在句尾时需要清化，[14]中给出的音标例子如下：</p>
+<ul>
+<li>爆破音：b$\rarr$p，d$\rarr$t，g$\rarr$k</li>
+<li>擦音：z$\rarr$s，v$\rarr$f</li>
+</ul>
+<h2 id="特殊辅音组合"><a href="#特殊辅音组合" class="headerlink" title="特殊辅音组合"></a>特殊辅音组合</h2><p>德语中的特殊辅音组合很多，比如<code>tsch</code>&#x2F;<code>sch</code>&#x2F;<code>sp</code>&#x2F;<code>st</code>&#x2F;<code>ch</code>。</p>
+<ul>
+<li><p><code>tsch</code>和读音就像英语中chair中的ch</p>
+</li>
+<li><p><code>sch</code>的音标始终为<code>[ʃ]</code></p>
+</li>
+<li><p>当且仅当位于音节开头时<code>sp</code>&#x2F;<code>st</code>读<code>[ʃp]</code> &#x2F; <code>[ʃt]</code></p>
+</li>
+<li><p><code>ch</code>有三种读音</p>
+<ul>
+<li><p>一般情况下，发硬腭清擦音<code>[ç]</code>，比如在单词Ich和Chemie中。舌头和摆放位置如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Its place of articulation is palatal, which means it is articulated with the middle or back part of the tongue raised to the hard palate.</span><br></pre></td></tr></table></figure>
+
+<p>另可以参照Wikipedia上的示意图来发音：</p>
+<p><img src="/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/ch_palatal.png"></p>
+</li>
+<li><p>在元音<code>a</code>&#x2F;<code>o</code>&#x2F;<code>u</code>&#x2F;<code>au</code>后面变为软腭清擦音<code>[x]</code>，示例单词为Bauch&#x2F;Rauch&#x2F;Buch&#x2F;Hoch</p>
+</li>
+<li><p>在后面跟s变成<code>chs</code>以及在某些外来词的开头时变为<code>[k]</code>，示例单词为Sechs&#x2F;Chaos</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>还有一些别的辅音组合未在[10]中列出，罗列如下：</p>
+<ul>
+<li><code>qu</code>发<code>[kv]</code>，如Qualität</li>
+<li><code>kn</code>&#x2F;<code>gn</code>&#x2F;<code>ps</code>中的n也要发音</li>
+<li><code>ig</code>在词尾时的音标变为<code>[iç]</code>，如König</li>
+</ul>
+<h2 id="特殊词缀ion"><a href="#特殊词缀ion" class="headerlink" title="特殊词缀ion"></a>特殊词缀ion</h2><p>德语中的某些词汇会以ion结尾，读音听起来就像英语中的eon，IPA音标为<code>[i̯oːn]</code>，示例单词为Addition&#x2F;Aggression&#x2F;Definition。</p>
+<h1 id="词法特征"><a href="#词法特征" class="headerlink" title="词法特征"></a>词法特征</h1><p>德语作为屈折语最大的特征便是变格(Declension){Deklination}，[1]中定义<code>变格在语言学上是指名词、代词、冠词、形容词在句子中为了实现特定的语法功能而产生的词形变化。动词的这种屈折变化一般被称作变位。...词通过变格能够反映自身的性（阴性、阳性、中性等）、数（单数、双数、复数等）、格（主格、宾格、与格、从格、属格、处格等）及其他语法范畴上的归属</code>。注意这里的变格是一个大的概念，包含了德语中的格(Case){Kasus}，不要混淆了。</p>
+<p>按照[4]中的说法，要开始背表格了，即名词、代词、冠词和形容词的性、数、格所对应的表格。</p>
+<p>性、数、格这三个东西本质上只能是归属于名词的，其他的代词、冠词和形容词是是遵从语言学的一致（或称对协）(Agreement){Kongruenz}原则而发生变化的，[5]中给出了常见的一致性语法关系：</p>
+<ul>
+<li><p>动词与形容词与主语一致：性、数、身</p>
+</li>
+<li><p>名词与修饰语一致：性、数、格</p>
+</li>
+<li><p>名词与指代它的代词：性、数</p>
+</li>
+</ul>
+<p>所以说核心在于掌握名词的性、数、格，以及对应代词、冠词和形容词的变格表格以及谓语动词的变位表格。</p>
+<h2 id="性"><a href="#性" class="headerlink" title="性"></a>性</h2><p>德语中的无论是表示人还是物的名词都可以分为阳性{maskulin}、阴性{feminin}和中性{neutral}三种，词性的变化会遵从一致性原则体现在修饰名词的冠词和形容词上。阳性对应der，阴性对应die，而中性对应das，这三者又会随着数和格发生响应的变化，如下表所示（要开始背表格了）：</p>
+<p><img src="/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/article.png"></p>
+<p>所以说在记忆名词时必须要记住它的性，这方面也不能想当然，比如[6]中提到了一个例子，太阳Sonne是阴性的{die Sonne}，而月亮Mond则是阳性的{der Mond}，如果从中文的语境中出发应该大概率会搞错。[6]的作者给出了一个猜测：<code>温习北欧神话时才猛然意识到，对于古日耳曼人来说，掌管太阳的是女神Sól / Sunna，而掌管月亮的则是男神Mani</code>，这样若是将这个词性视为远古日耳曼神话的吉光片羽就说得通了。</p>
+<p>当然词性的规律并非完全无迹可寻，有很多资料都有总结能够应对大部分单词词性的诀窍，这里大致记录下[9]中提到的方法。</p>
+<h3 id="名词的性规律"><a href="#名词的性规律" class="headerlink" title="名词的性规律"></a>名词的性规律</h3><p>有两种分类方式可以大致判断名词的性，一是按照名词的主题(Noun Groups)分类，而是按照名词的拼写(Forms)分类。</p>
+<h4 id="按主题"><a href="#按主题" class="headerlink" title="按主题"></a>按主题</h4><p>以下只是大致的分类，每一类中都有特例，具体请参考[9]。</p>
+<p>说实话感觉这个规律并没有很普遍🤣。</p>
+<h5 id="阳性"><a href="#阳性" class="headerlink" title="阳性"></a>阳性</h5><ul>
+<li><p>部分Animals</p>
+</li>
+<li><p>Cars</p>
+</li>
+<li><p>Currency</p>
+</li>
+<li><p>Days, Months, and Seasons</p>
+</li>
+<li><p>Directions</p>
+</li>
+<li><p>Drinks: Alcoholic and Plant-based</p>
+</li>
+<li><p>Male Persons</p>
+</li>
+<li><p>Mountains and Mountain Ranges</p>
+</li>
+<li><p>Non-German Rivers</p>
+</li>
+<li><p>Outer Space</p>
+</li>
+<li><p>Rocks and Minerals</p>
+</li>
+<li><p>Weather</p>
+</li>
+</ul>
+<h5 id="阴性"><a href="#阴性" class="headerlink" title="阴性"></a>阴性</h5><ul>
+<li>Airplane, motorcycle, ship makes&#x2F;models&#x2F;names</li>
+<li>部分Animals</li>
+<li>Female Persons</li>
+<li>Numeral used as nouns</li>
+<li>Rivers within Germany, Austria, Switzerland</li>
+<li>Trees, Fruits, and Flowers</li>
+</ul>
+<h5 id="中性"><a href="#中性" class="headerlink" title="中性"></a>中性</h5><ul>
+<li>Alphabet letters and music notes</li>
+<li>Continents, cities, provinces, and most countries</li>
+<li>Gerunds（-ing动名词）, colors, languages, English -ing forms and other parts of speech used as nouns</li>
+<li>Hotels, cafes, restaurants, and movie theaters</li>
+<li>Metals and chemical elements</li>
+<li>Scientific units</li>
+<li>Young persons and baby animals</li>
+</ul>
+<h4 id="按拼写"><a href="#按拼写" class="headerlink" title="按拼写"></a>按拼写</h4><p>按主题分类的体系中有很多的例外，很多都可以用按拼写分类的方式的解释，相当于这条规则的优先级会高不少。这里的按拼写一般情况下指的是根据后缀来判断。如果某个词是缩写形式的话需要从原型出发判断。</p>
+<h5 id="阳性-1"><a href="#阳性-1" class="headerlink" title="阳性"></a>阳性</h5><ul>
+<li>-ant&#x2F;-ast&#x2F;-ich&#x2F;-ig&#x2F;-ling&#x2F;-or&#x2F;-us</li>
+<li>nouns formed from strong verbs</li>
+<li>~60% of nouns ending in -en&#x2F;-el&#x2F;-er</li>
+</ul>
+<h5 id="阴性-1"><a href="#阴性-1" class="headerlink" title="阴性"></a>阴性</h5><ul>
+<li>-a&#x2F;-anz&#x2F;-enz&#x2F;-ei&#x2F;-ie&#x2F;-heit&#x2F;-keit&#x2F;-ik&#x2F;-sion&#x2F;-tion&#x2F;-sis&#x2F;-tät&#x2F;-ung&#x2F;-ur&#x2F;schaft</li>
+<li>-in or -frau denoting the female counterpart to a male person</li>
+<li>90% of nouns ending in -e</li>
+<li>most nouns (coming from verbs) ending in -t</li>
+</ul>
+<h5 id="中性-1"><a href="#中性-1" class="headerlink" title="中性"></a>中性</h5><ul>
+<li>-chen&#x2F;-lein&#x2F;-icht&#x2F;-il&#x2F;-it&#x2F;-ma&#x2F;-ment&#x2F;-tel&#x2F;-tum&#x2F;-um</li>
+<li>most nouns that start with the prefix Ge-</li>
+<li>~70% of nouns ending with -nis and -sal</li>
+<li>-al&#x2F;-an&#x2F;-ar&#x2F;-är&#x2F;-at&#x2F;-ent&#x2F;-ett&#x2F;-ier&#x2F;-iv-&#x2F;-o&#x2F;-on (foreign loan words for objects)</li>
+</ul>
+<h5 id="复合词"><a href="#复合词" class="headerlink" title="复合词"></a>复合词</h5><p>一般情况下，复合词的性是由最后的词决定的，比如<strong>der</strong> Fahr<strong>plan</strong></p>
+<h2 id="数"><a href="#数" class="headerlink" title="数"></a>数</h2><p>关于复数形式的变化规律总结，请参考[15]和[16]。</p>
+<h2 id="格"><a href="#格" class="headerlink" title="格"></a>格</h2><p>参考资料为[1]。</p>
+<p>为了表明一个名词与居中其他词类的关系，会用名词的「格」形式来表达。德语中共有四种格，分别是主格{Nominativ}，受格{Akkusativ}、与格{Dativ}和属格{Genitiv}。一般来说名词和名词前的修饰词会发生一些小变化，用来指示名词属于哪种格。</p>
+<h3 id="主格"><a href="#主格" class="headerlink" title="主格"></a>主格</h3><p>主格代表句子的主语，通常搭配疑问词Wer或Was使用，如<strong>Ich</strong> gebe dir ein Buch。</p>
+<p>跟在系动词{sein&#x2F;werden&#x2F;bleiden}后的名词也是主格，如Das ist ein schönes Buch。</p>
+<h3 id="受格"><a href="#受格" class="headerlink" title="受格"></a>受格</h3><p>受格又称直接受格，是句子中的直接受词，也就是动作直接发生的对象，通常搭配疑问词Wen或Was（对谁或发生了什么事情），如Ich gebe dir ein Buch中的ein Buch。注意与与格区分开。</p>
+<h3 id="与格"><a href="#与格" class="headerlink" title="与格"></a>与格</h3><p>与格用于句子中的间接受词，即间接接受东西或动作的人、事物，搭配疑问词Wem oder Was（这是为了谁或为谁做的），如Ich gebe dir ein Buch中的dir。某些动词永远搭配与格，如danken&#x2F;glauben&#x2F;helfen&#x2F;gehören&#x2F;gefallen。</p>
+<p>有些特定的介词也会搭配与格，如auβer&#x2F;bei&#x2F;mit&#x2F;nach。</p>
+<h3 id="属格"><a href="#属格" class="headerlink" title="属格"></a>属格</h3><p>表明某物或某人属于谁，即占有或所有权，搭配疑问词Wessen（这是谁的），如Das ist das Buch eines Lehrers。属格通常用于书面语，口语中通常使用介词von+与格来代替。</p>
+<h2 id="代词"><a href="#代词" class="headerlink" title="代词"></a>代词</h2><p>[7]中提到，日耳曼语中的代词可以被划分为以下几个大类：</p>
+<ul>
+<li>人称代词(Personal pronouns)，如英语中的me&#x2F;he&#x2F;she</li>
+<li>物主代词(Possessive pronouns)，如英语中的my&#x2F;your&#x2F;his&#x2F;her&#x2F;its</li>
+<li>指示代词(Demonstrative pronouns)，如英语中的this&#x2F;that&#x2F;such</li>
+<li>反身代词(Reflexive pronouns)，如英语中的myself&#x2F;himself&#x2F;herself</li>
+<li>关系代词(Relative pronouns)，如英语中的which&#x2F;who&#x2F;whose&#x2F;whom</li>
+<li>疑问代词(Interrogative pronouns)，如英语中的who&#x2F;what&#x2F;why&#x2F;how</li>
+<li>不定代词(Indefinite pronouns)，如英语中的someone&#x2F;something&#x2F;nothing</li>
+</ul>
+<p>每一类代词都会随着性数格发生变化，所以说又多了几张要背的表格。</p>
+<h1 id="语法特征-WIP"><a href="#语法特征-WIP" class="headerlink" title="语法特征 WIP"></a>语法特征 WIP</h1><p>这部分比较复杂，之后再做补充，先根据[17]和[18]简单总结下。</p>
+<h2 id="语态-Voices"><a href="#语态-Voices" class="headerlink" title="语态 Voices"></a>语态 Voices</h2><p>德语中也有主动和被动语态。</p>
+<h2 id="语气-Moods"><a href="#语气-Moods" class="headerlink" title="语气 Moods"></a>语气 Moods</h2><p>德语共有三种语气，分别是直陈式{Indikativ}、虚拟式{Konjunktiv}和命令式{Imperativ}。</p>
+<h2 id="时态-Tenses-das-Tempus"><a href="#时态-Tenses-das-Tempus" class="headerlink" title="时态 Tenses {das Tempus}"></a>时态 Tenses {das Tempus}</h2><p>首先回忆下英语的若干个时态，由Gemini总结：</p>
+<table>
+<thead>
+<tr>
+<th><strong>状态 \ 时间</strong></th>
+<th><strong>过去 (Past)(那时)</strong></th>
+<th><strong>现在 (Present)(现在&#x2F;总是)</strong></th>
+<th><strong>将来 (Future)(以后)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>一般 (Simple)</strong> <em>陈述事实</em></td>
+<td><strong>I wrote</strong> 我(那时)写了。(动作发生过)</td>
+<td><strong>I write</strong> 我写。(那是我的习惯&#x2F;职业)</td>
+<td><strong>I will write</strong> 我将要写。</td>
+</tr>
+<tr>
+<td><strong>进行 (Continuous)</strong> <em>正在进行</em></td>
+<td><strong>I was writing</strong> 我(那时)正在写。(被电话打断时)</td>
+<td><strong>I am writing</strong> 我(此刻)正在写。</td>
+<td><strong>I will be writing</strong> 我(届时)将正在写。</td>
+</tr>
+<tr>
+<td><strong>完成 (Perfect)</strong> <em>回顾&#x2F;已完成</em></td>
+<td><strong>I had written</strong> 我(那时)已经写完了。(在回家之前)</td>
+<td><strong>I have written</strong> 我(现在)已经写完了。(稿子在这儿)</td>
+<td><strong>I will have written</strong> 我(届时)将已经写完了。</td>
+</tr>
+<tr>
+<td><strong>完成进行 (Perf. Cont.)</strong> <em>持续到现在</em></td>
+<td><strong>I had been writing</strong> 我(那时)一直在写。(写累了)</td>
+<td><strong>I have been writing</strong> 我(这阵子)一直在写。(还没停)</td>
+<td><strong>I will have been writing</strong> 我(届时)将已经写了多久了。</td>
+</tr>
+</tbody></table>
+<p>而德语中不存在进行时，剩下的就只有6个时态，分别是</p>
+<ul>
+<li><strong>现在时 {Präsens}</strong>：表现在发生的时态，也能表示将来确定的事情，甚至也包含过去开始但目前未结束的事情</li>
+<li><strong>现在完成时 {Perfekt}</strong>：实际为德语的过去时，是口语中表示过去事件的主力军</li>
+<li><strong>过去时 {Präteritum}</strong>：多用于书面或特定文法</li>
+<li><strong>过去完成时 {Plusquamperfekt}</strong>：表示比过去某时间点更早的动作时间</li>
+<li><strong>未来一式 {Futur I}</strong>：对应英语的未来时但主要强调不确定性</li>
+<li><strong>未来二式 {Futur II}</strong>：对应英语的未来完成时，相较于Futur I，强调未来极可能完成的动作</li>
+</ul>
+<p>[17]给出了非常好的总结图：</p>
+<p><img src="/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/tenses.webp"></p>
+<h3 id="关于Perfekt和Prateritum"><a href="#关于Perfekt和Prateritum" class="headerlink" title="关于Perfekt和Präteritum"></a>关于Perfekt和Präteritum</h3><p>这两个时态基本可以看作是可互换的，只要是过去发生且截至当前已经结束的事情都可以表示。在口语中基本会使用Perfekt，但有一些特例，[19]的原话是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">There is a single concept of the past (die Vergangenheit) and the Präteritum and Perfekt tenses are interchangeable in expressing it. In practice, Germans use the Perfekt for about 90% of speech; they only use the Präteritum in speech for the auxiliary and modal verbs and a few very common strong or mixed verbs.</span><br></pre></td></tr></table></figure>
+
+<p>剩下的10%特例就是助动词、情态动词和某些词汇了，由Gemini举例如下</p>
+<ul>
+<li>助动词sein&#x2F;haben等等，例如<ul>
+<li>Ich war zu Hause✅</li>
+<li>Ich bin zu Hause gewesen❌</li>
+</ul>
+</li>
+<li>由于情态动词的完成时结构很复杂，所以口语几乎清一色过去时，例如<ul>
+<li>Ich musste arbeiten✅</li>
+<li>Ich habe arbeiten müssen❌</li>
+</ul>
+</li>
+<li>极少数常用的动词用过去时更顺口，如wissen&#x2F;denken&#x2F;geben，这点存在地区差异<ul>
+<li>Das wusste ich nicht 比 habe gewust常用的多</li>
+</ul>
+</li>
+</ul>
+<h1 id="一些思考"><a href="#一些思考" class="headerlink" title="一些思考"></a>一些思考</h1><ul>
+<li><p>德语好的一点是掌握了元辅音的读音和少数几个音变规律后，单词基本就会念了，不像是英语，乱七八糟的变音，不查音标根本读不对。至于英语的拼读规则为什么会那么随机，问了下AI，大致原因有四个：</p>
+<ul>
+<li><p><strong>拼写深度不同：</strong> 德语是“所见即所得”的浅层拼写，字母与发音高度对应；而英语拼写与发音严重脱节，充满了特例。</p>
+</li>
+<li><p><strong>外来词影响不同：</strong> 英语直接保留了大量法语和拉丁语的原始拼写，导致规则混乱；而德语即便引入外来词，也往往会将其规范化。</p>
+</li>
+<li><p><strong>历史演变不同：</strong> 英语经历了“元音大推移”，发音变了但拼写却因印刷术定型而没变，造成了“文不对音”的历史错位。</p>
+</li>
+<li><p><strong>人为干预不同：</strong> 德语国家会定期进行官方正字法改革来修正拼写以适应发音，而英语从未有过统一改革，全靠约定俗成。</p>
+</li>
+</ul>
+</li>
+<li><p>区分nicht与kein</p>
+<ul>
+<li>nicht用于否定动词、形容词和副词，同时当名词前是由定冠词der&#x2F;die&#x2F;das修饰时也要用nicht</li>
+<li>kein用于替换不定冠词ein来表示某个物体没有了</li>
+</ul>
+</li>
+<li><p>德语中的表语</p>
+<ul>
+<li>当形容词跟在系动词{sein&#x2F;werden&#x2F;bleiben}后面做表语时，直接保持原样，无需做任何变化</li>
+<li>系动词跟英语基本一致，除了上面的三个，还有一堆感官系动词</li>
+<li>比如，Die Lampe ist neu&#x2F;Der Kaffee schmeckt bitter</li>
+</ul>
+</li>
+<li><p>注意音标<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Near-close_near-front_rounded_vowel">ʏ</a>和<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Close_front_rounded_vowel">yː</a>的读音，舌位靠前而非靠后</p>
+</li>
+<li><p>德语发音的一大特点是，所有字母都要发音</p>
+</li>
+<li><p>关于<code>ch</code>前元音是长音还是短音，Reddit网友的回答是没有规律，见[13]</p>
+</li>
+<li><p>确定读音请使用Wikitionary或Duden</p>
+</li>
+<li><p>助动词和系动词的区别：系动词有实义，而助动词没有独立含义，只是为了帮助另一个实义动词完成语法任务。德语中的sein&#x2F;werden既可以充当系动词也可以充当助动词</p>
+</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://readle-app.com/zh-hant/grammar/german/a1/the-four-german-cases/">【德語文法】德文四格(Nominativ, Akkusativ, Dativ, Genitiv)用法整理</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/659011004">常见的语言类型：黏着语、孤立语、屈折语、多式综合语</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Synthetic_language">Wiki for Linguistic typology</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/482232321/answer/2505257485">黏着语、屈折语、分析语的区别是什么？</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%B8%80%E8%87%B4_(%E8%AA%9E%E6%B3%95)">一致 (语法)</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.metaphox.com/post/genus-numerus-kasus/">性数格</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/German_pronouns">German pronouns</a></li>
+<li><a target="_blank" rel="noopener" href="https://lingoni.com/german-pronouns/">Understanding German Pronouns: A Comprehensive Guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://germanwithlaura.com/noun-gender/">German Noun Gender</a></li>
+<li><a target="_blank" rel="noopener" href="https://lets-learn-german.com/german-language/beginning-german/diphthongs">German Diphthongs</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Help:IPA/Standard_German">IPA&#x2F;Standard German</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.google.com/document/d/e/2PACX-1vSyJpp1JkPge9bQfb8Nx0cvzmeNT1Dc1uaoRFjpBUFqipz6mL-5WoMRZDF4mtd1HbMOswwpE7rrxGgD/pub">German Vowels Sheet for Native-like Pronunciation</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/German/comments/c1blkq/long_or_short_vowel_before_ch_ipa_transcription/">Long or short vowel before <ch> ? (IPA transcription)</a></li>
+<li><a target="_blank" rel="noopener" href="https://de.wikipedia.org/wiki/Auslautverh%C3%A4rtung">Auslautverhärtung</a></li>
+<li><a target="_blank" rel="noopener" href="https://germanwithlaura.com/plurals/">German Plurals</a></li>
+<li><a target="_blank" rel="noopener" href="https://lets-learn-german.com/german-language/beginning-german/plural">German Plural Nouns</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.spra-chen-tw.com/2024/02/14/a1-grammatik-konjug-tempora-modi-passiv/">［德語文法］［初階德語］德語動詞變位：六種時態與三種語氣</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.vistawide.com/german/grammar/german_verb_tenses_summary.htm">Summary of German verb tenses, voices, &amp; moods</a></li>
+<li><a target="_blank" rel="noopener" href="https://germanforenglishspeakers.com/verbs/perfect-vs-preterite/">Perfect vs. Preterite</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BE%B7%E8%AF%AD/" rel="tag"># 德语</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/16/TAA/" rel="prev" title="TAA">
+                  <i class="fa fa-angle-left"></i> TAA
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">dummyummy</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
