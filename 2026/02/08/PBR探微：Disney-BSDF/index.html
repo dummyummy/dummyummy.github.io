@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="\[ \newcommand{\d}{\mathrm{d}} \newcommand{\norm}[1]{\left\| #1 \right\|} \] 前言 最近突然又想去搓一个离线渲染器作为玩具项目了，趁机深入看了下Disney Principled BSDF，也算是又从头学了一遍PBR，谨将所学的东西略微记下，以便后续查阅。 基本定义 由于Disney BSDF涉及大量的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PBR探微：Disney BSDF">
+<meta property="og:url" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/index.html">
+<meta property="og:site_name" content="dummyummy的博客">
+<meta property="og:description" content="\[ \newcommand{\d}{\mathrm{d}} \newcommand{\norm}[1]{\left\| #1 \right\|} \] 前言 最近突然又想去搓一个离线渲染器作为玩具项目了，趁机深入看了下Disney Principled BSDF，也算是又从头学了一遍PBR，谨将所学的东西略微记下，以便后续查阅。 基本定义 由于Disney BSDF涉及大量的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/refraction.png">
+<meta property="article:published_time" content="2026-02-08T11:35:37.753Z">
+<meta property="article:modified_time" content="2026-02-09T13:31:18.744Z">
+<meta property="article:author" content="dummyummy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/refraction.png">
+
+
+<link rel="canonical" href="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/","path":"2026/02/08/PBR探微：Disney-BSDF/","title":"PBR探微：Disney BSDF"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PBR探微：Disney BSDF | dummyummy的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">dummyummy的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">基本定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ndf"><span class="nav-number">2.1.</span> <span class="nav-text">NDF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shadowing-masking-function-g"><span class="nav-number">2.2.</span> <span class="nav-text">Shadowing-Masking Function G</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E5%B9%B3%E9%9D%A2bsdf%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">微平面BSDF模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%B3%BB%E6%95%B0"><span class="nav-number">2.3.1.</span> <span class="nav-text">第一个系数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%B3%BB%E6%95%B0"><span class="nav-number">2.3.2.</span> <span class="nav-text">第二个系数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE%E8%A1%A8%E9%9D%A2%E7%9A%84bsdfbrdfbsdf"><span class="nav-number">2.3.3.</span> <span class="nav-text">微表面的BSDF（BRDF+BSDF）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#reflection-brdf"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">Reflection BRDF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#refractiontransmission-brdf"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">Refraction(Transmission) BRDF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bsdf"><span class="nav-number">2.3.4.</span> <span class="nav-text">BSDF</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%82%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">杂记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dummyummy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PBR探微：Disney BSDF | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PBR探微：Disney BSDF
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-02-08 19:35:37" itemprop="dateCreated datePublished" datetime="2026-02-08T19:35:37+08:00">2026-02-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-09 21:31:18" itemprop="dateModified" datetime="2026-02-09T21:31:18+08:00">2026-02-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><span class="math display">\[
+\newcommand{\d}{\mathrm{d}}
+\newcommand{\norm}[1]{\left\| #1 \right\|}
+\]</span></p>
+<h1 id="前言">前言</h1>
+<p>最近突然又想去搓一个离线渲染器作为玩具项目了，趁机深入看了下Disney
+Principled
+BSDF，也算是又从头学了一遍PBR，谨将所学的东西略微记下，以便后续查阅。</p>
+<h1 id="基本定义">基本定义</h1>
+<p>由于Disney
+BSDF涉及大量的公式，这里有必要重新对于所有的公式和定义进行澄清。</p>
+<h2 id="ndf">NDF</h2>
+<p>法线分布函数NDF究竟是什么？之前我的视线总是聚焦于具体的公式如Beckmann，GGX和GTR等等，很少会去关注NDF的定义。其实在不久之前，我还以为NDF就是法线分布的pdf，满足半球面上的积分为一即可，然而NDF的定义却并非如此。</p>
+<p>[1]中对于NDF的描述是
+<code>the statistical distribution of surface normals m over the microsurface</code>，这里的<span
+class="math inline">\(\mathrm{m}\)</span>指的就是微观法线，也就是我们常说的半程向量<span
+class="math inline">\(\mathrm{h}\)</span>。乍一看这个定义似乎说的还是pdf，但NDF实际上是用微观面积与宏观面积的比值来定义的。具体来说，定义宏观面积的微元为<span
+class="math inline">\(\mathrm{d}A\)</span>，微观法线<span
+class="math inline">\(\mathrm{m}\)</span>对应的立体角微元为<span
+class="math inline">\(\mathrm{d}\mathrm{\omega}_m\)</span>，那么<span
+class="math inline">\(D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m\mathrm{d}A\)</span>就等于（微观）法线朝向为<span
+class="math inline">\(\mathrm{m}\)</span>微平面的总面积，因此<span
+class="math inline">\(D(\mathrm{m})\)</span>项可以写为，其中<span
+class="math inline">\(\mathrm{d}A_m\)</span>代表微平面的面积：</p>
+<p><span class="math display">\[D(\mathrm{m})=\frac{\d A_m}{\d
+\mathrm{\omega}_m\mathrm{d}A}\]</span></p>
+<p>然后来看下<span
+class="math inline">\(D\)</span>的归一化条件，首先易得微平面投影面积的积分应该为<span
+class="math inline">\(\mathrm{d}A\)</span>：</p>
+<p><span class="math display">\[\mathrm{d}A=\int(n \cdot
+m)\mathrm{d}A_m\]</span></p>
+<p>将<span
+class="math inline">\(D(\mathrm{m})\)</span>的定义带入后可得真正的归一化条件：</p>
+<p><span class="math display">\[\int_{\Omega}(n \cdot
+m)D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m=1\]</span></p>
+<p>之后就不要再天真地把<span
+class="math inline">\(D(\mathrm{m})\)</span>项看作pdf了，而将其称为面积密度则更合适。</p>
+<p><strong>P.S.</strong> [1]中Walter et
+al. 实际上给出了更严格的归一化条件，即对于任意的方向<span
+class="math inline">\(\mathrm{v}\)</span>需要满足：</p>
+<p><span class="math display">\[\int_{\Omega}(v \cdot
+m)D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m=(v \cdot m)\]</span></p>
+<h2 id="shadowing-masking-function-g">Shadowing-Masking Function G</h2>
+<p><span
+class="math inline">\(G\)</span>项是为了能量守恒而加上的，用于描述有多少的微平面是在入射方向<span
+class="math inline">\(\mathrm{}\)</span><span
+class="math inline">\(\mathrm{i}\)</span>和出射方向<span
+class="math inline">\(\mathrm{}\)</span><span
+class="math inline">\(\mathrm{o}\)</span>上都是可见的，<span
+class="math inline">\(G\)</span>要满足的三个条件分别是：</p>
+<ol type="1">
+<li>位于0-1之间，这个没啥问题</li>
+<li>可逆性reciprocity， 交换<span
+class="math inline">\(\mathrm{i}\)</span>和<span
+class="math inline">\(\mathrm{o}\)</span>不影响<span
+class="math inline">\(G\)</span>的值</li>
+<li>微平面始终只有一侧是可见的，即当<span
+class="math inline">\((\mathrm{i} \cdot \mathrm{n})(\mathrm{i} \cdot
+\mathrm{m}) \le 0\)</span>（<span
+class="math inline">\(\mathrm{o}\)</span>同理）时<span
+class="math inline">\(G\)</span>为0</li>
+</ol>
+<p>由于<span
+class="math inline">\(G\)</span>项依赖于微表面的细节，因此一般情况下不存在解析解，现有的模型如Smith包含了大量的统计近似和几何简化，这里就不再赘述。</p>
+<p>Smith中为了满足可逆性，特意将<span
+class="math inline">\(G\)</span>项设计为了可分离的形式（这似乎是个很通用的技巧，Kulla-Conty
+Approximation也是这么干的），即<span
+class="math inline">\(G(\mathrm{i},\mathrm{o},\mathrm{m})=G_1(\mathrm{i},\mathrm{m})G_1(\mathrm{o},\mathrm{m})\)</span>。</p>
+<h2 id="微平面bsdf模型">微平面BSDF模型</h2>
+<p>既然已经准备深入PBR了，那微平面模型的推导肯定少不了，紧跟[1]的思路，可以得到一看看起来非常吓人的宏观表面BSDF积分定义，注意不是渲染方程的那个积分！</p>
+<p><span class="math display">\[
+f_s(\mathrm{i},\mathrm{o},\mathrm{m})=\displaystyle \int \left|
+\dfrac{\mathrm{i} \cdot \mathrm{m}}{\mathrm{i} \cdot \mathrm{n}} \right|
+f_s^m(\mathrm{i},\mathrm{o},\mathrm{m}) \left| \dfrac{\mathrm{o} \cdot
+\mathrm{m}}{\mathrm{o} \cdot \mathrm{n}} \right|
+G(\mathrm{i},\mathrm{o},\mathrm{m}) D(\mathrm{m}) \d\mathrm{\omega}_m
+\label{eq:1} \tag{1}
+\]</span></p>
+<p>其中<span
+class="math inline">\(f_s^m(\mathrm{i},\mathrm{o},\mathrm{m})\)</span>为微平面本身的BSDF，虽然常用的模型都假设了微表面为镜面，但是这里暂时先只列出一般形式，这也是不把<span
+class="math inline">\(\mathrm{m}\)</span>直接写作<span
+class="math inline">\(\mathrm{h}\)</span>的原因。</p>
+<p>为了搞懂这个式子，先关注后面的部分，<span
+class="math inline">\(G\)</span>和<span
+class="math inline">\(D\)</span>的乘积代表了微观法线朝向为<span
+class="math inline">\(\mathrm{m}\)</span>的微平面面积之和占宏观面积的比例，这点很好理解。</p>
+<p>最神秘的是那两个点积构成的系数，它们实则充当了宏观与微观间的桥梁，按照论文的意思就是，第一个系数会把incident
+irradiance从macro尺度转换到micro，第二个系数会把radiance转换回macro尺度。尝试着来理解下为什么要用到这两个系数。</p>
+<h3 id="第一个系数">第一个系数</h3>
+<p>宏观表面是与入射方向<span
+class="math inline">\(\mathrm{i}\)</span>是成角度的，除以<span
+class="math inline">\((\mathrm{i} \cdot
+\mathrm{n})\)</span>，是为了抵消这个角度带来的衰减，还原真正的incident
+irradiance，也就是垂直辐照度。微观表面的法线也与入射方向<span
+class="math inline">\(\mathrm{i}\)</span>有角度，既然有了真正的incident
+irradiance，那么只需要再乘上<span class="math inline">\((\mathrm{i}
+\cdot
+\mathrm{m})\)</span>就能得到微表面接收到的irradiance了。这两步合起来就是第一个系数了。</p>
+<h3 id="第二个系数">第二个系数</h3>
+<p>经过实际微表面的反射后就是出射的radiance了，不妨以radiant
+exitance（也就是出射的irradiance）作为桥梁把radiance从微观尺度转换为宏观尺度的数值。从radiance的定义出发，只要乘上<span
+class="math inline">\(\mathrm{d}\mathrm{\omega}_o(\mathrm{o} \cdot
+\mathrm{m})\)</span>就能得到radiant exitance了；同样，radiant
+exitance除以<span
+class="math inline">\(\mathrm{d}\mathrm{\omega}_o(\mathrm{o} \cdot
+\mathrm{n})\)</span>就是宏观的radiance了。这样我们就得到了第二个系数。</p>
+<h3 id="微表面的bsdfbrdfbsdf">微表面的BSDF（BRDF+BSDF）</h3>
+<p>虽说上面是一般的式子，但是为了方便，大多数模型都会假定微平面是完全光滑的，只遵从Fresnel和Snell定律进行反射和折射。设<span
+class="math inline">\(\rho(\mathrm{i},\mathrm{m})\)</span>代表散射的比例，<span
+class="math inline">\(\mathrm{s}(\mathrm{i},\mathrm{m})\)</span>为理论上应该散射的方向，那么镜面的BSDF可以定义为：
+<span class="math display">\[
+f_s^m(\mathrm{i},\mathrm{o},\mathrm{m})=\rho\dfrac{\delta_{\omega_o}(\mathrm{s},\mathrm{o})}{\left|
+\mathrm{o} \cdot \mathrm{m} \right|} \tag{2}
+\]</span> 上式中<span
+class="math inline">\(\delta_{\omega_o}(\mathrm{s},\mathrm{o})\)</span>为仅在<span
+class="math inline">\(\mathrm{s}\)</span>处有值的Dirac函数，分布上的点积是为了保证<a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bidirectional_reflectance_distribution_function#Physically_based_BRDFs">能量守恒</a>而加上的。接下来就是考虑如何把这个式子应用到(1)中。</p>
+<p>既然已经假定微表面是镜面了，半程向量<span
+class="math inline">\(\mathrm{h}(\mathrm{i},\mathrm{o})\)</span>的概念也就可用了，用<span
+class="math inline">\(\mathrm{h}\)</span>替代<span
+class="math inline">\(\mathrm{s}\)</span>并带入到(2)中可得(3)。注意这里乘上Jacobian，是因为Dirac本身只有在积分时才是有意义的，(2)式只能算是一个简单写法；<span
+class="math inline">\(\mathrm{s}\)</span>又与积分变量<span
+class="math inline">\(\mathrm{o}\)</span>相关，所以在进行代换时需要乘上Jacobian才能保持积分值不变。
+<span class="math display">\[
+f_s^m(\mathrm{i},\mathrm{o},\mathrm{m})=\rho(\mathrm{i},\mathrm{m})\dfrac{\delta_{\omega_o}(\mathrm{h}(\mathrm{i},\mathrm{o}),\mathrm{m})}{\left|
+\mathrm{o} \cdot \mathrm{m} \right|}
+\norm{\dfrac{\partial\mathrm{\omega}_h}{\partial\mathrm{\omega}_o}}
+\tag{3}
+\]</span></p>
+<h4 id="reflection-brdf">Reflection BRDF</h4>
+<p>[1]和[3]中分别给出了Jacobian的计算方法，个人认为[3]中的比较清晰，在此复述一遍。下面的示意图来自[3]，注意图中的<span
+class="math inline">\(\mathrm{o}\)</span>和<span
+class="math inline">\(\mathrm{i}\)</span>和我们讨论中的定义相反，<span
+class="math inline">\(\mathrm{m}\)</span>就是半程向量。下面会先按照图中给出的符号进行推导，最后再替换为我们的符号。</p>
+<p><img
+src="https://pbr-book.org/4ed/Reflection_Models/pha09f30.svg" /></p>
+<p>从几何关系中可以很容易看出固定<span
+class="math inline">\(\mathrm{o}\)</span>时并移动<span
+class="math inline">\(\mathrm{m}\)</span>时，<span
+class="math inline">\(\d \theta_i=2\d
+\theta_m\)</span>，然后是比较有意思的一步，直接以<span
+class="math inline">\(\mathrm{o}\)</span>而非<span
+class="math inline">\(\mathrm{m}\)</span>作为up
+vector来建立球面坐标系，这样子<span
+class="math inline">\(\theta_i\)</span>和<span
+class="math inline">\(\theta_m\)</span>就成<span
+class="math inline">\(\mathrm{i}\)</span>和<span
+class="math inline">\(\mathrm{m}\)</span>与<span
+class="math inline">\(\mathrm{o}\)</span>的夹角了，另外在retro
+reflection的情况下还能得到<span
+class="math inline">\(\theta_i=\theta_m=0\)</span>，然后很容易就能看出（解一个微分方程）<span
+class="math inline">\(\theta_i=2\theta_m\)</span>，将立体角表示为球坐标后开始计算Jacobian：</p>
+<p><span class="math display">\[
+\begin{aligned}
+\dfrac{\d\mathrm{\omega}_h}{\d\mathrm{\omega}_i}
+&amp;= \dfrac{\sin \theta_m \d \theta_m \d \phi_m}{\sin \theta_i \d
+\theta_i \d \phi_i} \\
+&amp;= \dfrac{\sin \theta_m \d \theta_m \d \phi_m}{\sin 2\theta_m (2\d
+\theta_m) \d \phi_m} \\
+&amp;= \dfrac{\sin \theta_m}{4\sin \theta_m \cos \theta_m } \\
+&amp;= \dfrac{1}{4\cos \theta_m } \\
+&amp;= \dfrac{1}{4(\mathrm{i} \cdot \mathrm{m})} =
+\dfrac{1}{4(\mathrm{o} \cdot \mathrm{m})}
+\end{aligned}
+\]</span>
+来计算微表面的反射部分，直接把菲涅尔项和Jacobian带进去即可。注意<span
+class="math inline">\((\mathrm{i} \cdot \mathrm{h}_r)=(\mathrm{o} \cdot
+\mathrm{h}_r)\)</span>。 <span class="math display">\[
+f_r^m(\mathrm{i},\mathrm{o},\mathrm{m})=F(\mathrm{i},\mathrm{m})\dfrac{\delta_{\omega_o}(\mathrm{h}_r,\mathrm{m})}{4(\mathrm{i}
+\cdot \mathrm{h}_r)^2} \tag{4}
+\]</span></p>
+<h4 id="refractiontransmission-brdf">Refraction(Transmission) BRDF</h4>
+<p>虽然[1]对于这部分的推导使用了折射半程向量<span
+class="math inline">\(\mathrm{h}_t\)</span>的概念，但这里的<span
+class="math inline">\(\mathrm{h}_t\)</span>实际上指的就是微平面的法线。这里还要做一些补充，笔者也是在写的时候才意识到，就是微平面<span
+class="math inline">\(\mathrm{m}\)</span>实际上只是一个统计和建模上的概念，因为一个无限小平面的朝向是不可知的。唯一能做的就是从镜面的假设出发，通过实际观测到的<span
+class="math inline">\(\mathrm{i}\)</span>和<span
+class="math inline">\(\mathrm{o}\)</span>来算一个半程向量<span
+class="math inline">\(\mathrm{h}\)</span>，并通过Dirac函数来筛选出朝向正好为<span
+class="math inline">\(\mathrm{h}\)</span>的平面。因此，<span
+class="math inline">\(\mathrm{h}_r\)</span>、<span
+class="math inline">\(\mathrm{h}_t\)</span>和<span
+class="math inline">\(\mathrm{m}\)</span>在实际计算时都是同一个向量，在折射的情况下称其为”<em>半程向量</em>”实际上是不名副其实的，不过为了推导上的统一我们就不再引入新的符号了。</p>
+<p><img src="refraction.png" /></p>
+<p>如何计算微观法线呢？首先从上图的左边可以观察到<span
+class="math inline">\(\mathrm{i}\)</span>和<span
+class="math inline">\(\mathrm{o}\)</span>垂直于<span
+class="math inline">\(\mathrm{h}_t\)</span>分量的模长分别为对应折射角的正弦值，同时分量的方向相反。根据斯涅尔定律<span
+class="math inline">\(\eta_i\sin\theta_i=\eta_o\sin\theta_o\)</span>，两者相加正好完全抵消，剩下的部分正好是与微观法线共线的，做一次归一化就行了。记归一化与未归一化的半程向量分别为<span
+class="math inline">\(\mathrm{h}_t\)</span>和<span
+class="math inline">\(\vec{\mathrm{h}}_t\)</span>，则 <span
+class="math display">\[
+\vec{\mathrm{h}}_t=-(\eta_i\mathrm{i}+\eta_o\mathrm{o}),
+\mathrm{h}_t(\mathrm{i},\mathrm{o})=\frac{\vec{\mathrm{h}}_t}{\Vert
+\vec{\mathrm{h}}_t \Vert} \tag{5}
+\]</span>
+至于Jacobian，[1]给出了几何的解释，如上图的右半部分。Gemini也给出了一个大概的推导，为了转换为立体角之间的关系，需要得到<span
+class="math inline">\(\vec{\mathrm{h}}_t\)</span>和<span
+class="math inline">\(\mathrm{o}\)</span>变化时微分面积的对应关系。首先在(5)式<span
+class="math inline">\(\vec{\mathrm{h}}_t\)</span>的两端求导，得到<span
+class="math inline">\(\d \vec{\mathrm{h}}_t=\eta_o \d
+\mathrm{o}\)</span>，这说明当<span
+class="math inline">\(\mathrm{o}\)</span>变化时<span
+class="math inline">\(\vec{\mathrm{h}}_t\)</span>扫过的微分面积是<span
+class="math inline">\(\mathrm{o}\)</span>扫过面积的<span
+class="math inline">\(\eta_o^2\)</span>倍。但这个面积是垂直与<span
+class="math inline">\(\mathrm{o}\)</span>的，还要投影到垂直于<span
+class="math inline">\(\vec{\mathrm{h}}_t\)</span>的方向上，因此还要乘上<span
+class="math inline">\(\left| \mathrm{o} \cdot \vec{\mathrm{h}}_t
+\right|\)</span>才是真正的微分面积。根据立体角的定义，还要除以半径的平方，而<span
+class="math inline">\(\norm{\vec{\mathrm{h}}_t}=\mathrm{h}_t \cdot
+\vec{\mathrm{h}}_t\)</span>，最终可以得到Jacobian为： <span
+class="math display">\[
+f_t^m(\mathrm{i},\mathrm{o},\mathrm{m})=(1-F(\mathrm{i},\mathrm{m}))\dfrac{\delta_{\omega_o}(\mathrm{h}_t,\mathrm{m})
+\eta_o^2}{(\eta_i(\mathrm{i} \cdot \mathrm{h}_t)+\eta_o(\mathrm{o} \cdot
+\mathrm{h}_t))^2} \tag{6}
+\]</span> [4]中的一段也与这段推导相呼应：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Snell’s law describes the bending of rays, but less obviously, it also describes the spreading of rays. Specifically, the apparent radiance of a refracted ray will be scaled by η2 which, as Veach shows [Vea97], is equivalent to the change in projected solid angle.</span><br></pre></td></tr></table></figure>
+<p>当然，从上面的式子我们也能看出BTDF是不满足可逆性的，因为Radiance被缩放了<span
+class="math inline">\(\eta^2\)</span>倍，双向的BTDF关系如下： <span
+class="math display">\[
+\dfrac{f_t^m(\mathrm{i},\mathrm{o},\mathrm{m})}{\eta_o^2}=\dfrac{f_t^m(\mathrm{o},\mathrm{i},\mathrm{m})}{\eta_i^2}
+\]</span></p>
+<h3 id="bsdf">BSDF</h3>
+<p>有了(1)、(4)和(6)式，我们终于能写出最终的BSDF了，由于Dirac函数的存在，宏观表面的BSDF可以看作是反射和折射两部分的叠加：
+<span class="math display">\[
+f_s(\mathrm{i},\mathrm{o},\mathrm{n})=f_r(\mathrm{i},\mathrm{o},\mathrm{n})+f_t(\mathrm{i},\mathrm{o},\mathrm{n})
+\tag{7}
+\]</span> 经过消元，反射部分为，就是我们熟悉的Cook-Torrance BRDF： <span
+class="math display">\[
+f_r(\mathrm{i},\mathrm{o},\mathrm{n})=\dfrac{F(\mathrm{i},\mathrm{h}_r)G(\mathrm{i},\mathrm{o},\mathrm{h}_r)D(\mathrm{h}_r)}{4
+\left| \mathrm{i} \cdot \mathrm{n} \right| \left| \mathrm{o} \cdot
+\mathrm{n} \right|}
+\]</span></p>
+<p>折射部分基本上没什么可消元的，就是单纯把微平面的<span
+class="math inline">\(f_t^m\)</span>带进去即可： <span
+class="math display">\[
+f_t(\mathrm{i},\mathrm{o},\mathrm{n})=\left| \dfrac{\mathrm{i} \cdot
+\mathrm{h}_t}{\mathrm{i} \cdot \mathrm{n}} \right| \left|
+\dfrac{\mathrm{i} \cdot \mathrm{h}_t}{\mathrm{o} \cdot \mathrm{n}}
+\right|
+\dfrac{\eta_o^2(1-F(\mathrm{i},\mathrm{h}_t))G(\mathrm{i},\mathrm{o},\mathrm{h}_t)D(\mathrm{h}_t)}{(\eta_i(\mathrm{i}
+\cdot \mathrm{h}_t)+\eta_o(\mathrm{o} \cdot \mathrm{h}_t))^2}
+\]</span></p>
+<h1 id="杂记">杂记</h1>
+<h1 id="参考">参考</h1>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://www.cs.cornell.edu/~srm/publications/EGSR07-btdf.pdf">Microfacet
+Models for Refraction through Rough
+Surfaces，GGX原论文，包含了对于微平面模型的完整推导过程</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.reedbeta.com/blog/hows-the-ndf-really-defined/#you-found-a-secret-area">How
+Is The NDF Really Defined?</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://pbr-book.org/4ed/Reflection_Models/Roughness_Using_Microfacet_Theory">PBRTv4:
+Roughness Using Microfacet Theory</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://blog.selfshadow.com/publications/s2015-shading-course/burley/s2015_pbs_disney_bsdf_slides.pdf">Extending
+the Disney BRDF to a BSDF with Integrated Subsurface Scattering</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/29/%E5%BE%B7%E8%AF%AD%E8%AF%AD%E6%B3%95%E7%AC%94%E8%AE%B0/" rel="prev" title="德语语法笔记">
+                  <i class="fa fa-angle-left"></i> 德语语法笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">dummyummy</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
