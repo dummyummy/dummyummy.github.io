@@ -146,7 +146,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/03/06/hello-world/">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/11/06/GJK%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/03/06/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+          <a href="/2025/11/06/GJK%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">GJK算法</a>
         </h2>
 
         <div class="post-meta-container">
@@ -175,7 +175,27 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2025-03-06 23:02:50" itemprop="dateCreated datePublished" datetime="2025-03-06T23:02:50+08:00">2025-03-06</time>
+      <time title="创建时间：2025-11-06 10:38:19" itemprop="dateCreated datePublished" datetime="2025-11-06T10:38:19+08:00">2025-11-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-09 21:35:27" itemprop="dateModified" datetime="2026-02-09T21:35:27+08:00">2026-02-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%89%A9%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">物理</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%89%A9%E7%90%86/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/" itemprop="url" rel="index"><span itemprop="name">游戏引擎</span></a>
+        </span>
     </span>
 
   
@@ -188,30 +208,41 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very
-first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for
-more info. If you get any problems when using Hexo, you can find the
-answer in <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
-you can ask me on <a
-target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
+          <p>这篇文章是对于GAMES 104游戏引擎物理系统一节中GJK算法的学习总结。</p>
+<h1 id="minkowski-sum-闵可夫斯基和">Minkowski Sum 闵可夫斯基和</h1>
+<p>首先明确，一个闭合形状可以通过边界点集来定义。</p>
+<p>对于两个形状 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span>
+来说，他们的闵可夫斯基和即为两个集合中的点两两相加形成的点集，记作 <span class="math inline">\(A+B\)</span> 。一个直观的理解就是将其中的一个形状
+<span class="math inline">\(A\)</span> 所在坐标系的原点平移到另一个形状
+<span class="math inline">\(B\)</span> 的边界上，并沿着 <span class="math inline">\(B\)</span>
+的边界扫过一周，这样得到的新边界即为Minkowski Sum，如下图所示：</p>
+<figure>
+<img src="minkowski-sum.gif" alt="intuition">
+<figcaption aria-hidden="true">intuition</figcaption>
+</figure>
+<p>闵可夫斯基和有一个重要的性质，即闵可夫斯基和的凸包等于两个形状各自凸包的闵可夫斯基和。这样的话，如果两个形状本就是凸的话，Minkowski
+Sum的凸包就会恰好包含两个形状内无穷多个点两两相加的结果。</p>
+<h1 id="minkowski-difference-闵可夫斯基差">Minkowski Difference
+闵可夫斯基差</h1>
+<p>如果两个形状相交的话，那么一定会存在至少一对 <span class="math inline">\(A\)</span> 和 <span class="math inline">\(B\)</span> 中的点 <span class="math inline">\(p_A\)</span> 和 <span class="math inline">\(p_B\)</span> ，使得 <span class="math inline">\(p_A-p_B=0\)</span>
+。尝试将这个观察与上面所述的Minkowski Sum联系起来，定义闵可夫斯基差为
+<span class="math inline">\(A-B=A+(-B)\)</span> ， <span class="math inline">\((-B)\)</span> 即 <span class="math inline">\(B\)</span> 中的点绕原点翻转后得到的点集。</p>
+<p>P.S. 按照Wiki上的说法，这其实不是Minkowski
+Difference的正统定义，而是Hermann
+Minkowski，不过在碰撞检测中只会用到上面的定义，这里就不再深究区别了。</p>
+<p>根据Minkowski Sum的性质， <span class="math inline">\(A-B\)</span>
+的中含中包含了所有点对的差值。也就是说如果这个凸包能够包围原点的话，这两个形状就是相交的。这样我们就把一个本来要做无穷次判断才能得到答案的问题成功转化为了一个有界的问题。乍一看，单纯按照这种方法来测试的话复杂度仍是平方级别的。可以证明得到的凸包至多只有
+<span class="math inline">\(|A|+|B|\)</span> 个顶点，[3]中给出了在 <span class="math inline">\(O(n\log n)\)</span> 内直接构造Minkowski
+Sum凸包的算法，大致的思路就是首先按照逆时针的顺序对于两个点集中的顶点排序，再使用双指针比较Polar
+Angle来保证不重不漏，具体可以参考原文章，这里我们不会用到这种算法。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/11/06/GJK%E7%AE%97%E6%B3%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -237,7 +268,7 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/02/28/PreZ%E6%8A%80%E6%9C%AF/">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/08/19/%E7%9C%9F%E5%AE%9E%E5%A4%A7%E6%B0%94%E6%B8%B2%E6%9F%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -255,7 +286,7 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/02/28/PreZ%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">PreZ技术</a>
+          <a href="/2025/08/19/%E7%9C%9F%E5%AE%9E%E5%A4%A7%E6%B0%94%E6%B8%B2%E6%9F%93/" class="post-title-link" itemprop="url">真实大气渲染</a>
         </h2>
 
         <div class="post-meta-container">
@@ -266,14 +297,243 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2025-02-28 13:59:01" itemprop="dateCreated datePublished" datetime="2025-02-28T13:59:01+08:00">2025-02-28</time>
+      <time title="创建时间：2025-08-19 00:40:35" itemprop="dateCreated datePublished" datetime="2025-08-19T00:40:35+08:00">2025-08-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-12 10:51:37" itemprop="dateModified" datetime="2025-12-12T10:51:37+08:00">2025-12-12</time>
+      <time title="修改时间：2026-02-09 21:34:47" itemprop="dateModified" datetime="2026-02-09T21:34:47+08:00">2026-02-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93/" itemprop="url" rel="index"><span itemprop="name">真实感渲染</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93/CG/" itemprop="url" rel="index"><span itemprop="name">CG</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="前言">前言</h1>
+<p>近期去了海南旅游，有幸观赏到了美丽的日落，配上洁净的沙滩和硕果累累的椰树可以称得上是种享受。现在想想，这种美丽的晚霞也非首次目睹，然而即便是欣赏了上千次，每当通过那绚烂的大气层看向那浩瀚无垠的银河时仍会感到头晕目眩。</p>
+<p>此外，在本人玩过的游戏中，欧卡2中的大气和云也是令人印象深刻，比如下面这张（忘了是在哪里截的了，好像是在荷兰？）。不过这个云感觉不是用噪声做的，太逼真了，层次也分明。之前特意观察过，云似乎是有多张实拍的贴图，随着时间做简单的线性插值的。</p>
+<figure>
+<img src="ets2.png" alt="Euro Truck Simulator2">
+<figcaption aria-hidden="true">Euro Truck Simulator2</figcaption>
+</figure>
+<p>当然巫师3的大气也很美，下面这张图好像是在陶森特截的。一个题外话，GAMES104也拿类似的场景举过例子，最终的画面表现中Bloom功不可没。不过感觉这张截图中的Fog似乎用力过猛了。</p>
+<figure>
+<img src="witcher3.png" alt="The Witcher 3">
+<figcaption aria-hidden="true">The Witcher 3</figcaption>
+</figure>
+<p>既然无论是湛蓝的晴天还是翠绿兼血红的晚霞都能让我们浮想联翩，不如手动去创造一个出来。</p>
+<h1 id="参与介质和体渲染">参与介质和体渲染</h1>
+<p>显而易见地是，大气是一种参与介质，光会与参与介质发生以下的几种交互：</p>
+<h2 id="自发光">自发光</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/19/%E7%9C%9F%E5%AE%9E%E5%A4%A7%E6%B0%94%E6%B8%B2%E6%9F%93/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/03/24/PBR%E6%9D%90%E8%B4%A8-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/03/24/PBR%E6%9D%90%E8%B4%A8-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">PBR材质-微平面模型</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-24 13:38:10" itemprop="dateCreated datePublished" datetime="2025-03-24T13:38:10+08:00">2025-03-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-09 21:34:58" itemprop="dateModified" datetime="2026-02-09T21:34:58+08:00">2026-02-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/PBR/" itemprop="url" rel="index"><span itemprop="name">PBR</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/PBR/CG/" itemprop="url" rel="index"><span itemprop="name">CG</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>本文为GAMES 202 PBR Material的笔记</p>
+<h2 id="pbr和pbr材质">PBR和PBR材质</h2>
+<p>所谓PBR，指的是渲染过程中的一切都是基于物理的，包括材质、光源、相机和光照传输，不过在实践中一般单指材质。</p>
+<h2 id="实时渲染中的pbr-materials">实时渲染中的PBR Materials</h2>
+<p>表面的材质主要有两种，Microfacet模型和Disney Principled
+BRDFs。不过按照课件所说，这两种其实并非是基于物理的，它们仍然遵循着RTR领域的优良传统：hack和近似。</p>
+<p>体积渲染的话，关注点更多是在如何快速近似单次或多次散射。</p>
+<h2 id="microfacet微平面模型">Microfacet(微平面)模型</h2>
+<p>Microfacet模型将表面近似成若干微小的镜面，并通过控制微平面的法线朝向来模拟不同的材质。回顾一下Microfacet
+BRDF的公式：</p>
+<p><span class="math display">\[ f(\mathbf{i}, \mathbf{o}) =
+\frac{\mathbf{F}(\mathbf{i}, \mathbf{h})\mathbf{G}(\mathbf{i},
+\mathbf{o}, \mathbf{h})\mathbf{D}(\mathbf{h})}{4(\mathbf{n},
+\mathbf{i})(\mathbf{n}, \mathbf{o})} \]</span></p>
+<p>其中<span class="math inline">\(\mathbf{F}\)</span>项是菲涅尔项，可以让材质展现菲涅尔效应，<span class="math inline">\(\mathbf{G}\)</span>项是阴影-遮挡项（阴影和遮挡其实是两码事，下文会解释），<span class="math inline">\(\mathbf{G}\)</span>是法线分布。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/03/24/PBR%E6%9D%90%E8%B4%A8-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E6%A8%A1%E5%9E%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/" class="post-title-link" itemprop="url">GAMES202-作业3</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-10 22:14:51" itemprop="dateCreated datePublished" datetime="2025-03-10T22:14:51+08:00">2025-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-11 00:52:27" itemprop="dateModified" datetime="2025-03-11T00:52:27+08:00">2025-03-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -299,26 +559,154 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="背景">背景</h1>
-<p>PreZ技术的全称是Pre-depth
-Pass，从这个名字中大概就能得知该技术的一些要点如2-pass和depth
-pass。PreZ是为了防止开启Alpha
-Test时可能出现的渲染顺序错误。假如现在我们开启了Alpha
-Test并且启用了Early-Z来提高渲染效率，由于在片元着色器运行之前我们并不知道哪些片元会被Alpha
-Test所剔除，提前进行深度测试很可能会导致错误。</p>
-<h1 id="方法">方法</h1>
-<p>PreZ的思路也很简单，既然将深度测试提前的终极目标就是尽可能地减少渲染的开销，那能不能在保持Alpha
-Test开启的情况下只渲染最低限度的信息？既然Alpha
-Test会导致深度信息错误，那不如直接把depth
-buffer取出来单独渲染，得到正确的深度信息后再进行更复杂的光照计算。这样我们就构想出了一个两趟的算法：</p>
-<ol type="1">
-<li><p>Pass 1：保持Alpha Test开启，Z-Write开启，只渲染深度图</p></li>
-<li><p>Pass
-2：关闭Z-Write，将深度测试的条件设置为EQUAL，运行片元着色</p></li>
-</ol>
-<p>这样因为Pass 1中已经渲染了考虑discard后正确的深度图，在Pass
-2中关闭Z-Write后，由于根本不会改变深度，GPU便可以对所有物体开启Early-Z了，大大减少了Overdraw。</p>
+          <p>GAMES202 HW3的完成记录~</p>
+<h1 id="总览">总览</h1>
+<p>在延迟渲染管线下，为一个光源为方向光，材质为漫反射 (Diffuse)
+的场景实现屏幕空间下的全局光照效果（两次反射）。</p>
+<p>作业3共分为三个部分： 1. 实现对场景直接光照的着色 (考虑阴影)。 2.
+实现屏幕空间下光线的求交 (SSR)。 3. 实现对场景间接光照的着色。</p>
+<p>作业文档里使用的术语是BSDF，不过既然本次作业只会涉及到漫反射材质，下文可能会出现BSDF和BRDF的互换。</p>
+<h1 id="part-1直接光照">Part 1：直接光照</h1>
+<p>这部分的两个子任务是计算漫反射材质BSDF的值以及光照的强度（包含可见性），非常简单。</p>
+<p>首先是EvalDiffuse函数的实现。虽然EvalDiffuse接收了三个参数<span class="math inline">\(w_i, w_o\)</span>和<span class="math inline">\(uv\)</span>，但是对于漫反射材质来说，前两个代表方向的参数都是不需要的。作业说明中提示要用到保存在G-Buffer中的法线信息，意味着计算出来的BSDF是cosine
+weighted的。知道了这些之后，实现EvalDiffuse就是随手的事啦：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">vec3</span> EvalDiffuse(<span class="type">vec3</span> wi, <span class="type">vec3</span> wo, <span class="type">vec2</span> uv) &#123;</span><br><span class="line">  <span class="type">vec3</span> albedo = GetGBufferDiffuse(uv);</span><br><span class="line">  <span class="type">vec3</span> n = GetGBufferNormalWorld(uv);</span><br><span class="line">  <span class="type">float</span> cos_theta = <span class="built_in">dot</span>(n, wi);</span><br><span class="line">  <span class="type">vec3</span> bsdf = albedo * <span class="built_in">max</span>(<span class="number">0.0</span>, cos_theta) * INV_PI;</span><br><span class="line">  <span class="keyword">return</span> bsdf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="漫反射bsdf">漫反射BSDF</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">UE5 Lumen 学习笔记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-06 23:10:03" itemprop="dateCreated datePublished" datetime="2025-03-06T23:10:03+08:00">2025-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-09 17:04:17" itemprop="dateModified" datetime="2025-03-09T17:04:17+08:00">2025-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/" itemprop="url" rel="index"><span itemprop="name">CG</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/%E5%BC%95%E6%93%8E/" itemprop="url" rel="index"><span itemprop="name">引擎</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>该文章内容主要来自于虚幻5的官方文档[4]。 # 介绍
+一开始只觉得Lumen听起来很高大上，以为它除了渲染之外还有一些内容，最后发现是和Nanite搞混了（难绷）。按照文档的介绍，Lumen其实就是UE5新推出的全局光照(GI)和反射系统。最离谱的是，Lumen可以近似反射了无限次的漫反射光照和高光光照，甚至能在复杂环境中达成实时渲染。Lumen是此前各种屏幕空间技术(SSGI)和距离场环境光遮蔽(DFAO)的替代品。P.S.
+DFAO是虚幻4中所用的环境光遮蔽方法，文档里描述其与SSAO最大的区别是<code>遮蔽在场景空间遮挡物中进行计算，因此出屏丢失数据不会导致瑕疵</code>，至于原理吗，我猜与GAMES202中所讲的距离场阴影类似。</p>
+<p>要启用Lumen，需要在Project Settings-&gt;Rnedering中启用Dynamic Global
+Illumination和Reflections这两项（新项目应该是默认启用的）。</p>
+<h1 id="特性">特性</h1>
+<h2 id="全局光照">全局光照</h2>
+<ul>
+<li>不限制弹射次数的间接漫反射光照</li>
+<li>真实阴影（在光线追踪器中，阴影就不需要用传统方法去做了）</li>
+<li>要求实时性的情况下会以较低的分辨率来计算间接光照 ## 天光(Sky
+Lighting)
+天光在UE中负责模拟来自天空或远景的间接光照[1]，Skylight计算的光照会填充场景中的阴影部分，增强环境光照。Lumen也会为半透明材质和体积雾计算一个低质量的全局光照。
+## 自发光材质 自发光材质的贡献在Lumen的Final Gather
+Process中被计算。目前Final Gather还不太理解，留个坑。 ## 反射
+Lumen支持各种粗糙度材质反射，包括清漆（clear
+coat）和不透明材质的glossy反射，打开对应选项后也能渲染出半透明材质在最前面一层surface上的反射。Lumen还支持渲染单层水面的镜面反射。
+### Clear Coat材质
+即基础层上覆盖了薄薄的一层透明涂料，比如车漆[2]。Clear
+coat材质也可以使用Cook-Torrance microfacet BRDF来表示[3]。 ## 双面树叶
+允许光线在树叶中的次表面散射，效果出奇的好。下图右边是开启Two-Sided
+Foliage之后的效果 <img src="https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/lumen-foliage-1.png"></li>
+</ul>
+<h1 id="设置略">设置（略）</h1>
+<h1 id="补充说明">补充说明</h1>
+<h2 id="lumen的更新速度">Lumen的更新速度</h2>
+<p>因为lumen似乎使用的是类似光照探针的技术并将计算压力分摊到多帧上来保证实时性的，所以局部光照条件的变化会快速传播，而全局的光照变化（如禁用阳光）需要一定的时间才能收敛。实测如果在项目中将主要的平行光设置为不可见的话，场景会缓慢变暗。而且如果仔细观察的话，直接光照会立即消失，间接光照则是缓慢黯淡。</p>
+<h2 id="lumen反射">Lumen反射</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -337,7 +725,7 @@ buffer取出来单独渲染，得到正确的深度信息后再进行更复杂�
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
