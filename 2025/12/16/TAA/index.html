@@ -29,13 +29,14 @@
 <meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/notaa.png">
 <meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/taa.png">
 <meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/jitter.gif">
+<meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/uv.png">
 <meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/overview.png">
 <meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/disocclusion.png">
 <meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/ghosting.png">
 <meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/no-ghosting.png">
 <meta property="og:image" content="https://dummyummy.github.io/2025/12/16/TAA/hfreq.png">
 <meta property="article:published_time" content="2025-12-16T10:02:21.000Z">
-<meta property="article:modified_time" content="2026-02-09T13:35:13.973Z">
+<meta property="article:modified_time" content="2026-02-09T13:52:43.643Z">
 <meta property="article:author" content="dummyummy">
 <meta property="article:tag" content="抗锯齿">
 <meta name="twitter:card" content="summary">
@@ -198,7 +199,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-02-09 21:35:13" itemprop="dateModified" datetime="2026-02-09T21:35:13+08:00">2026-02-09</time>
+      <time title="修改时间：2026-02-09 21:52:43" itemprop="dateModified" datetime="2026-02-09T21:52:43+08:00">2026-02-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -229,12 +230,12 @@
     
     <div class="post-body" itemprop="articleBody"><h1 id="taa实现小结">TAA实现小结</h1>
 <p><a
-target="_blank" rel="noopener" href="https://github.com/dummyummy/LearnVue/tree/master/LearnGL">项目地址</a></p>
+href="TAA/https://github.com/dummyummy/LearnVue/tree/master/LearnGL">项目地址</a></p>
 <h2 id="前言">前言</h2>
 <p>刚把LearnOpenGL的渲染部分学完，IBL的效果是真不错，但是锯齿挺明显的：</p>
-<p><img src="notaa.png" /></p>
+<img src="/2025/12/16/TAA/notaa.png" class="">
 <p>又因为跑的是defer管线，很难上MSAA，想着加一套抗锯齿进去，查了些资料后还是选择了TAA而非FXAA和SMAA等后处理抗锯齿。TAA有很多优点，比如不会随着运动而抖动，同时能够为画面中几乎所有的部分完成抗锯齿，生来就与Defer兼容等等。加入TAA后的效果如下：</p>
-<p><img src="taa.png" /></p>
+<img src="/2025/12/16/TAA/taa.png" class="">
 <p>锯齿肉眼可见地基本消失了。</p>
 <h2 id="实现思路">实现思路</h2>
 <p>TAA作为经典算法已经有很多教程了，GDC和Siggraph
@@ -256,7 +257,7 @@ Vector时需要抵消Jitter的影响。为了逻辑的清晰，本文选择了�
 <p>这里还要额外做一些说明，Jitter其实只是通过扰动NDC坐标而对光栅化产生了影响，但光栅化又与插值相关联，因此到最后下面所有的这些输出都会受到影响，进而达到了边缘抗锯齿的效果：
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec2</span> fragTexCoord;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec3</span> fragNormal;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec4</span> fragTangent;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec3</span> fragPos;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec4</span> fragPosClip;</span><br><span class="line"><span class="keyword">out</span> <span class="keyword">highp</span> <span class="type">vec4</span> fragPrevPosClip;</span><br></pre></td></tr></table></figure></p>
 <p>做完这一部分后，如果进行可视化，可以看到画面是抖动的：</p>
-<p><img src="jitter.gif" /></p>
+<img src="/2025/12/16/TAA/jitter.gif" class="">
 <h3 id="motion-vector">Motion Vector</h3>
 <p>在将当前帧的画面与历史颜色进行混合之前，我们还要去计算屏幕空间内的Motion
 Vector。在一个动态的场景中，运动可能来自于以下的几个方面：</p>
@@ -279,11 +280,11 @@ Vector，关键代码如下：</p>
 <p>注意这里一定要是<strong>未Jitter</strong>的Motion
 Vector，否则可能会错误采样到别的像素。原因也不难理解，Motion
 Vector代表的是像素间的对应关系，考虑Jitter就不合理了。</p>
-<p>[3]也包含了UV动画产生的Motion Vector的计算方法，简单张贴一下： <img
-src="uv.png" /></p>
+<p>[3]也包含了UV动画产生的Motion Vector的计算方法，简单张贴一下：
+<img src="/2025/12/16/TAA/uv.png" class=""></p>
 <h3 id="resolve">Resolve</h3>
 <p>Resolve负责进行帧间的累加，大致流程如下，图源[5]：</p>
-<p><img src="overview.png" /></p>
+<img src="/2025/12/16/TAA/overview.png" class="">
 <p>Resolve实际上很简单，就是利用Motion
 Vector算出当前像素在上一帧对应的位置，采样历史颜色并按一定的权重做混合，这样产生的画面就成功完成了抗锯齿，关键代码如下：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">   <span class="type">vec2</span> uv = fragTexCoord;</span><br><span class="line">   <span class="type">vec2</span> <span class="keyword">offset</span> = <span class="number">1.0</span> / <span class="type">vec2</span>(<span class="built_in">textureSize</span>(currentFrame, <span class="number">0</span>));</span><br><span class="line">   <span class="type">vec2</span> mv = <span class="built_in">texture</span>(GBuffer3, uv).xy;</span><br><span class="line">   <span class="type">vec3</span> currentColorHDR = <span class="built_in">texture</span>(currentFrame, uv).rgb;</span><br><span class="line">   <span class="type">vec2</span> jitteredUV = uv - mv;</span><br><span class="line">   <span class="type">vec3</span> historyColorHDR;</span><br><span class="line">   <span class="keyword">if</span> (jitteredUV.x &lt; <span class="number">0.0</span> || jitteredUV.x &gt; <span class="number">1.0</span> || jitteredUV.y &lt; <span class="number">0.0</span> || jitteredUV.y &gt; <span class="number">1.0</span>) &#123;</span><br><span class="line">       historyColorHDR = currentColorHDR;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       historyColorHDR = <span class="built_in">texture</span>(historyFrame, jitteredUV).rgb;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">FragColor = <span class="type">vec4</span>(<span class="built_in">mix</span>(currentColorHDR, historyColorHDR, historyWeight), <span class="number">1.0</span>);</span><br></pre></td></tr></table></figure>
@@ -292,7 +293,7 @@ Vector算出当前像素在上一帧对应的位置，采样历史颜色并按�
 <p>这里借助以下FSR的图进行说明，在场景发生运动时，遮挡关系也会随之发生变化，如下图所示，Disocclusion
 Mask的黑色部分是没有历史信息的。如果我们还是拿着Motion
 Vector去采样便会造成错误的结果。</p>
-<p><img src="disocclusion.png" /></p>
+<img src="/2025/12/16/TAA/disocclusion.png" class="">
 <p>解决方式也不难，在当前帧中采样3x3邻域内的颜色，并计算这些颜色构成的AABB，然后将historyColor
 Clamp到对应的AABB中。另外在[2]中UE也提到在YCoCg颜色空间中进行Clamp会更好，最终代码如下：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Clamping history color to avoid disocclusion artifacts</span></span><br><span class="line"><span class="type">vec3</span> minColor = RGBToYCoCg(currentColorHDR.rgb);</span><br><span class="line"><span class="type">vec3</span> maxColor = minColor;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> x = <span class="number">-1</span>; x &lt;= <span class="number">1</span>; x++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> y = <span class="number">-1</span>; y &lt;= <span class="number">1</span>; y++) &#123;</span><br><span class="line">        <span class="type">vec3</span> sampledColorHDR = <span class="built_in">texture</span>(currentFrame, uv + <span class="type">vec2</span>(x, y) * <span class="keyword">offset</span>).rgb;</span><br><span class="line">        sampledColorHDR = RGBToYCoCg(sampledColorHDR);</span><br><span class="line">        minColor = <span class="built_in">min</span>(minColor, sampledColorHDR.rgb);</span><br><span class="line">        maxColor = <span class="built_in">max</span>(maxColor, sampledColorHDR.rgb);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">historyColorHDR.rgb = <span class="built_in">clamp</span>(RGBToYCoCg(historyColorHDR.rgb), minColor, maxColor);</span><br><span class="line">historyColorHDR.rgb = YCoCgToRGB(historyColorHDR.rgb);</span><br></pre></td></tr></table></figure>
@@ -302,9 +303,9 @@ Clamp到AABB的边界而非角落，项目中没有实现就不再赘述了。</
 <p>Clamping很容易导致高光部分发生闪烁的问题。由于我们采用的是周期性指数平均的混合方式并开启了HDR，某些亮点可能会周期性出现并主导混合结果进而导致闪烁。有两个解决这个瑕疵的Trick，第一个是在混合前进行可逆的临时性Tonemapping，第二个则是[2]中提出的根据Luminance降低高亮度样本的权重。两个方法都能一定程度上抑制闪烁，随便用一种即可。当然代价也是有的，高亮部分会稍显黯淡。Shader代码如下：</p>
 <figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Tonemapping</span></span><br><span class="line"><span class="type">vec3</span> currentColor = Tonemapping(currentColorHDR); </span><br><span class="line"><span class="type">vec3</span> historyColor = Tonemapping(historyColorHDR);</span><br><span class="line"><span class="type">vec3</span> blendedColor = currentColor * (<span class="number">1.0</span> - historyWeight) + historyColor * historyWeight;</span><br><span class="line">FragColor = <span class="type">vec4</span>(InverseTonemapping(blendedColor), <span class="number">1.0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Weighted blending</span></span><br><span class="line"><span class="type">vec4</span> currentColor = AdjustHDRColor(currentColorHDR); </span><br><span class="line"><span class="type">vec4</span> historyColor = AdjustHDRColor(historyColorHDR);</span><br><span class="line"><span class="type">vec4</span> blendedColor = currentColor * (<span class="number">1.0</span> - historyWeight) + historyColor * historyWeight;</span><br><span class="line">FragColor = <span class="type">vec4</span>(RestoreHDRColor(blendedColor), <span class="number">1.0</span>);</span><br></pre></td></tr></table></figure>
 <h4 id="效果">效果</h4>
-<p>首先是不使用Clamping的效果图： <img src="ghosting.png" /></p>
+<p>首先是不使用Clamping的效果图： <img src="/2025/12/16/TAA/ghosting.png" class=""></p>
 <p>使用Clamping并抑制闪烁后：</p>
-<p><img src="no-ghosting.png" /></p>
+<img src="/2025/12/16/TAA/no-ghosting.png" class="">
 <h3 id="渲染管线的其余部分">渲染管线的其余部分</h3>
 <h4 id="天空盒">天空盒</h4>
 <p>天空盒也要生成对应的Motion Vector。</p>
@@ -317,7 +318,7 @@ Vector的话需要借助MRT或Multi-Pass。</p>
 <h1 id="遗留问题">遗留问题</h1>
 <ul>
 <li><p>当高频的细节如草地或法线贴图与其他部分混合时Clamping会失效，如下图所示，注意下图的草地部分有淡淡的轨迹，[3]中提出了解决方法。</p>
-<p><img src="hfreq.png" /></p></li>
+<img src="/2025/12/16/TAA/hfreq.png" class=""></li>
 <li><p>由于采样history
 frame时用的是双线性插值，经过TAA的累积后图像可能会变得更加模糊，解决方式为使用5-tap的Catmull-Rom
 Filter来滤波，参考[1]的Blurring部分。</p></li>
@@ -327,26 +328,26 @@ Filter来滤波，参考[1]的Blurring部分。</p></li>
 <p>FSR2/3、DLSS3往上(DLAA)和TSR都可以在超分的同时抗锯齿，DLSS还能借助光流估计以及CNN或ViT的帮助来减少鬼影并提高稳定性[7]。</p>
 <h1 id="参考">参考</h1>
 <ol type="1">
-<li><p><a
+<li><a
 target="_blank" rel="noopener" href="https://www.elopezr.com/temporal-aa-and-the-quest-for-the-holy-trail/">Temporal
-AA and the Quest for the Holy Trail</a></p></li>
-<li><p><a
+AA and the Quest for the Holy Trail</a></li>
+<li><a
 target="_blank" rel="noopener" href="https://advances.realtimerendering.com/s2014/epic/TemporalAA.pptx">HIGH-QUALITY
-TEMPORAL SUPERSAMPLING SIGGRAPH COURSE 2014</a></p></li>
-<li><p><a
+TEMPORAL SUPERSAMPLING SIGGRAPH COURSE 2014</a></li>
+<li><a
 target="_blank" rel="noopener" href="https://advances.realtimerendering.com/s2016/s16_Ke.pptx">Temporal
-Antialiasing In Uncharted 4</a></p></li>
-<li><p><a
-target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/425233743">主流抗锯齿方案详解（二）TAA</a></p></li>
-<li><p><a
+Antialiasing In Uncharted 4</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/425233743">主流抗锯齿方案详解（二）TAA</a></li>
+<li><a
 target="_blank" rel="noopener" href="https://www.gdcvault.com/play/1022970/Temporal-Reprojection-Anti-Aliasing-in">Temporal
-Reprojection Anti-Aliasing in INSIDE</a></p></li>
-<li><p><a
+Reprojection Anti-Aliasing in INSIDE</a></li>
+<li><a
 target="_blank" rel="noopener" href="https://sugulee.wordpress.com/2021/06/21/temporal-anti-aliasingtaa-tutorial/">Temporal
-Anti-Aliasing(TAA) Tutorial</a></p></li>
-<li><p><a
+Anti-Aliasing(TAA) Tutorial</a></li>
+<li><a
 target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Deep_Learning_Super_Sampling#DLSS_4.0">DLSS
-Wikipedia Page</a></p></li>
+Wikipedia Page</a></li>
 </ol>
 
     </div>
