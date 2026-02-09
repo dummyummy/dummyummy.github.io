@@ -7,6 +7,7 @@ categories:
   - 计算机图形学
   - PBR
   - CG
+mathjax: true
 ---
 本文为GAMES 202 PBR Material的笔记
 
