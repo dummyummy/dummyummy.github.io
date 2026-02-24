@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260215183204025.png">
 <meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260215185032286.png">
 <meta property="article:published_time" content="2026-02-08T11:35:37.753Z">
-<meta property="article:modified_time" content="2026-02-24T10:30:16.398Z">
+<meta property="article:modified_time" content="2026-02-24T11:26:36.026Z">
 <meta property="article:author" content="dummyummy">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260209215616130.png">
@@ -197,7 +197,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-02-24 18:30:16" itemprop="dateModified" datetime="2026-02-24T18:30:16+08:00">2026-02-24</time>
+      <time title="修改时间：2026-02-24 19:26:36" itemprop="dateModified" datetime="2026-02-24T19:26:36+08:00">2026-02-24</time>
     </span>
 
   
@@ -667,6 +667,9 @@ class="math inline">\(\mathrm{h}&#39;\)</span>的概念，用于提高采样的�
 =\frac{\mathrm{h}^{\prime}}{\left|\mathrm{h}^{\prime}\right|}
 \end{aligned}  \tag{20}
 \]</span></p>
+<p>另外注意由于我们采样的是<span
+class="math inline">\(\mathrm{h}\)</span>，最终的结果还要乘上基本定义中Reflection
+BRDF一节推导出的雅可比行列式才能正确的概率。</p>
 <h3 id="f">F</h3>
 <p>这部分还是使用Schlick Fresnel近似去计算，公式如下，相当于根据<span
 class="math inline">\(\cos
