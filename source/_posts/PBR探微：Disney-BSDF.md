@@ -343,8 +343,10 @@ $$
 $$
 $\gamma=2$或$\gamma=1$时的$\cos \theta_h$的公式分别在下面的第一行和第二行：
 $$
-\cos \theta_h=\sqrt{\frac{1-\xi_2}{1+(\alpha^2-1)\xi_2}}\ ,\ \gamma=2 \\
-\cos \theta_h=\sqrt{\frac{1-(\alpha^2)^{1-\xi_2}}{1-\alpha^2}}\ ,\ \gamma=1 \tag{19}
+\begin{aligned}
+\cos \theta_h&=\sqrt{\frac{1-\xi_2}{1+(\alpha^2-1)\xi_2}}\ ,\ \gamma=2 \\
+\cos \theta_h&=\sqrt{\frac{1-(\alpha^2)^{1-\xi_2}}{1-\alpha^2}}\ ,\ \gamma=1
+\end{aligned} \tag{19}
 $$
 对于anisotropic的GTR，Disney额外引入了投影半程向量$\mathrm{h}'$的概念，用于提高采样的效率：
 $$
@@ -356,6 +358,8 @@ $$
 \mathrm{h} & =\frac{\mathrm{h}^{\prime}}{\left|\mathrm{h}^{\prime}\right|}
 \end{aligned}  \tag{20}
 $$
+
+另外注意由于我们采样的是$\mathrm{h}$，最终的结果还要乘上基本定义中Reflection BRDF一节推导出的雅可比行列式才能正确的概率。
 
 ### F
 
@@ -398,13 +402,15 @@ G_1(\mathrm{o},\mathrm{m})&=\frac{2}{1+\sqrt{1+\alpha^2 \tan^2 \theta_o}} \\
 &=\frac{2}{1+\sqrt{1+\alpha^2 \frac{1-\cos^2 \theta_o}{\cos^2 \theta_o}}} \\
 &=\frac{2}{1+\frac{1}{\cos \theta_o}\sqrt{\cos^2 \theta_o+\alpha^2 (1-\cos^2 \theta_o)}} \\
 &=\frac{2}{1+\frac{1}{\cos \theta_o}\sqrt{\alpha^2 + \cos^2 \theta_o-\alpha^2 \cos^2 \theta_o}} \\
-&=\frac{2}{1+\frac{1}{(\mathrm{o} \cdot \mathrm{n})}\sqrt{\alpha^2 + (\mathrm{o} \cdot \mathrm{n})^2 -\alpha^2 (\mathrm{o} \cdot \mathrm{n})^2}} \\
+&=\frac{2}{1+\frac{1}{(\mathrm{o} \cdot \mathrm{n})}\sqrt{\alpha^2 + (\mathrm{o} \cdot \mathrm{n})^2 -\alpha^2 (\mathrm{o} \cdot \mathrm{n})^2}}
 \end{aligned}
 $$
 然后很巧的是，在(10)式的分母上正好有一个$(\mathrm{o} \cdot \mathrm{n})$，为了数值稳定性考虑，Disney在[8]的实现中将$2(\mathrm{o} \cdot \mathrm{n})$与$G_1$项进行了合并，这样就得到了：
 $$
-\frac{1}{2(\mathrm{o} \cdot \mathrm{n})}G_1(\mathrm{o},\mathrm{m})=\frac{1}{(\mathrm{o} \cdot \mathrm{n})+\sqrt{\alpha^2 + (\mathrm{o} \cdot \mathrm{n})^2 -\alpha^2 (\mathrm{o} \cdot \mathrm{n})^2}} \\
-\frac{1}{2(\mathrm{i} \cdot \mathrm{n})}G_1(\mathrm{i},\mathrm{m})=\frac{1}{(\mathrm{i} \cdot \mathrm{n})+\sqrt{\alpha^2 + (\mathrm{i} \cdot \mathrm{n})^2 -\alpha^2 (\mathrm{i} \cdot \mathrm{n})^2}} \tag{22}
+\begin{aligned}
+\frac{1}{2(\mathrm{o} \cdot \mathrm{n})}G_1(\mathrm{o},\mathrm{m})&=\frac{1}{(\mathrm{o} \cdot \mathrm{n})+\sqrt{\alpha^2 + (\mathrm{o} \cdot \mathrm{n})^2 -\alpha^2 (\mathrm{o} \cdot \mathrm{n})^2}} \\
+\frac{1}{2(\mathrm{i} \cdot \mathrm{n})}G_1(\mathrm{i},\mathrm{m})&=\frac{1}{(\mathrm{i} \cdot \mathrm{n})+\sqrt{\alpha^2 + (\mathrm{i} \cdot \mathrm{n})^2 -\alpha^2 (\mathrm{i} \cdot \mathrm{n})^2}}
+\end{aligned} \tag{22}
 $$
 各向异性$G$的$\Lambda$的定义是一样的，但是$a$的定义有所变化：
 $$
@@ -416,8 +422,10 @@ G_1(\mathrm{o},\mathrm{m})=\frac{2}{1+\frac{1}{(\mathrm{o} \cdot \mathrm{n})}\sq
 $$
 同样地，与分布上的归一化常数合并后可以得到：
 $$
-\frac{1}{2(\mathrm{o} \cdot \mathrm{n})}G_1(\mathrm{o},\mathrm{m})=\frac{1}{(\mathrm{o} \cdot \mathrm{n})+\sqrt{(\mathrm{o} \cdot \mathrm{n})^2 + (\mathrm{o} \cdot \mathrm{x})^2 \alpha_x^2 + (\mathrm{o} \cdot \mathrm{y})^2 \alpha_y^2}} \\
-\frac{1}{2(\mathrm{i} \cdot \mathrm{n})}G_1(\mathrm{i},\mathrm{m})=\frac{1}{(\mathrm{i} \cdot \mathrm{n})+\sqrt{(\mathrm{i} \cdot \mathrm{n})^2 + (\mathrm{i} \cdot \mathrm{x})^2 \alpha_x^2 + (\mathrm{i} \cdot \mathrm{y})^2 \alpha_y^2}} \tag{23}
+\begin{aligned}
+\frac{1}{2(\mathrm{o} \cdot \mathrm{n})}G_1(\mathrm{o},\mathrm{m})&=\frac{1}{(\mathrm{o} \cdot \mathrm{n})+\sqrt{(\mathrm{o} \cdot \mathrm{n})^2 + (\mathrm{o} \cdot \mathrm{x})^2 \alpha_x^2 + (\mathrm{o} \cdot \mathrm{y})^2 \alpha_y^2}} \\
+\frac{1}{2(\mathrm{i} \cdot \mathrm{n})}G_1(\mathrm{i},\mathrm{m})&=\frac{1}{(\mathrm{i} \cdot \mathrm{n})+\sqrt{(\mathrm{i} \cdot \mathrm{n})^2 + (\mathrm{i} \cdot \mathrm{x})^2 \alpha_x^2 + (\mathrm{i} \cdot \mathrm{y})^2 \alpha_y^2}}
+\end{aligned} \tag{23}
 $$
 [8]中Smith项的实现就是这么来的，因此在最后计算$f_r$时才不需要做归一化。代码如下：
 
@@ -449,7 +457,11 @@ Disney在Future work部分坦言最大的问题缺少一个更直观可控的次
 
 ### 多重重要性采样 MIS
 
-我们已经知道了对于Specular lobe和Clearcoat lobe要根据$D$进行重要性采样，那么如何选择三个波瓣对应的lobe呢？答案仍然是多重重要性采样。
+我们已经知道了对于Specular lobe和Clearcoat lobe要根据$D$进行重要性采样，那么如何选择三个波瓣对应的lobe呢？答案仍然是多重重要性采样。具体要实现的就是One-Sample Model，关于多重重要性采样可以参考笔者的[这篇文章](https://dummyummy.github.io/2026/02/24/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E7%A7%AF%E5%88%86/)。
+
+## 实现结果
+
+
 
 # Disney Principled BSDF
 
