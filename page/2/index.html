@@ -111,7 +111,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -120,7 +120,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -137,6 +137,133 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">UE5 Lumen 学习笔记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-06 23:10:03" itemprop="dateCreated datePublished" datetime="2025-03-06T23:10:03+08:00">2025-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-09 17:04:17" itemprop="dateModified" datetime="2025-03-09T17:04:17+08:00">2025-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/" itemprop="url" rel="index"><span itemprop="name">CG</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/%E5%BC%95%E6%93%8E/" itemprop="url" rel="index"><span itemprop="name">引擎</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>该文章内容主要来自于虚幻5的官方文档[4]。 # 介绍
+一开始只觉得Lumen听起来很高大上，以为它除了渲染之外还有一些内容，最后发现是和Nanite搞混了（难绷）。按照文档的介绍，Lumen其实就是UE5新推出的全局光照(GI)和反射系统。最离谱的是，Lumen可以近似反射了无限次的漫反射光照和高光光照，甚至能在复杂环境中达成实时渲染。Lumen是此前各种屏幕空间技术(SSGI)和距离场环境光遮蔽(DFAO)的替代品。P.S.
+DFAO是虚幻4中所用的环境光遮蔽方法，文档里描述其与SSAO最大的区别是<code>遮蔽在场景空间遮挡物中进行计算，因此出屏丢失数据不会导致瑕疵</code>，至于原理吗，我猜与GAMES202中所讲的距离场阴影类似。</p>
+<p>要启用Lumen，需要在Project Settings-&gt;Rnedering中启用Dynamic Global
+Illumination和Reflections这两项（新项目应该是默认启用的）。</p>
+<h1 id="特性">特性</h1>
+<h2 id="全局光照">全局光照</h2>
+<ul>
+<li>不限制弹射次数的间接漫反射光照</li>
+<li>真实阴影（在光线追踪器中，阴影就不需要用传统方法去做了）</li>
+<li>要求实时性的情况下会以较低的分辨率来计算间接光照 ## 天光(Sky
+Lighting)
+天光在UE中负责模拟来自天空或远景的间接光照[1]，Skylight计算的光照会填充场景中的阴影部分，增强环境光照。Lumen也会为半透明材质和体积雾计算一个低质量的全局光照。
+## 自发光材质 自发光材质的贡献在Lumen的Final Gather
+Process中被计算。目前Final Gather还不太理解，留个坑。 ## 反射
+Lumen支持各种粗糙度材质反射，包括清漆（clear
+coat）和不透明材质的glossy反射，打开对应选项后也能渲染出半透明材质在最前面一层surface上的反射。Lumen还支持渲染单层水面的镜面反射。
+### Clear Coat材质
+即基础层上覆盖了薄薄的一层透明涂料，比如车漆[2]。Clear
+coat材质也可以使用Cook-Torrance microfacet BRDF来表示[3]。 ## 双面树叶
+允许光线在树叶中的次表面散射，效果出奇的好。下图右边是开启Two-Sided
+Foliage之后的效果 <img src="https://raw.githubusercontent.com/dummyummy/dummyummy.github.io/refs/heads/source/external/lumen-foliage-1.png"></li>
+</ul>
+<h1 id="设置略">设置（略）</h1>
+<h1 id="补充说明">补充说明</h1>
+<h2 id="lumen的更新速度">Lumen的更新速度</h2>
+<p>因为lumen似乎使用的是类似光照探针的技术并将计算压力分摊到多帧上来保证实时性的，所以局部光照条件的变化会快速传播，而全局的光照变化（如禁用阳光）需要一定的时间才能收敛。实测如果在项目中将主要的平行光设置为不可见的话，场景会缓慢变暗。而且如果仔细观察的话，直接光照会立即消失，间接光照则是缓慢黯淡。</p>
+<h2 id="lumen反射">Lumen反射</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/03/06/lumen%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 

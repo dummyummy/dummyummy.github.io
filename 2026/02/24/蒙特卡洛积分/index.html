@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="\[ \newcommand{\d}{\mathrm{d}} \] 蒙特卡洛积分 首先来看我们常用的蒙特卡洛积分（按照Wikipedia这已经算是重要性采样的形式了），注意所有的\(X_i\)都是独立同分布的： \[ I \approx I_{MC}&#x3D;\frac{1}{N} \sum \frac{f(X_i)}{p(X_i)} \tag{1} \] 当\(f(x) \neq 0\)的时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重要性采样">
+<meta property="og:url" content="https://dummyummy.github.io/2026/02/24/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E7%A7%AF%E5%88%86/index.html">
+<meta property="og:site_name" content="dummyummy的博客">
+<meta property="og:description" content="\[ \newcommand{\d}{\mathrm{d}} \] 蒙特卡洛积分 首先来看我们常用的蒙特卡洛积分（按照Wikipedia这已经算是重要性采样的形式了），注意所有的\(X_i\)都是独立同分布的： \[ I \approx I_{MC}&#x3D;\frac{1}{N} \sum \frac{f(X_i)}{p(X_i)} \tag{1} \] 当\(f(x) \neq 0\)的时">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-24T09:30:49.000Z">
+<meta property="article:modified_time" content="2026-02-24T09:32:11.542Z">
+<meta property="article:author" content="dummyummy">
+<meta property="article:tag" content="重要性采样">
+<meta property="article:tag" content="概率与统计">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://dummyummy.github.io/2026/02/24/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E7%A7%AF%E5%88%86/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://dummyummy.github.io/2026/02/24/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E7%A7%AF%E5%88%86/","path":"2026/02/24/蒙特卡洛积分/","title":"重要性采样"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>重要性采样 | dummyummy的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">dummyummy的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E7%A7%AF%E5%88%86"><span class="nav-number">1.</span> <span class="nav-text">蒙特卡洛积分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7"><span class="nav-number">1.1.</span> <span class="nav-text">重要性采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E9%87%8D%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7"><span class="nav-number">1.2.</span> <span class="nav-text">多重重要性采样</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#balance-heuristic"><span class="nav-number">1.2.1.</span> <span class="nav-text">Balance Heuristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#power-heuristic"><span class="nav-number">1.2.2.</span> <span class="nav-text">Power Heuristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#one-sample-model"><span class="nav-number">1.2.3.</span> <span class="nav-text">One-Sample Model</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B1%82%E9%87%87%E6%A0%B7"><span class="nav-number">1.3.</span> <span class="nav-text">分层采样</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dummyummy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2026/02/24/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E7%A7%AF%E5%88%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="重要性采样 | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重要性采样
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-02-24 17:30:49 / 修改时间：17:32:11" itemprop="dateCreated datePublished" datetime="2026-02-24T17:30:49+08:00">2026-02-24</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><span class="math display">\[
+\newcommand{\d}{\mathrm{d}}
+\]</span></p>
+<h1 id="蒙特卡洛积分">蒙特卡洛积分</h1>
+<p>首先来看我们常用的蒙特卡洛积分（按照<a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Monte_Carlo_integration#Importance_sampling_algorithm">Wikipedia</a>这已经算是重要性采样的形式了），注意所有的<span
+class="math inline">\(X_i\)</span>都是独立同分布的： <span
+class="math display">\[
+I \approx I_{MC}=\frac{1}{N} \sum \frac{f(X_i)}{p(X_i)} \tag{1}
+\]</span> 当<span class="math inline">\(f(x) \neq 0\)</span>的时候<span
+class="math inline">\(p(x)&gt;0\)</span>的话，这个估计就是无偏的。证明也很简单，直接在(1)式两端求期望即可。由于<span
+class="math inline">\(X_i\)</span>之间是独立的，因此可以计算出蒙特卡洛估计器的方差为：
+<span class="math display">\[
+\mathbb{V}[I_{MC}]=\mathbb{V}[\frac{1}{N} \sum
+\frac{f(X_i)}{p(X_i)}]=\frac{1}{N^2}\mathbb{V}[\sum
+\frac{f(X_i)}{p(X_i)}]=\frac{1}{N^2} \cdot N \cdot
+\mathbb{V}[\frac{f(X_i)}{p(X_i)}]=\frac{1}{N}\mathbb{V}[\frac{f(X_i)}{p(X_i)}]
+\tag{2}
+\]</span> 标准差即为： <span class="math display">\[
+\sigma = \frac{1}{\sqrt{N}}\sigma[\frac{f(X_i)}{p(X_i)}] \tag{3}
+\]</span>
+等式右边的方差项是常数，因此积分器的误差随着样本数量增加的衰减速度是<span
+class="math inline">\(O(n^{-1/2})\)</span>的，并不是很快。</p>
+<p>要注意的是，在路径追踪中我们一般用的是单点的蒙特卡洛采样，也就是认为：
+<span class="math display">\[
+I_{MC}=\frac{f(X_i)}{p(X_i)} \tag{4}
+\]</span></p>
+<h2 id="重要性采样">重要性采样</h2>
+<p>积分器中的<span
+class="math inline">\(p(x)\)</span>是可以任选的，而如果它恰好是<span
+class="math inline">\(f(x)\)</span>的常数倍的即<span
+class="math inline">\(p(x)=Cf(x)\)</span>的话，(2)和(3)式的误差就变为0了！然而简单计算一下我们会发现这是一个悖论：
+<span class="math display">\[
+1=\int \limits_\Omega p(x)\d x=\int \limits_\Omega Cf(x)\d x=C\int
+\limits_\Omega f(x)\d x=CI
+\]</span> 上式说明<span
+class="math inline">\(C=I^{-1}\)</span>，也就是我们需要提前得知<span
+class="math inline">\(I\)</span>的值才能得到理想的<span
+class="math inline">\(p(x)\)</span>，但是<span
+class="math inline">\(I\)</span>的值正是我们想要计算的目标！</p>
+<p>即便没法把采样的方差降为0，上面的分析也能作为选择<span
+class="math inline">\(p(x)\)</span>的指导方针：让<span
+class="math inline">\(p(x)\)</span>的形状尽可能地接近<span
+class="math inline">\(f(x)\)</span>，从而尽可能多采样重要也就是f(x)的值更大的区域。</p>
+<p>常用的重要性采样比如漫反射表面的余弦采样，还有直接光源采样等等，都符合这个原则。</p>
+<h2 id="多重重要性采样">多重重要性采样</h2>
+<p>如何组合多个不同的采样策略？一些简单的策略是，固定使用其中的一个分布来采样，或者是从每一个分布都采样，使用这些采样估计积分后对结果进行平均。很遗憾这些都是行不通的，不仅无法减少方差甚至可能得到错误的结果，具体的说明可以参考[5]。[1]中也给出了一个例子用于证明这些简单策略是有误的，对于Cornell
+Box场景，如果我们分别以<span
+class="math inline">\(1/2\)</span>的使用<span
+class="math inline">\(p_1(x)\)</span>（余弦采样）和<span
+class="math inline">\(p_2(x)\)</span>（直接光源采样），渲染出的图像如下：</p>
+<p><img
+src="https://lisyarus.github.io/blog/media/multiple-importance-sampling/box-mis-wrong-64.png" /></p>
+<p>整体的图像显得偏暗，原因是直接光源采样在这个场景中不满足<span
+class="math inline">\(f(x)\neq 0\)</span>处<span
+class="math inline">\(p(x)\neq
+0\)</span>因此是有偏的，上面的方法无异于在一张正确和一张错误的图像之间做了混合。正确的思路是，如果要以<span
+class="math inline">\(1/2\)</span>的概率在两个分布之间做选择，根据全概率公式，选中某条光线的概率是：
+<span class="math display">\[
+p(X)=\frac{1}{2}p_1(X)+\frac{1}{2}p_2(X) \tag{5}
+\]</span> 将(5)式带入到蒙特卡洛积分中可得单点估计值为： <span
+class="math display">\[
+\frac{f(X)}{\frac{1}{2}p_1(X)+\frac{1}{2}p_2(X)} \tag{6}
+\]</span> 这就是最简单的<strong>多重重要性采样</strong>(Multiple
+Importance Sampling也称MIS)，使用这个方法渲染出来Cornell
+Box长下面这样：</p>
+<p><img
+src="https://lisyarus.github.io/blog/media/multiple-importance-sampling/box-mis-64.png" /></p>
+<p>Veach在97年的博士论文[2]中给出了MIS的一般形式，假设有<span
+class="math inline">\(n\)</span>个采样策略（分布）<span
+class="math inline">\(p_i\)</span>，每个策略<span
+class="math inline">\(p_i\)</span>采样<span
+class="math inline">\(n_i\)</span>个样本<span
+class="math inline">\(X_{i,j}\)</span>，那么积分的估计值为： <span
+class="math display">\[
+I_{MC}=\sum\limits_{i=1}^{n}\frac{1}{n_i}\sum\limits_{i=1}^{n_i}w_i(X_{i,j})\frac{f(X_{i,j})}{p_i(X_{i,j})}
+\tag{7}
+\]</span> <span
+class="math inline">\(w_i(X_{i,j})\)</span>为权重函数，理想情况下它应该满足，当<span
+class="math inline">\(p_i\)</span>与真实的采样分布越相似时<span
+class="math inline">\(w_i\)</span>越大，反之则越小。从数学上来说，<span
+class="math inline">\(w_i\)</span>要满足两个条件才能保证估计是无偏的，分别是：</p>
+<ul>
+<li>当<span class="math inline">\(f(x) \neq 0\)</span>时，<span
+class="math inline">\(\sum_{i=1}^{n}w_i(x)=1\)</span></li>
+<li>当<span class="math inline">\(p_i(x)=0\)</span>时，<span
+class="math inline">\(w_i(x)=0\)</span></li>
+</ul>
+<p>这就能说明为什么上面的例子可以得到正确的画面了，虽然单独使用直接光源采样是有偏的，但是由于<span
+class="math inline">\(1/2\)</span>作为恒定的权重函数满足这两个条件（虽然不一定能减小方差）。实践中有两种常用的权重函数，分别是<em>Balance
+Heuristic</em>和<em>Power Heuristic</em>。</p>
+<h3 id="balance-heuristic">Balance Heuristic</h3>
+<p>Balance Heuristic的定义为： <span class="math display">\[
+w_i(x)=\dfrac{n_i p_i(x)}{\sum_j{n_j p_j(x)}} \tag{8}
+\]</span> 假如从两个分布<span class="math inline">\(p_1\)</span>和<span
+class="math inline">\(p_2\)</span>中分别只采样一个样本<span
+class="math inline">\(X\)</span>和<span
+class="math inline">\(Y\)</span>，那么(7)式可以简化为： <span
+class="math display">\[
+\frac{f(X)}{p_1(X)+p_2(X)}+\frac{f(Y)}{p_1(Y)+p_2(Y)} \tag{9}
+\]</span> 一个直观的理解[5]是，比如<span
+class="math inline">\(p_1(X)\)</span>很小，但是<span
+class="math inline">\(p_2(X)\)</span>较大，认为此时<span
+class="math inline">\(p_2\)</span>策略更加有效，那么<span
+class="math inline">\(p_2(X)\)</span>在分母上就能有效削弱<span
+class="math inline">\(f(X)\)</span>的贡献从而减小方差。所以Balance
+Heuristic能够自动识别并且惩罚那些“极其罕见但恰好发生”的高方差样本，只要<span
+class="math inline">\(p_i\)</span>中至少有一个分布的形状与真实分布类似那么Balance
+Heuristic就有助于减小方差。</p>
+<h3 id="power-heuristic">Power Heuristic</h3>
+<p>Power Heuristic相当于是Balance Heuristic的一般形式： <span
+class="math display">\[
+w_i(x)=\dfrac{(n_i p_i(x))^\beta}{\sum_j{((n_j p_j(x))^\beta}} \tag{10}
+\]</span> 这里就不再展开说明。</p>
+<h3 id="one-sample-model">One-Sample Model</h3>
+<p>(7)式要求在每个分布中都进行采样，对于路径追踪来说样本数量很快就会爆炸。Veach给出了更适合路径追踪的One-Sample
+Model，根据一个确定的离散概率分布以<span
+class="math inline">\(q_i\)</span>的概率选中策略<span
+class="math inline">\(p_i\)</span>并只在<span
+class="math inline">\(p_i\)</span>中采样，那么易得无偏的积分估计值为：
+<span class="math display">\[
+I_{MC}=\frac{w_i(X)}{q_i}\frac{f(X)}{p_i(X)} \tag{11}
+\]</span></p>
+<h2 id="分层采样">分层采样</h2>
+<p>TODO</p>
+<h1 id="参考">参考</h1>
+<ol type="1">
+<li><p><a
+target="_blank" rel="noopener" href="https://lisyarus.github.io/blog/posts/multiple-importance-sampling.html">Demystifying
+multiple importance sampling</a></p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://graphics.stanford.edu/courses/cs348b-03/papers/veach-chapter9.pdf">Multiple
+Importance Sampling</a></p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://pbr-book.org/4ed/Monte_Carlo_Integration/Monte_Carlo_Basics#TheMonteCarloEstimator">PBRT:
+The Monte Carlo Estimator</a></p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://pbr-book.org/4ed/Monte_Carlo_Integration/Monte_Carlo_Basics#ErrorinMonteCarloEstimators">PBRT:
+Error in Monte Carlo Estimators</a></p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://pbr-book.org/4ed/Monte_Carlo_Integration/Improving_Efficiency#MultipleImportanceSampling">PBRT:
+Multiple Importance Sampling</a></p></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7/" rel="tag"># 重要性采样</a>
+              <a href="/tags/%E6%A6%82%E7%8E%87%E4%B8%8E%E7%BB%9F%E8%AE%A1/" rel="tag"># 概率与统计</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/" rel="prev" title="PBR探微：Disney BSDF">
+                  <i class="fa fa-angle-left"></i> PBR探微：Disney BSDF
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">dummyummy</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

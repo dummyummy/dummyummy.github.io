@@ -27,8 +27,15 @@
 <meta property="og:description" content="\[ \newcommand{\d}{\mathrm{d}} \newcommand{\norm}[1]{\left\| #1 \right\|} \] 前言 最近突然又想去搓一个离线渲染器作为玩具项目了，趁机深入看了下Disney Principled BSDF，也算是又从头学了一遍PBR，谨将所学的东西略微记下，以便后续查阅。 基本定义 由于Disney BSDF涉及大量的">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260209215616130.png">
+<meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260209232558671.png">
+<meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260210002319868.png">
+<meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260210225759476.png">
+<meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260215181207238.png">
+<meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260215182739696.png">
+<meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260215183204025.png">
+<meta property="og:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260215185032286.png">
 <meta property="article:published_time" content="2026-02-08T11:35:37.753Z">
-<meta property="article:modified_time" content="2026-02-09T13:56:28.708Z">
+<meta property="article:modified_time" content="2026-02-23T16:45:48.383Z">
 <meta property="article:author" content="dummyummy">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://dummyummy.github.io/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260209215616130.png">
@@ -105,7 +112,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">基本定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ndf"><span class="nav-number">2.1.</span> <span class="nav-text">NDF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shadowing-masking-function-g"><span class="nav-number">2.2.</span> <span class="nav-text">Shadowing-Masking Function G</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E5%B9%B3%E9%9D%A2bsdf%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">微平面BSDF模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%B3%BB%E6%95%B0"><span class="nav-number">2.3.1.</span> <span class="nav-text">第一个系数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%B3%BB%E6%95%B0"><span class="nav-number">2.3.2.</span> <span class="nav-text">第二个系数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE%E8%A1%A8%E9%9D%A2%E7%9A%84bsdfbrdfbsdf"><span class="nav-number">2.3.3.</span> <span class="nav-text">微表面的BSDF（BRDF+BSDF）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#reflection-brdf"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">Reflection BRDF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#refractiontransmission-brdf"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">Refraction(Transmission) BRDF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bsdf"><span class="nav-number">2.3.4.</span> <span class="nav-text">BSDF</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%82%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">杂记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">基本定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ndf"><span class="nav-number">2.1.</span> <span class="nav-text">NDF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shadowing-masking-function-g"><span class="nav-number">2.2.</span> <span class="nav-text">Shadowing-Masking Function G</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E5%B9%B3%E9%9D%A2bsdf%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">微平面BSDF模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%B3%BB%E6%95%B0"><span class="nav-number">2.3.1.</span> <span class="nav-text">第一个系数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%B3%BB%E6%95%B0"><span class="nav-number">2.3.2.</span> <span class="nav-text">第二个系数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE%E8%A1%A8%E9%9D%A2%E7%9A%84bsdfbrdfbsdf"><span class="nav-number">2.3.3.</span> <span class="nav-text">微表面的BSDF（BRDF+BSDF）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#reflection-brdf"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">Reflection BRDF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#refractiontransmission-brdf"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">Refraction(Transmission) BRDF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bsdf"><span class="nav-number">2.3.4.</span> <span class="nav-text">BSDF</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#disney-principled-brdf"><span class="nav-number">3.</span> <span class="nav-text">Disney Principled BRDF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">3.1.</span> <span class="nav-text">前置知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%91%E5%B1%9E"><span class="nav-number">3.1.1.</span> <span class="nav-text">金属</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%B5%E4%BB%8B%E8%B4%A8"><span class="nav-number">3.1.2.</span> <span class="nav-text">电介质</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">3.2.</span> <span class="nav-text">定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%9C%E8%89%B2"><span class="nav-number">3.2.1.</span> <span class="nav-text">颜色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%AB%E5%8F%8D%E5%B0%84"><span class="nav-number">3.2.2.</span> <span class="nav-text">漫反射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d"><span class="nav-number">3.2.3.</span> <span class="nav-text">D</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">归一化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%84%E5%90%91%E5%BC%82%E6%80%A7"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">各向异性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">重要性采样</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#f"><span class="nav-number">3.2.4.</span> <span class="nav-text">F</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#g"><span class="nav-number">3.2.5.</span> <span class="nav-text">G</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sheenfabric"><span class="nav-number">3.2.6.</span> <span class="nav-text">Sheen(Fabric)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clearcoatvarnish"><span class="nav-number">3.2.7.</span> <span class="nav-text">Clearcoat(Varnish)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subsurface"><span class="nav-number">3.2.8.</span> <span class="nav-text">Subsurface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E9%87%8D%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7-mis"><span class="nav-number">3.2.9.</span> <span class="nav-text">多重重要性采样 MIS</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#disney-principled-bsdf"><span class="nav-number">4.</span> <span class="nav-text">Disney Principled BSDF</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%82%E8%AE%B0"><span class="nav-number">5.</span> <span class="nav-text">杂记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -118,7 +125,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -127,7 +134,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -190,7 +197,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-02-09 21:56:28" itemprop="dateModified" datetime="2026-02-09T21:56:28+08:00">2026-02-09</time>
+      <time title="修改时间：2026-02-24 00:45:48" itemprop="dateModified" datetime="2026-02-24T00:45:48+08:00">2026-02-24</time>
     </span>
 
   
@@ -226,24 +233,26 @@ class="math inline">\(D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m\mathrm{d}A\)</spa
 class="math inline">\(\mathrm{m}\)</span>微平面的总面积，因此<span
 class="math inline">\(D(\mathrm{m})\)</span>项可以写为，其中<span
 class="math inline">\(\mathrm{d}A_m\)</span>代表微平面的面积：</p>
-<p><span class="math display">\[D(\mathrm{m})=\frac{\d A_m}{\d
-\mathrm{\omega}_m\mathrm{d}A}\]</span></p>
-<p>然后来看下<span
+<p><span class="math display">\[
+D(\mathrm{m})=\frac{\d A_m}{\d \mathrm{\omega}_m\mathrm{d}A}
+\]</span> 然后来看下<span
 class="math inline">\(D\)</span>的归一化条件，首先易得微平面投影面积的积分应该为<span
 class="math inline">\(\mathrm{d}A\)</span>：</p>
-<p><span class="math display">\[\mathrm{d}A=\int(n \cdot
-m)\mathrm{d}A_m\]</span></p>
-<p>将<span
+<p><span class="math display">\[
+\mathrm{d}A=\int(n \cdot m)\mathrm{d}A_m
+\]</span> 将<span
 class="math inline">\(D(\mathrm{m})\)</span>的定义带入后可得真正的归一化条件：</p>
-<p><span class="math display">\[\int_{\Omega}(n \cdot
-m)D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m=1\]</span></p>
-<p>之后就不要再天真地把<span
+<p><span class="math display">\[
+\int_{\Omega}(n \cdot m)D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m=1
+\]</span> 之后就不要再天真地把<span
 class="math inline">\(D(\mathrm{m})\)</span>项看作pdf了，而将其称为面积密度则更合适。</p>
 <p><strong>P.S.</strong> [1]中Walter et
 al. 实际上给出了更严格的归一化条件，即对于任意的方向<span
-class="math inline">\(\mathrm{v}\)</span>需要满足：</p>
-<p><span class="math display">\[\int_{\Omega}(v \cdot
-m)D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m=(v \cdot m)\]</span></p>
+class="math inline">\(\mathrm{v}\)</span>需要满足： <span
+class="math display">\[
+\int_{\Omega}(v \cdot m)D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m=(v
+\cdot m)
+\]</span></p>
 <h2 id="shadowing-masking-function-g">Shadowing-Masking Function G</h2>
 <p><span
 class="math inline">\(G\)</span>项是为了能量守恒而加上的，用于描述有多少的微平面是在入射方向<span
@@ -434,7 +443,7 @@ f_s(\mathrm{i},\mathrm{o},\mathrm{n})=f_r(\mathrm{i},\mathrm{o},\mathrm{n})+f_t(
 class="math display">\[
 f_r(\mathrm{i},\mathrm{o},\mathrm{n})=\dfrac{F(\mathrm{i},\mathrm{h}_r)G(\mathrm{i},\mathrm{o},\mathrm{h}_r)D(\mathrm{h}_r)}{4
 \left| \mathrm{i} \cdot \mathrm{n} \right| \left| \mathrm{o} \cdot
-\mathrm{n} \right|}
+\mathrm{n} \right|} \tag{8} \
 \]</span></p>
 <p>折射部分基本上没什么可消元的，就是单纯把微平面的<span
 class="math inline">\(f_t^m\)</span>带进去即可： <span
@@ -444,9 +453,339 @@ f_t(\mathrm{i},\mathrm{o},\mathrm{n})=\left| \dfrac{\mathrm{i} \cdot
 \dfrac{\mathrm{i} \cdot \mathrm{h}_t}{\mathrm{o} \cdot \mathrm{n}}
 \right|
 \dfrac{\eta_o^2(1-F(\mathrm{i},\mathrm{h}_t))G(\mathrm{i},\mathrm{o},\mathrm{h}_t)D(\mathrm{h}_t)}{(\eta_i(\mathrm{i}
-\cdot \mathrm{h}_t)+\eta_o(\mathrm{o} \cdot \mathrm{h}_t))^2}
+\cdot \mathrm{h}_t)+\eta_o(\mathrm{o} \cdot \mathrm{h}_t))^2}  \tag{9}
 \]</span></p>
+<p>到这里，基本定义部分就告一段落，终于可以开始探索Disney BSDF了。</p>
+<h1 id="disney-principled-brdf">Disney Principled BRDF</h1>
+<p>这是Disney在2012年提出的模型，他们通过观察MERL
+100中的材质，提出了一种不那么物理但是对于艺术家更加友好的模型。该模型共有1个颜色参数和10个标量参数，并且一般情况下所有的参数都在0到1之间。这里就不再复述Disney分析材质的过程，他们得出的结论非常有意思，有兴趣的朋友可以看看原论文[4]。下面是该模型的效果展示。</p>
+<img src="/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260209232558671.png" class="" title="image-20260209232558671">
+<h2 id="前置知识">前置知识</h2>
+<p>首先我们要明确，光打到表面后的去向只有两种可能：</p>
+<ul>
+<li>在表面就被反射</li>
+<li>进入物体内部</li>
+</ul>
+<p>然后我们还需要区分电介质dielectric和金属metal，虽然在实时渲染中用的PBR模型一般会根据金属度去混合一个diffuse和一个specular，但事实上这个混合并不符合物理，因为一个材质要么是电介质要么是金属，而这两者呈现出颜色的物理本源大相径庭。</p>
+<p>在继续接下来的讨论之前需要声明，由于笔者本人并非物理出身，对于Fresnel
+Equation的了解还停留在初级阶段，下面的陈述也大致是由AI佐证的，并不保证严谨性。对于Fresnel方程完整的讨论见Sébastien大神的博客[6]。</p>
+<p>首先每个材质都有一个折射率（P.S.
+折射率本身实际上是用真空光速与介质中光速的比值来定义的），它实际上是一个形为<span
+class="math inline">\(n+ik\)</span>的复数，其中<span
+class="math inline">\(k\)</span>是一个叫做消光系数(extinction
+coefficient)的玩意，它大致代表了光线在介质衰减的速度。电介质的消光系数一般非常小，而金属的消光系数则很大。</p>
+<h3 id="金属">金属</h3>
+<p>但是！消光系数<span
+class="math inline">\(k\)</span>大，并不意味着大部分入射光会被金属吸收。金属材质中有大量的自由电子，入射光会与这些电子发生两种交互[7]，要么是被吸收并转化为热能，要么是被重新辐射（反射）出去。电子云还会产生一个反向的电场，阻止光线的继续深入。同时由于光波在金属中会快速衰减，为了保持能量守恒，绝大部分的能量都会走上第二条路径，也就是被反射出去。从下面<span
+class="math inline">\(F_0\)</span>的计算公式也能看出金属的反射能力非常强，当<span
+class="math inline">\(k\)</span>很大时，<span
+class="math inline">\(F_0\)</span>会趋近于1。 <span
+class="math display">\[
+F_0=\dfrac{(n-1)^2+k^2}{(n+1)^2+k^2} \tag{10}
+\]</span> 那既然反射这么强，为啥金属还会有颜色呢？实际上，金属的<span
+class="math inline">\(n\)</span>和<span
+class="math inline">\(k\)</span>都是与波长高度相关的，比如下面黄金的数据：</p>
+<img src="/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260210002319868.png" class="" title="image-20260210002319868">
+<p>也就是说，金属会在表面立即将一部分波长的电磁波立即转换为热能，剩下的部分就被原封不动地反射出去了，这就是金属带有颜色的原因。</p>
+<h3 id="电介质">电介质</h3>
+<p>与金属截然不同，电介质的消光系数<span
+class="math inline">\(k\)</span>通常极小（接近
+0）。这意味着光线大部分都折射进入了物体内部。一旦光线进入内部，它便开始了在物质微观结构间的行进。在这个过程中，光线会发生无数次的散射。而在散射的路径上，特定波长的光子会被物质内部的色素或分子结构选择性吸收并转化为热能。那些幸存下来、未被吸收的光波，在经过多次散射后，最终会从表面重新射出。这部分从内部逃逸出来的光，携带了物质内部的信息，形成了我们所看到的颜色。</p>
+<p>而我们平常说的漫反射颜色，实际上是忽略了多数行进距离较远的光线，进而认定出射点等同于入射点，完成了对于上述复杂的次表面散射过程的近似。</p>
+<p>另外从<span
+class="math inline">\(F_0\)</span>的计算公式来看，电介质表面仍然会发生直接反射，虽然<span
+class="math inline">\(F_0\)</span>非常小，但这部分能量不容忽视。这一点也是Disney的工程师们在设计BRDF的时候要考虑的事情。</p>
+<h2 id="定义">定义</h2>
+<p><strong>P.S.</strong> Disney还贴心地为大家设计了一个BRDF
+Explorer用于快速可视化和探索常用的BRDF模型，不过在Windows上编译的话好像需要Qt环境，如果不想编译的话还是可以作为Disney
+BRDF官方实现来参考的，详见[8]。</p>
+<h3 id="颜色">颜色</h3>
+<p>让我们来一览Principled
+BRDF具体的定义，先从最基础的部分入手。前面我们已经提到过，Disney
+BRDF并不追求完全的物理，所以该模型会使用金属度<code>metallic</code>去混合电介质的BRDF和金属的BRDF，如下图所示：</p>
+<img src="/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260210225759476.png" class="" title="image-20260210225759476">
+<p>Disney
+BRDF最有趣的一点在于它只有一个颜色参数<code>baseColor</code>，它既用于控制金属反射的颜色，又用于控制电介质漫反射的颜色。按照之前的分析，电介质的高光是消色差也就白色的，而且它们的<span
+class="math inline">\(F_0\)</span>一般非常小，所以Disney基于电介质平均的<span
+class="math inline">\(F_0\)</span>在<span
+class="math inline">\(0.04\)</span>左右的观察，将<code>specular</code>参数设置为了<span
+class="math inline">\(0.08 \times
+F_0\)</span>，这样当<code>specular</code>为<span
+class="math inline">\(0.5\)</span>时正好代表一般的电介质。另外美术也许会想要让这个高光不是消色差的，Disney
+BRDF引入了<code>specularTint</code>来控制高光的颜色，这个值越接近<span
+class="math inline">\(1\)</span>，高光颜色就越向<code>baseColor</code>趋同（<code>sheenTint</code>也是这个逻辑）。需要注意的是，这个<code>specular</code><strong>只影响电介质</strong>，金属的高光是仅由<code>baseColor</code>来控制的！</p>
+<p>另外，模型中实际上存在两个Specular Lobe，一个是电介质的Specular
+Lobe，另一个是金属的Specular
+Lobe。一开始笔者还对这一点存有疑问，觉得这两个部分应该分开计算。后来想了想，既然我们已经允许电介质与金属的混合了，还有<code>specularTint</code>来控制非金属的高光，除掉颜色成因的差异之外两者的微表面反射原理是一致的，完全可以共用同一个BRDF的计算公式。在实践中，只需要根据<code>metallic</code>和<code>specular</code>对颜色做混合就行了。下面是颜色计算的代码，可以清晰地看出混合的逻辑。tint_color是使用luminance对base_color进行归一化的结果。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> Color <span class="title">CalculateTint</span><span class="params">(<span class="type">const</span> Color &amp;base_color)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">double</span> luminance = <span class="built_in">dot</span>(<span class="built_in">Vec3</span>(<span class="number">0.3</span>, <span class="number">0.6</span>, <span class="number">0.1</span>), base_color);</span><br><span class="line">    <span class="keyword">return</span> luminance &gt; <span class="number">0.0</span> ? base_color * (<span class="number">1.0</span> / luminance) : Color::<span class="built_in">one</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> Color <span class="title">CalculateF0</span><span class="params">(<span class="type">const</span> Color &amp;base_color, <span class="type">const</span> Color &amp;tint_color, <span class="type">double</span> metallic, <span class="type">double</span> specular,</span></span></span><br><span class="line"><span class="params"><span class="function">                         <span class="type">double</span> specular_tint)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">lerp</span>(specular * <span class="number">0.08</span> * <span class="built_in">lerp</span>(Color::<span class="built_in">one</span>(), tint_color, specular_tint), base_color, metallic);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="漫反射">漫反射</h3>
+<p>Disney观察到不少漫反射材质有着很明显的掠射角自反射（grazing
+retroreflection），如下图所示，其中<span
+class="math inline">\(\theta_d\)</span>是<span
+class="math inline">\(\mathrm{h}\)</span>与<span
+class="math inline">\(\mathrm{n}\)</span>的夹角。一种可能的原因是，由于表面非常粗糙，所以与菲涅尔公式预测的相反，处于掠射角时折射的比例反而会增大，这些折射的光线在最终表现为一个宏观的specular
+peak。</p>
+<img src="/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260215181207238.png" class="" title="image-20260215181207238">
+<p>为了还原这个现象，Disney为Lambert
+Diffuse模型加上了一个与粗糙度相关的权重来模拟这种现象，具体的公式如下，其中<span
+class="math inline">\(\theta_l\)</span>和<span
+class="math inline">\(\theta_v\)</span>分别相对于宏观法线<span
+class="math inline">\(\mathrm{n}\)</span>夹角的余弦。 <span
+class="math display">\[
+f_d=\frac{\text { baseColor }}{\pi}\left(1+\left(F_{D
+90}-1\right)\left(1-\cos \theta_l\right)^5\right)\left(1+\left(F_{D
+90}-1\right)\left(1-\cos \theta_v\right)^5\right) \tag{11}
+\]</span> <span class="math inline">\(F_{D 90}\)</span>与粗糙度相关：
+<span class="math display">\[
+F_{D 90}=0.5+2 \cdot roughness \cdot \cos^2\theta_d \tag{12}
+\]</span>
+该模型的效果如下，当粗糙度增大时，BRDF切片右下角的亮度明显增加，而在材料比较光滑时，根据Fresnel定律右下角则较暗。</p>
+<img src="/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260215182739696.png" class="" title="image-20260215182739696">
+<h3 id="d">D</h3>
+<p>真实的高光具有非常宽广的分布，比如金属铬(Chrome)的高光，对应下面左图中的黑色线条：</p>
+<img src="/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260215183204025.png" class="" title="image-20260215183204025">
+<p>而现有的GGX（也就是Trowbridge-Reitz）和Beckmann都无法很好地拟合这个分布“长尾”的特征。Disney因此根据GGX和Berry分布的特点，创造了GTR也就是Generalized-Trowbridge-Reitz分布，公式和绘图如下，其中<span
+class="math inline">\(c\)</span>是未知的归一化常数，<span
+class="math inline">\(\alpha\)</span>是与粗糙度相关的参数。可以看到GTR有着很优秀的且可调节的长尾特征：
+<span class="math display">\[
+D_{\text{GTR}}=\frac{c}{(\alpha^2 \cos^2 \theta_h + \sin^2
+\theta_h)^\gamma} \tag{13}
+\]</span> <img src="/2026/02/08/PBR%E6%8E%A2%E5%BE%AE%EF%BC%9ADisney-BSDF/image-20260215185032286.png" class="" title="image-20260215185032286"></p>
+<p>当然，这个<span
+class="math inline">\(\gamma\)</span>参数也是要事先确定下来的，Principled
+BRDF中一共会使用两个不同的Specular Lobes，分别是对应主要材质的primary
+lobe，<span
+class="math inline">\(\gamma=2\)</span>，这个实际上就是GGX，以及对应清漆的secondary
+lobe，<span class="math inline">\(\gamma=1\)</span>。</p>
+<p>另外这篇论文中也为笔者解答了一个此前困惑许久的问题：为啥有些实时渲染的模型中会有一个叫做perceptual
+roughness的玩意儿？原来，Disney在试验时发现令<span
+class="math inline">\(\alpha=roughness^2\)</span>会让粗糙度的变化更加<code>perceptually linear</code>，因此提出使用平方后的perceptual
+roughness即<span
+class="math inline">\(\alpha\)</span>来替换GGX中原来的粗糙度。这是一个经验性的改进，没有涉及数学上的推导。</p>
+<p>从前置知识和定义部分中我们知道，<code>specular</code>参数作为电介质垂直入射时的反射强度，实际上表示的就是归一化的折射率IOR。根据<span
+class="math inline">\(F_0\)</span>的公式(10)来看，<code>specular</code>越高意味着IOR也越高，同时<code>specular</code>等于0.5时对应的IOR为1.5，这也是个常见的反射率数值，说明归一化是合理的。对于清漆clearcoat层，Disney让IOR固定为了1.5，在这种情况下<span
+class="math inline">\(F_0\)</span>只有0.04，只占反射能量的很小一部分，因此在最终的计算里clearcoat和基础材料的BRDF只要简单相加而无需进行混合。<code>clearcoat</code>参数也像<code>specular</code>一样做了归一化处理。</p>
+<h4 id="归一化">归一化</h4>
+<p>论文的附录部分给出了GTR归一化后的公式，推导思路就是根据之前介绍过的<span
+class="math inline">\(D\)</span>的定义来解出归一化常数<span
+class="math inline">\(c\)</span>即可。 <span class="math display">\[
+D_{\mathrm{GTR}}\left(\theta_h\right)=\frac{(\gamma-1)\left(\alpha^2-1\right)}{\pi(1-\left(\alpha^2\right)^{1-\gamma})}
+\frac{1}{\left(1+\left(\alpha^2-1\right) \cos ^2
+\theta_h\right)^\gamma}  \tag{14}
+\]</span> 对于primary lobe和secondary
+lobe来说，更具体的公式如下，由于<span
+class="math inline">\(\gamma=1\)</span>时GTR实际上是未定义的，因此下面secondary
+lobe的式子实际上取了极限： <span class="math display">\[
+\begin{aligned}
+D_{\mathrm{GTR}_{2}}\left(\theta_h\right)&amp;=\frac{\alpha^2}{\pi}
+\frac{1}{(1+(\alpha^2-1) \cos ^2 \theta_h)^{2}}\\
+D_{\mathrm{GTR}_{1}}\left(\theta_h\right)&amp;=\frac{\alpha^2
+-1}{\pi\log \alpha^2} \frac{1}{(1+(\alpha^2-1) \cos ^2 \theta_h)}
+\end{aligned} \tag{15}
+\]</span> 代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">double</span> <span class="title">GTR1</span><span class="params">(<span class="type">double</span> NdotH, <span class="type">double</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (a &gt;= <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> inv_pi;</span><br><span class="line">    <span class="type">double</span> a2 = <span class="built_in">sqr</span>(a);</span><br><span class="line">    <span class="type">double</span> t = <span class="number">1</span> + (a2 - <span class="number">1</span>) * <span class="built_in">sqr</span>(NdotH);</span><br><span class="line">    <span class="keyword">return</span> (a2 - <span class="number">1</span>) / (pi * std::<span class="built_in">log</span>(a2) * t);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">double</span> <span class="title">GTR2</span><span class="params">(<span class="type">double</span> NdotH, <span class="type">double</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (a &gt;= <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> inv_pi;</span><br><span class="line">    <span class="type">double</span> a2 = <span class="built_in">sqr</span>(a);</span><br><span class="line">    <span class="type">double</span> t = <span class="number">1</span> + (a2 - <span class="number">1</span>) * <span class="built_in">sqr</span>(NdotH);</span><br><span class="line">    <span class="keyword">return</span> a2 / (pi * <span class="built_in">sqr</span>(t));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="各向异性">各向异性</h4>
+<p>为了引入各向异性，首先要建立局部坐标系，<span
+class="math inline">\(\mathrm{n}\)</span>作为up
+vector，其余两个基向量分别为<span
+class="math inline">\(\mathrm{x}\)</span>和<span
+class="math inline">\(\mathrm{y}\)</span>。<code>anisotropic</code>项控制在<span
+class="math inline">\(\mathrm{x}\)</span>和<span
+class="math inline">\(\mathrm{y}\)</span>上的roughness的缩放，具体的转换如下：
+<span class="math display">\[
+\begin{aligned}
+aspect&amp;=\sqrt{1-0.9 \cdot anisotropic}\\
+\alpha_x&amp;=roughness^2 / aspect\\
+\alpha_y&amp;=roughness^2 \cdot aspect
+\end{aligned}
+\]</span> 为了把GTR变成各向异性的，直接用<span
+class="math inline">\(\frac{\cos^2 \phi}{\alpha_x^2}+\frac{\sin^2
+\phi}{\alpha_x^2}\)</span>来代替<span
+class="math inline">\(\frac{1}{\alpha^2}\)</span>带入到primary
+lobe，其中<span class="math inline">\(\theta_h\)</span>和<span
+class="math inline">\(\phi_h\)</span>为<span
+class="math inline">\(\mathrm{h}\)</span>在局部坐标系中的球面坐标。由于只有primary
+lobe会是各向异性的，因此对于Anisotropic GTR的讨论全都假定<span
+class="math inline">\(\gamma=2\)</span>。 <span class="math display">\[
+D_{\mathrm{GTR}_{aniso}}\left(\theta_h\right)=\frac{1}{\pi}
+\frac{1}{\alpha_x \alpha_y} \frac{1}{(\sin^2 \theta_h (\cos^2
+\phi_h/\alpha_x^2 + \sin^2 \phi_h/\alpha_y^2) + \cos^2 \theta_h)^2}
+\]</span> 另注意到极坐标系与直角坐标系的转换关系： <span
+class="math display">\[
+\begin{aligned}
+\mathrm{h} \cdot \mathrm{n} &amp;= \cos \theta_h \\
+\mathrm{h} \cdot \mathrm{x} &amp;= \sin \theta_h \cos \phi_h \\
+\mathrm{h} \cdot \mathrm{y} &amp;= \sin \theta_h \sin \phi_h
+\end{aligned} \tag{16}
+\]</span> 代入后得到： <span class="math display">\[
+D_{\mathrm{GTR}_{aniso}}\left(\theta_h\right)=\frac{1}{\pi}
+\frac{1}{\alpha_x \alpha_y} \frac{1}{((\mathrm{h} \cdot
+\mathrm{x})^2/\alpha_x^2 + (\mathrm{h} \cdot \mathrm{y})^2/\alpha_y^2 +
+(\mathrm{h} \cdot \mathrm{n})^2)^2} \tag{17}
+\]</span> <span
+class="math inline">\(\gamma=2\)</span>时的代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">double</span> <span class="title">GTR2_aniso</span><span class="params">(<span class="type">double</span> NdotH, <span class="type">double</span> HdotX, <span class="type">double</span> HdotY, <span class="type">double</span> ax, <span class="type">double</span> ay)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">double</span> t = <span class="built_in">sqr</span>(HdotX / ax) + <span class="built_in">sqr</span>(HdotY / ay) + <span class="built_in">sqr</span>(NdotH);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> / (pi * ax * ay * <span class="built_in">sqr</span>(t));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="重要性采样">重要性采样</h4>
+<p>由于<span
+class="math inline">\(D\)</span>项是对于高光形状影响最大的项，因此根据它进行重要性采样能尽可能地减少方差。只要能够采样出<span
+class="math inline">\(\mathrm{h}\)</span>，便可以根据反射关系算出来<span
+class="math inline">\(\mathrm{l}\)</span>。大致的推导思路就是利用<span
+class="math inline">\(D\)</span>项的归一化性质选择<span
+class="math inline">\(p(\mathrm{h})=D(\theta_h)\cos
+\theta_h\)</span>，marginalize后利用inverse method来算出uniform
+random到<span class="math inline">\(\theta\)</span>和<span
+class="math inline">\(\phi\)</span>的映射，具体不再展开，这里仅罗列推导结果。</p>
+<p>对于isotropic的GTR，重要性采样的公式如下。 <span
+class="math display">\[
+\begin{aligned}
+\phi_h&amp;=2\pi \xi_1 \\
+\cos
+\theta_h&amp;=\sqrt{\frac{1-[(\alpha^2)^{1-\gamma}(1-\xi_2)+\xi_2]^{\frac{1}{1-\gamma}}}{1-\alpha^2}}
+\end{aligned} \tag{18}
+\]</span> <span class="math inline">\(\gamma=2\)</span>或<span
+class="math inline">\(\gamma=1\)</span>时的<span
+class="math inline">\(\cos
+\theta_h\)</span>的公式分别在下面的第一行和第二行： <span
+class="math display">\[
+\cos \theta_h=\sqrt{\frac{1-\xi_2}{1+(\alpha^2-1)\xi_2}}\ ,\ \gamma=2 \\
+\cos \theta_h=\sqrt{\frac{1-(\alpha^2)^{1-\xi_2}}{1-\alpha^2}}\ ,\
+\gamma=1 \tag{19}
+\]</span> 对于anisotropic的GTR，Disney额外引入了投影半程向量<span
+class="math inline">\(\mathrm{h}&#39;\)</span>的概念，用于提高采样的效率：
+<span class="math display">\[
+\begin{aligned}
+\sin \phi_h &amp; =\frac{\alpha_y \sin \left(2 \pi \xi_1\right)}{r} \\
+\cos \phi_h &amp; =\frac{\alpha_x \cos \left(2 \pi \xi_1\right)}{r} \\
+\tan \theta_h &amp; =r \sqrt{\frac{\xi_2}{1-\xi_2}} \\
+\mathrm{h}^{\prime} &amp; =\sqrt{\frac{\xi_2}{1-\xi_2}}\left[\alpha_x
+\cos \left(2 \pi \xi_1\right) \boldsymbol{x}+\alpha_y \sin \left(2 \pi
+\xi_1\right) \mathrm{y}\right]+\mathrm{n} \\
+\mathrm{h} &amp;
+=\frac{\mathrm{h}^{\prime}}{\left|\mathrm{h}^{\prime}\right|}
+\end{aligned}  \tag{20}
+\]</span></p>
+<h3 id="f">F</h3>
+<p>这部分还是使用Schlick Fresnel近似去计算，公式如下，相当于根据<span
+class="math inline">\(\cos
+\theta_d\)</span>对垂直入射和掠射角两种情况下的反射率做非线性混合：
+<span class="math display">\[
+\begin{aligned}
+F_{Schlick}
+&amp;=F_0+(1-F_0)(1-\cos \theta_d)^5\\
+&amp;=F_0\left( 1-(1-\cos \theta_d)^5 \right)+1 \cdot (1-\cos
+\theta_d)^5
+\end{aligned} \tag{21}
+\]</span> 代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">double</span> <span class="title">SchlickFresnel</span><span class="params">(<span class="type">double</span> cos_theta_d)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cos_theta_d = std::<span class="built_in">clamp</span>(cos_theta_d, <span class="number">0.0</span>, <span class="number">1.0</span>);</span><br><span class="line">    <span class="type">float</span> cos_theta_d2 = cos_theta_d * cos_theta_d;</span><br><span class="line">    <span class="keyword">return</span> cos_theta_d2 * cos_theta_d2 * cos_theta_d;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//......</span></span><br><span class="line"><span class="type">double</span> FH = PBR::<span class="built_in">SchlickFresnel</span>(LdotH);</span><br><span class="line">Color Fs = <span class="built_in">lerp</span>(F0, Color::<span class="built_in">one</span>(), FH);</span><br></pre></td></tr></table></figure>
+<h3 id="g">G</h3>
+<p>根据[1]和[12]的推导，<span
+class="math inline">\(G_1\)</span>项可以写作： <span
+class="math display">\[
+G_1(\mathrm{o},\mathrm{m})=\frac{1}{1+\Lambda(\mathrm{o})}
+\]</span> 这个<span
+class="math inline">\(\Lambda\)</span>的定义比较复杂，涉及到Smith
+Masking
+Function的推导，这里也不展开。这边不直接列公式，是因为Disney在[8]的实现中对于<span
+class="math inline">\(G\)</span>项做了一定的变化，有必要简单推导下。[12]中给出了GGX对应的<span
+class="math inline">\(\Lambda\)</span>： <span class="math display">\[
+\Lambda(\mathrm{o})=\frac{-1+\sqrt{1+1/a^2}}{2}=\frac{2}{1+\sqrt{1+1/a^2}}
+\]</span> 其中<span class="math inline">\(a=\frac{1}{\alpha \tan
+\theta_o}\)</span>，<span class="math inline">\(\theta_o\)</span>是<span
+class="math inline">\(\mathrm{o}\)</span>与宏观法线的夹角。将三角恒等式<span
+class="math inline">\(\tan^2 \theta_o=\frac{1-\cos^2 \theta_o}{\cos^2
+\theta_o}\)</span>带入上式并变化可得： <span class="math display">\[
+\begin{aligned}
+G_1(\mathrm{o},\mathrm{m})&amp;=\frac{2}{1+\sqrt{1+\alpha^2 \tan^2
+\theta_o}} \\
+&amp;=\frac{2}{1+\sqrt{1+\alpha^2 \frac{1-\cos^2 \theta_o}{\cos^2
+\theta_o}}} \\
+&amp;=\frac{2}{1+\frac{1}{\cos \theta_o}\sqrt{\cos^2 \theta_o+\alpha^2
+(1-\cos^2 \theta_o)}} \\
+&amp;=\frac{2}{1+\frac{1}{\cos \theta_o}\sqrt{\alpha^2 + \cos^2
+\theta_o-\alpha^2 \cos^2 \theta_o}} \\
+&amp;=\frac{2}{1+\frac{1}{(\mathrm{o} \cdot \mathrm{n})}\sqrt{\alpha^2 +
+(\mathrm{o} \cdot \mathrm{n})^2 -\alpha^2 (\mathrm{o} \cdot
+\mathrm{n})^2}} \\
+\end{aligned}
+\]</span> 然后很巧的是，在(10)式的分母上正好有一个<span
+class="math inline">\((\mathrm{o} \cdot
+\mathrm{n})\)</span>，为了数值稳定性考虑，Disney在[8]的实现中将<span
+class="math inline">\(2(\mathrm{o} \cdot \mathrm{n})\)</span>与<span
+class="math inline">\(G_1\)</span>项进行了合并，这样就得到了： <span
+class="math display">\[
+\frac{1}{2(\mathrm{o} \cdot
+\mathrm{n})}G_1(\mathrm{o},\mathrm{m})=\frac{1}{(\mathrm{o} \cdot
+\mathrm{n})+\sqrt{\alpha^2 + (\mathrm{o} \cdot \mathrm{n})^2 -\alpha^2
+(\mathrm{o} \cdot \mathrm{n})^2}} \\
+\frac{1}{2(\mathrm{i} \cdot
+\mathrm{n})}G_1(\mathrm{i},\mathrm{m})=\frac{1}{(\mathrm{i} \cdot
+\mathrm{n})+\sqrt{\alpha^2 + (\mathrm{i} \cdot \mathrm{n})^2 -\alpha^2
+(\mathrm{i} \cdot \mathrm{n})^2}} \tag{22}
+\]</span> 各向异性<span class="math inline">\(G\)</span>的<span
+class="math inline">\(\Lambda\)</span>的定义是一样的，但是<span
+class="math inline">\(a\)</span>的定义有所变化： <span
+class="math display">\[
+a=\frac{1}{\alpha_o \tan \theta_o}
+\]</span> 其中<span class="math inline">\(\alpha_o=\sqrt{\cos^2 \phi_o
+\alpha_x^2+\sin^2 \phi_o
+\alpha_y^2}\)</span>。按照与各向同性推导时一致的思路，并利用(16)中的关系可以易得：
+<span class="math display">\[
+G_1(\mathrm{o},\mathrm{m})=\frac{2}{1+\frac{1}{(\mathrm{o} \cdot
+\mathrm{n})}\sqrt{(\mathrm{o} \cdot \mathrm{n})^2 + (\mathrm{o} \cdot
+\mathrm{x})^2 \alpha_x^2 + (\mathrm{o} \cdot \mathrm{y})^2 \alpha_y^2}}
+\]</span> 同样地，与分布上的归一化常数合并后可以得到： <span
+class="math display">\[
+\frac{1}{2(\mathrm{o} \cdot
+\mathrm{n})}G_1(\mathrm{o},\mathrm{m})=\frac{1}{(\mathrm{o} \cdot
+\mathrm{n})+\sqrt{(\mathrm{o} \cdot \mathrm{n})^2 + (\mathrm{o} \cdot
+\mathrm{x})^2 \alpha_x^2 + (\mathrm{o} \cdot \mathrm{y})^2 \alpha_y^2}}
+\\
+\frac{1}{2(\mathrm{i} \cdot
+\mathrm{n})}G_1(\mathrm{i},\mathrm{m})=\frac{1}{(\mathrm{i} \cdot
+\mathrm{n})+\sqrt{(\mathrm{i} \cdot \mathrm{n})^2 + (\mathrm{i} \cdot
+\mathrm{x})^2 \alpha_x^2 + (\mathrm{i} \cdot \mathrm{y})^2 \alpha_y^2}}
+\tag{23}
+\]</span> [8]中Smith项的实现就是这么来的，因此在最后计算<span
+class="math inline">\(f_r\)</span>时才不需要做归一化。代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">double</span> <span class="title">SmithG_GGX</span><span class="params">(<span class="type">double</span> NdotV, <span class="type">double</span> a2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1.0</span> / (NdotV + std::<span class="built_in">sqrt</span>(<span class="built_in">sqr</span>(a) + <span class="built_in">sqr</span>(NdotV) - <span class="built_in">sqr</span>(a * NdotV)));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">double</span> <span class="title">SmithG_GGX_aniso</span><span class="params">(<span class="type">double</span> NdotV, <span class="type">double</span> VdotX, <span class="type">double</span> VdotY, <span class="type">double</span> ax, <span class="type">double</span> ay)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1.0</span> / (NdotV + std::<span class="built_in">sqrt</span>(<span class="built_in">sqr</span>(VdotX * ax) + <span class="built_in">sqr</span>(VdotY * ay) + <span class="built_in">sqr</span>(NdotV)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="sheenfabric">Sheen(Fabric)</h3>
+<p>Disney观察到MERL中的织物材质都在处于掠射角的情况下展现出了很高的透射能力，并且不是消色差的，猜测是纤维本身的构造所导致的，光线在掠射时会更容易发生透射并且带上材质本身的漫反射颜色。Disney直接在漫反射的基础上添加了一个Sheen
+Lobe来近似这个现象，并仿照高光部分用<code>sheenTint</code>来控制sheen的颜色，额外lobe的公式与Fresnel类似，为<span
+class="math inline">\(\text{sheen} \cdot
+(1-\cos\theta_d)^5\)</span>。</p>
+<h3 id="clearcoatvarnish">Clearcoat(Varnish)</h3>
+<p>在对于<span
+class="math inline">\(D\)</span>项的介绍中我们提到，Disney架设了清漆Clearcoat部分的BRDF是各向同性isotropic的，并将参数固定为：对于<span
+class="math inline">\(D\)</span>项的<span
+class="math inline">\(\gamma=1\)</span>，对于<span
+class="math inline">\(F\)</span>项<span
+class="math inline">\(F_0=0.04\)</span>（对应IOR=1.5），对于<span
+class="math inline">\(G\)</span>项<span
+class="math inline">\(roughness=0.25\)</span>。从代码中可以看到，clearcoat<span
+class="math inline">\(D\)</span>项的<span
+class="math inline">\(roughness\)</span>参数是由<code>clearcoatGloss</code>计算而来的，Disney使用该参数在<span
+class="math inline">\(0.1\)</span>到<span
+class="math inline">\(0.001\)</span>之间进行插值过渡，从而模拟从satin（锻）到gloss清漆材质的外观，具体效果请参考介绍部分的大图。</p>
+<p>Disney在论文中提到，由于会与清漆发生交互的光线能量总占比是很少的，同时为了尽可能保持计算的简单，他们直接把clearcoat
+lobe叠加到了diffuse
+lobe上。这样理论上是能量不守恒的，但是视觉上能说的过去。</p>
+<h3 id="subsurface">Subsurface</h3>
+<p>Disney在Future
+work部分坦言最大的问题缺少一个更直观可控的次表面散射模型，因此2012年的Principled
+BRDF直接用了Hanrahan-Krueger subsurface
+BRDF来做了近似。2015年的新版本给出了更好的解决方案，因此这里就不再赘述了。</p>
+<h3 id="多重重要性采样-mis">多重重要性采样 MIS</h3>
+<p>我们已经知道了对于Specular lobe和Clearcoat lobe要根据<span
+class="math inline">\(D\)</span>进行重要性采样，那么如何选择三个波瓣对应的lobe呢？答案仍然是多重重要性采样。</p>
+<h1 id="disney-principled-bsdf">Disney Principled BSDF</h1>
+<p>这是Disney在2015年提出的Principled
+BRDF的终极版本，添加了对于玻璃等透明物体的支持，并且使用更加符合物理的次表面散射来代替之前的Hanrahan-Krueger
+subsurface BRDF。</p>
 <h1 id="杂记">杂记</h1>
+<ul>
+<li>关于GGX的称谓，Matt Pharr大佬写过<a
+target="_blank" rel="noopener" href="https://pharr.org/matt/blog/2022/05/06/trowbridge-reitz">一篇博客</a>建议大家将名称纠正为TR</li>
+</ul>
 <h1 id="参考">参考</h1>
 <ol type="1">
 <li><a
@@ -460,8 +799,31 @@ Is The NDF Really Defined?</a></li>
 target="_blank" rel="noopener" href="https://pbr-book.org/4ed/Reflection_Models/Roughness_Using_Microfacet_Theory">PBRTv4:
 Roughness Using Microfacet Theory</a></li>
 <li><a
+target="_blank" rel="noopener" href="https://blog.selfshadow.com/publications/s2012-shading-course/burley/s2012_pbs_disney_brdf_slides_v2.pdf">Physically
+Based Shading at Disney</a></li>
+<li><a
 target="_blank" rel="noopener" href="https://blog.selfshadow.com/publications/s2015-shading-course/burley/s2015_pbs_disney_bsdf_slides.pdf">Extending
 the Disney BRDF to a BSDF with Integrated Subsurface Scattering</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://seblagarde.wordpress.com/2013/04/29/memo-on-fresnel-equations/">Memo
+on Fresnel equations</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.reddit.com/r/AskPhysics/comments/zh9cc8/comment/izlloyd/?utm_source=share&amp;utm_medium=web3x&amp;utm_name=web3xcss&amp;utm_term=1&amp;utm_content=share_button">Why
+do metals reflect most light?</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/wdas/brdf/blob/main/src/brdfs/disney.brdf">BRDF
+Explorer Source Code</a></li>
+<li><a target="_blank" rel="noopener" href="https://schuttejoe.github.io/post/disneybsdf/">Implementing
+the Disney BSDF</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://graphics.pixar.com/library/OrthonormalB/paper.pdf">Building
+an Orthonormal Basis, Revisited</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://gdcvault.com/play/1024478/PBR-Diffuse-Lighting-for-GGX">PBR
+Diffuse Lighting for GGX+Smith</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://jcgt.org/published/0003/02/03/paper.pdf">Understanding the
+Masking-Shadowing Function in Microfacet-Based BRDFs</a></li>
 </ol>
 
     </div>
@@ -481,6 +843,9 @@ the Disney BRDF to a BSDF with Integrated Subsurface Scattering</a></li>
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2026/02/24/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E7%A7%AF%E5%88%86/" rel="next" title="重要性采样">
+                  重要性采样 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
