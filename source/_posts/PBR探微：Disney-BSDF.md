@@ -23,21 +23,25 @@ $$
 
  [1]中对于NDF的描述是 `the statistical distribution of surface normals m over the microsurface`，这里的$\mathrm{m}$指的就是微观法线，也就是我们常说的半程向量$\mathrm{h}$。乍一看这个定义似乎说的还是pdf，但NDF实际上是用微观面积与宏观面积的比值来定义的。具体来说，定义宏观面积的微元为$\mathrm{d}A$，微观法线$\mathrm{m}$对应的立体角微元为$\mathrm{d}\mathrm{\omega}_m$，那么$D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m\mathrm{d}A$就等于（微观）法线朝向为$\mathrm{m}$微平面的总面积，因此$D(\mathrm{m})$项可以写为，其中$\mathrm{d}A_m$代表微平面的面积：
 
-$$D(\mathrm{m})=\frac{\d A_m}{\d \mathrm{\omega}_m\mathrm{d}A}$$
-
+$$
+D(\mathrm{m})=\frac{\d A_m}{\d \mathrm{\omega}_m\mathrm{d}A}
+$$
 然后来看下$D$的归一化条件，首先易得微平面投影面积的积分应该为$\mathrm{d}A$：
 
-$$\mathrm{d}A=\int(n \cdot m)\mathrm{d}A_m$$
-
+$$
+\mathrm{d}A=\int(n \cdot m)\mathrm{d}A_m
+$$
 将$D(\mathrm{m})$的定义带入后可得真正的归一化条件：
 
-$$\int_{\Omega}(n \cdot m)D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m=1$$
-
+$$
+\int_{\Omega}(n \cdot m)D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m=1
+$$
 之后就不要再天真地把$D(\mathrm{m})$项看作pdf了，而将其称为面积密度则更合适。
 
 **P.S.** [1]中Walter et al. 实际上给出了更严格的归一化条件，即对于任意的方向$\mathrm{v}$需要满足：
-
-$$\int_{\Omega}(v \cdot m)D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m=(v \cdot m)$$
+$$
+\int_{\Omega}(v \cdot m)D(\mathrm{m})\mathrm{d}\mathrm{\omega}_m=(v \cdot m)
+$$
 
 ## Shadowing-Masking Function G
 
@@ -142,12 +146,12 @@ f_s(\mathrm{i},\mathrm{o},\mathrm{n})=f_r(\mathrm{i},\mathrm{o},\mathrm{n})+f_t(
 $$
 经过消元，反射部分为，就是我们熟悉的Cook-Torrance BRDF：
 $$
-f_r(\mathrm{i},\mathrm{o},\mathrm{n})=\dfrac{F(\mathrm{i},\mathrm{h}_r)G(\mathrm{i},\mathrm{o},\mathrm{h}_r)D(\mathrm{h}_r)}{4 \left| \mathrm{i} \cdot \mathrm{n} \right| \left| \mathrm{o} \cdot \mathrm{n} \right|}
+f_r(\mathrm{i},\mathrm{o},\mathrm{n})=\dfrac{F(\mathrm{i},\mathrm{h}_r)G(\mathrm{i},\mathrm{o},\mathrm{h}_r)D(\mathrm{h}_r)}{4 \left| \mathrm{i} \cdot \mathrm{n} \right| \left| \mathrm{o} \cdot \mathrm{n} \right|} \tag{8} \
 $$
 
 折射部分基本上没什么可消元的，就是单纯把微平面的$f_t^m$带进去即可：
 $$
-f_t(\mathrm{i},\mathrm{o},\mathrm{n})=\left| \dfrac{\mathrm{i} \cdot \mathrm{h}_t}{\mathrm{i} \cdot \mathrm{n}} \right| \left| \dfrac{\mathrm{i} \cdot \mathrm{h}_t}{\mathrm{o} \cdot \mathrm{n}} \right| \dfrac{\eta_o^2(1-F(\mathrm{i},\mathrm{h}_t))G(\mathrm{i},\mathrm{o},\mathrm{h}_t)D(\mathrm{h}_t)}{(\eta_i(\mathrm{i} \cdot \mathrm{h}_t)+\eta_o(\mathrm{o} \cdot \mathrm{h}_t))^2}
+f_t(\mathrm{i},\mathrm{o},\mathrm{n})=\left| \dfrac{\mathrm{i} \cdot \mathrm{h}_t}{\mathrm{i} \cdot \mathrm{n}} \right| \left| \dfrac{\mathrm{i} \cdot \mathrm{h}_t}{\mathrm{o} \cdot \mathrm{n}} \right| \dfrac{\eta_o^2(1-F(\mathrm{i},\mathrm{h}_t))G(\mathrm{i},\mathrm{o},\mathrm{h}_t)D(\mathrm{h}_t)}{(\eta_i(\mathrm{i} \cdot \mathrm{h}_t)+\eta_o(\mathrm{o} \cdot \mathrm{h}_t))^2}  \tag{9}
 $$
 
 到这里，基本定义部分就告一段落，终于可以开始探索Disney BSDF了。
@@ -175,7 +179,7 @@ $$
 
 但是！消光系数$k$大，并不意味着大部分入射光会被金属吸收。金属材质中有大量的自由电子，入射光会与这些电子发生两种交互[7]，要么是被吸收并转化为热能，要么是被重新辐射（反射）出去。电子云还会产生一个反向的电场，阻止光线的继续深入。同时由于光波在金属中会快速衰减，为了保持能量守恒，绝大部分的能量都会走上第二条路径，也就是被反射出去。从下面$F_0$的计算公式也能看出金属的反射能力非常强，当$k$很大时，$F_0$会趋近于1。
 $$
-F_0=\dfrac{(n-1)^2+k^2}{(n+1)^2+k^2}
+F_0=\dfrac{(n-1)^2+k^2}{(n+1)^2+k^2} \tag{10}
 $$
 那既然反射这么强，为啥金属还会有颜色呢？实际上，金属的$n$和$k$都是与波长高度相关的，比如下面黄金的数据：
 
@@ -203,7 +207,7 @@ $$
 
 Disney BRDF最有趣的一点在于它只有一个颜色参数`baseColor`，它既用于控制金属反射的颜色，又用于控制电介质漫反射的颜色。按照之前的分析，电介质的高光是消色差也就白色的，而且它们的$F_0$一般非常小，所以Disney基于电介质平均的$F_0$在$0.04$左右的观察，将`specular`参数设置为了$0.08 \times F_0$，这样当`specular`为$0.5$时正好代表一般的电介质。另外美术也许会想要让这个高光不是消色差的，Disney BRDF引入了`specularTint`来控制高光的颜色，这个值越接近$1$，高光颜色就越向`baseColor`趋同（`sheenTint`也是这个逻辑）。需要注意的是，这个`specular`**只影响电介质**，金属的高光是仅由`baseColor`来控制的！
 
-另外，模型中实际上存在两个Specular Lobe，一个是电介质的Specular Lobe，另一个是金属的Specular Lobe。一开始笔者还对这一点存有疑问，觉得这两个部分应该分开计算。后来想了想，既然我们已经允许电介质与金属的混合了，还有`specularTint`来控制非金属的高光，除掉颜色成因的差异之外两者的微表面反射原理是一致的，完全可以共用同一个BRDF的计算公式。在实践中，只需要根据`metallic`和`specular`对颜色做混合就行了。下面是颜色计算的代码，可以清晰的看出混合的逻辑。tint_color是使用luminance对base_color进行归一化的结果。
+另外，模型中实际上存在两个Specular Lobe，一个是电介质的Specular Lobe，另一个是金属的Specular Lobe。一开始笔者还对这一点存有疑问，觉得这两个部分应该分开计算。后来想了想，既然我们已经允许电介质与金属的混合了，还有`specularTint`来控制非金属的高光，除掉颜色成因的差异之外两者的微表面反射原理是一致的，完全可以共用同一个BRDF的计算公式。在实践中，只需要根据`metallic`和`specular`对颜色做混合就行了。下面是颜色计算的代码，可以清晰地看出混合的逻辑。tint_color是使用luminance对base_color进行归一化的结果。
 
 ```c++
 inline Color CalculateTint(const Color &base_color)
@@ -221,19 +225,231 @@ inline Color CalculateF0(const Color &base_color, const Color &tint_color, doubl
 
 ### 漫反射
 
+Disney观察到不少漫反射材质有着很明显的掠射角自反射（grazing retroreflection），如下图所示，其中$\theta_d$是$\mathrm{h}$与$\mathrm{n}$的夹角。一种可能的原因是，由于表面非常粗糙，所以与菲涅尔公式预测的相反，处于掠射角时折射的比例反而会增大，这些折射的光线在最终表现为一个宏观的specular peak。
 
+![image-20260215181207238](PBR探微：Disney-BSDF/image-20260215181207238.png)
+
+为了还原这个现象，Disney为Lambert Diffuse模型加上了一个与粗糙度相关的权重来模拟这种现象，具体的公式如下，其中$\theta_l$和$\theta_v$分别相对于宏观法线$\mathrm{n}$夹角的余弦。
+$$
+f_d=\frac{\text { baseColor }}{\pi}\left(1+\left(F_{D 90}-1\right)\left(1-\cos \theta_l\right)^5\right)\left(1+\left(F_{D 90}-1\right)\left(1-\cos \theta_v\right)^5\right) \tag{11}
+$$
+$F_{D 90}$与粗糙度相关：
+$$
+F_{D 90}=0.5+2 \cdot roughness \cdot \cos^2\theta_d \tag{12}
+$$
+该模型的效果如下，当粗糙度增大时，BRDF切片右下角的亮度明显增加，而在材料比较光滑时，根据Fresnel定律右下角则较暗。
+
+![image-20260215182739696](PBR探微：Disney-BSDF/image-20260215182739696.png)
 
 ### D
 
+真实的高光具有非常宽广的分布，比如金属铬(Chrome)的高光，对应下面左图中的黑色线条：
 
+![image-20260215183204025](PBR探微：Disney-BSDF/image-20260215183204025.png)
+
+而现有的GGX（也就是Trowbridge-Reitz）和Beckmann都无法很好地拟合这个分布“长尾”的特征。Disney因此根据GGX和Berry分布的特点，创造了GTR也就是Generalized-Trowbridge-Reitz分布，公式和绘图如下，其中$c$是未知的归一化常数，$\alpha$是与粗糙度相关的参数。可以看到GTR有着很优秀的且可调节的长尾特征：
+$$
+D_{\text{GTR}}=\frac{c}{(\alpha^2 \cos^2 \theta_h + \sin^2 \theta_h)^\gamma} \tag{13}
+$$
+![image-20260215185032286](PBR探微：Disney-BSDF/image-20260215185032286.png)
+
+当然，这个$\gamma$参数也是要事先确定下来的，Principled BRDF中一共会使用两个不同的Specular Lobes，分别是对应主要材质的primary lobe，$\gamma=2$，这个实际上就是GGX，以及对应清漆的secondary lobe，$\gamma=1$。
+
+另外这篇论文中也为笔者解答了一个此前困惑许久的问题：为啥有些实时渲染的模型中会有一个叫做perceptual roughness的玩意儿？原来，Disney在试验时发现令$\alpha=roughness^2$会让粗糙度的变化更加`perceptually linear`，因此提出使用平方后的perceptual roughness即$\alpha$来替换GGX中原来的粗糙度。这是一个经验性的改进，没有涉及数学上的推导。
+
+从前置知识和定义部分中我们知道，`specular`参数作为电介质垂直入射时的反射强度，实际上表示的就是归一化的折射率IOR。根据$F_0$的公式(10)来看，`specular`越高意味着IOR也越高，同时`specular`等于0.5时对应的IOR为1.5，这也是个常见的反射率数值，说明归一化是合理的。对于清漆clearcoat层，Disney让IOR固定为了1.5，在这种情况下$F_0$只有0.04，只占反射能量的很小一部分，因此在最终的计算里clearcoat和基础材料的BRDF只要简单相加而无需进行混合。`clearcoat`参数也像`specular`一样做了归一化处理。
+
+#### 归一化
+
+论文的附录部分给出了GTR归一化后的公式，推导思路就是根据之前介绍过的$D$的定义来解出归一化常数$c$即可。
+$$
+D_{\mathrm{GTR}}\left(\theta_h\right)=\frac{(\gamma-1)\left(\alpha^2-1\right)}{\pi(1-\left(\alpha^2\right)^{1-\gamma})} \frac{1}{\left(1+\left(\alpha^2-1\right) \cos ^2 \theta_h\right)^\gamma}  \tag{14}
+$$
+对于primary lobe和secondary lobe来说，更具体的公式如下，由于$\gamma=1$时GTR实际上是未定义的，因此下面secondary lobe的式子实际上取了极限：
+$$
+\begin{aligned}
+D_{\mathrm{GTR}_{2}}\left(\theta_h\right)&=\frac{\alpha^2}{\pi} \frac{1}{(1+(\alpha^2-1) \cos ^2 \theta_h)^{2}}\\
+D_{\mathrm{GTR}_{1}}\left(\theta_h\right)&=\frac{\alpha^2 -1}{\pi\log \alpha^2} \frac{1}{(1+(\alpha^2-1) \cos ^2 \theta_h)}
+\end{aligned} \tag{15}
+$$
+代码如下：
+
+```cpp
+inline double GTR1(double NdotH, double a)
+{
+    if (a >= 1)
+        return inv_pi;
+    double a2 = sqr(a);
+    double t = 1 + (a2 - 1) * sqr(NdotH);
+    return (a2 - 1) / (pi * std::log(a2) * t);
+}
+
+inline double GTR2(double NdotH, double a)
+{
+    if (a >= 1)
+        return inv_pi;
+    double a2 = sqr(a);
+    double t = 1 + (a2 - 1) * sqr(NdotH);
+    return a2 / (pi * sqr(t));
+}
+```
+
+#### 各向异性
+
+为了引入各向异性，首先要建立局部坐标系，$\mathrm{n}$作为up vector，其余两个基向量分别为$\mathrm{x}$和$\mathrm{y}$。`anisotropic`项控制在$\mathrm{x}$和$\mathrm{y}$上的roughness的缩放，具体的转换如下：
+$$
+\begin{aligned}
+aspect&=\sqrt{1-0.9 \cdot anisotropic}\\
+\alpha_x&=roughness^2 / aspect\\
+\alpha_y&=roughness^2 \cdot aspect
+\end{aligned}
+$$
+为了把GTR变成各向异性的，直接用$\frac{\cos^2 \phi}{\alpha_x^2}+\frac{\sin^2 \phi}{\alpha_x^2}$来代替$\frac{1}{\alpha^2}$带入到primary lobe，其中$\theta_h$和$\phi_h$为$\mathrm{h}$在局部坐标系中的球面坐标。由于只有primary lobe会是各向异性的，因此对于Anisotropic GTR的讨论全都假定$\gamma=2$。
+$$
+D_{\mathrm{GTR}_{aniso}}\left(\theta_h\right)=\frac{1}{\pi} \frac{1}{\alpha_x \alpha_y} \frac{1}{(\sin^2 \theta_h (\cos^2 \phi_h/\alpha_x^2 + \sin^2 \phi_h/\alpha_y^2) + \cos^2 \theta_h)^2}
+$$
+另注意到极坐标系与直角坐标系的转换关系：
+$$
+\begin{aligned}
+\mathrm{h} \cdot \mathrm{n} &= \cos \theta_h \\
+\mathrm{h} \cdot \mathrm{x} &= \sin \theta_h \cos \phi_h \\
+\mathrm{h} \cdot \mathrm{y} &= \sin \theta_h \sin \phi_h
+\end{aligned} \tag{16}
+$$
+代入后得到：
+$$
+D_{\mathrm{GTR}_{aniso}}\left(\theta_h\right)=\frac{1}{\pi} \frac{1}{\alpha_x \alpha_y} \frac{1}{((\mathrm{h} \cdot \mathrm{x})^2/\alpha_x^2 + (\mathrm{h} \cdot \mathrm{y})^2/\alpha_y^2 + (\mathrm{h} \cdot \mathrm{n})^2)^2} \tag{17}
+$$
+$\gamma=2$时的代码如下：
+
+```cpp
+inline double GTR2_aniso(double NdotH, double HdotX, double HdotY, double ax, double ay)
+{
+    double t = sqr(HdotX / ax) + sqr(HdotY / ay) + sqr(NdotH);
+    return 1 / (pi * ax * ay * sqr(t));
+}
+```
+
+#### 重要性采样
+
+由于$D$项是对于高光形状影响最大的项，因此根据它进行重要性采样能尽可能地减少方差。只要能够采样出$\mathrm{h}$，便可以根据反射关系算出来$\mathrm{l}$。大致的推导思路就是利用$D$项的归一化性质选择$p(\mathrm{h})=D(\theta_h)\cos \theta_h$，marginalize后利用inverse method来算出uniform random到$\theta$和$\phi$的映射，具体不再展开，这里仅罗列推导结果。
+
+对于isotropic的GTR，重要性采样的公式如下。
+$$
+\begin{aligned}
+\phi_h&=2\pi \xi_1 \\
+\cos \theta_h&=\sqrt{\frac{1-[(\alpha^2)^{1-\gamma}(1-\xi_2)+\xi_2]^{\frac{1}{1-\gamma}}}{1-\alpha^2}}
+\end{aligned} \tag{18}
+$$
+$\gamma=2$或$\gamma=1$时的$\cos \theta_h$的公式分别在下面的第一行和第二行：
+$$
+\cos \theta_h=\sqrt{\frac{1-\xi_2}{1+(\alpha^2-1)\xi_2}}\ ,\ \gamma=2 \\
+\cos \theta_h=\sqrt{\frac{1-(\alpha^2)^{1-\xi_2}}{1-\alpha^2}}\ ,\ \gamma=1 \tag{19}
+$$
+对于anisotropic的GTR，Disney额外引入了投影半程向量$\mathrm{h}'$的概念，用于提高采样的效率：
+$$
+\begin{aligned}
+\sin \phi_h & =\frac{\alpha_y \sin \left(2 \pi \xi_1\right)}{r} \\
+\cos \phi_h & =\frac{\alpha_x \cos \left(2 \pi \xi_1\right)}{r} \\
+\tan \theta_h & =r \sqrt{\frac{\xi_2}{1-\xi_2}} \\
+\mathrm{h}^{\prime} & =\sqrt{\frac{\xi_2}{1-\xi_2}}\left[\alpha_x \cos \left(2 \pi \xi_1\right) \boldsymbol{x}+\alpha_y \sin \left(2 \pi \xi_1\right) \mathrm{y}\right]+\mathrm{n} \\
+\mathrm{h} & =\frac{\mathrm{h}^{\prime}}{\left|\mathrm{h}^{\prime}\right|}
+\end{aligned}  \tag{20}
+$$
 
 ### F
 
+这部分还是使用Schlick Fresnel近似去计算，公式如下，相当于根据$\cos \theta_d$对垂直入射和掠射角两种情况下的反射率做非线性混合：
+$$
+\begin{aligned}
+F_{Schlick}
+&=F_0+(1-F_0)(1-\cos \theta_d)^5\\
+&=F_0\left( 1-(1-\cos \theta_d)^5 \right)+1 \cdot (1-\cos \theta_d)^5
+\end{aligned} \tag{21}
+$$
+代码如下：
 
+```cpp
+inline double SchlickFresnel(double cos_theta_d)
+{
+    cos_theta_d = std::clamp(cos_theta_d, 0.0, 1.0);
+    float cos_theta_d2 = cos_theta_d * cos_theta_d;
+    return cos_theta_d2 * cos_theta_d2 * cos_theta_d;
+}
+//......
+double FH = PBR::SchlickFresnel(LdotH);
+Color Fs = lerp(F0, Color::one(), FH);
+```
 
 ### G
 
+根据[1]和[12]的推导，$G_1$项可以写作：
+$$
+G_1(\mathrm{o},\mathrm{m})=\frac{1}{1+\Lambda(\mathrm{o})}
+$$
+这个$\Lambda$的定义比较复杂，涉及到Smith Masking Function的推导，这里也不展开。这边不直接列公式，是因为Disney在[8]的实现中对于$G$项做了一定的变化，有必要简单推导下。[12]中给出了GGX对应的$\Lambda$：
+$$
+\Lambda(\mathrm{o})=\frac{-1+\sqrt{1+1/a^2}}{2}=\frac{2}{1+\sqrt{1+1/a^2}}
+$$
+其中$a=\frac{1}{\alpha \tan \theta_o}$，$\theta_o$是$\mathrm{o}$与宏观法线的夹角。将三角恒等式$\tan^2 \theta_o=\frac{1-\cos^2 \theta_o}{\cos^2 \theta_o}$带入上式并变化可得：
+$$
+\begin{aligned}
+G_1(\mathrm{o},\mathrm{m})&=\frac{2}{1+\sqrt{1+\alpha^2 \tan^2 \theta_o}} \\
+&=\frac{2}{1+\sqrt{1+\alpha^2 \frac{1-\cos^2 \theta_o}{\cos^2 \theta_o}}} \\
+&=\frac{2}{1+\frac{1}{\cos \theta_o}\sqrt{\cos^2 \theta_o+\alpha^2 (1-\cos^2 \theta_o)}} \\
+&=\frac{2}{1+\frac{1}{\cos \theta_o}\sqrt{\alpha^2 + \cos^2 \theta_o-\alpha^2 \cos^2 \theta_o}} \\
+&=\frac{2}{1+\frac{1}{(\mathrm{o} \cdot \mathrm{n})}\sqrt{\alpha^2 + (\mathrm{o} \cdot \mathrm{n})^2 -\alpha^2 (\mathrm{o} \cdot \mathrm{n})^2}} \\
+\end{aligned}
+$$
+然后很巧的是，在(10)式的分母上正好有一个$(\mathrm{o} \cdot \mathrm{n})$，为了数值稳定性考虑，Disney在[8]的实现中将$2(\mathrm{o} \cdot \mathrm{n})$与$G_1$项进行了合并，这样就得到了：
+$$
+\frac{1}{2(\mathrm{o} \cdot \mathrm{n})}G_1(\mathrm{o},\mathrm{m})=\frac{1}{(\mathrm{o} \cdot \mathrm{n})+\sqrt{\alpha^2 + (\mathrm{o} \cdot \mathrm{n})^2 -\alpha^2 (\mathrm{o} \cdot \mathrm{n})^2}} \\
+\frac{1}{2(\mathrm{i} \cdot \mathrm{n})}G_1(\mathrm{i},\mathrm{m})=\frac{1}{(\mathrm{i} \cdot \mathrm{n})+\sqrt{\alpha^2 + (\mathrm{i} \cdot \mathrm{n})^2 -\alpha^2 (\mathrm{i} \cdot \mathrm{n})^2}} \tag{22}
+$$
+各向异性$G$的$\Lambda$的定义是一样的，但是$a$的定义有所变化：
+$$
+a=\frac{1}{\alpha_o \tan \theta_o}
+$$
+其中$\alpha_o=\sqrt{\cos^2 \phi_o \alpha_x^2+\sin^2 \phi_o \alpha_y^2}$。按照与各向同性推导时一致的思路，并利用(16)中的关系可以易得：
+$$
+G_1(\mathrm{o},\mathrm{m})=\frac{2}{1+\frac{1}{(\mathrm{o} \cdot \mathrm{n})}\sqrt{(\mathrm{o} \cdot \mathrm{n})^2 + (\mathrm{o} \cdot \mathrm{x})^2 \alpha_x^2 + (\mathrm{o} \cdot \mathrm{y})^2 \alpha_y^2}}
+$$
+同样地，与分布上的归一化常数合并后可以得到：
+$$
+\frac{1}{2(\mathrm{o} \cdot \mathrm{n})}G_1(\mathrm{o},\mathrm{m})=\frac{1}{(\mathrm{o} \cdot \mathrm{n})+\sqrt{(\mathrm{o} \cdot \mathrm{n})^2 + (\mathrm{o} \cdot \mathrm{x})^2 \alpha_x^2 + (\mathrm{o} \cdot \mathrm{y})^2 \alpha_y^2}} \\
+\frac{1}{2(\mathrm{i} \cdot \mathrm{n})}G_1(\mathrm{i},\mathrm{m})=\frac{1}{(\mathrm{i} \cdot \mathrm{n})+\sqrt{(\mathrm{i} \cdot \mathrm{n})^2 + (\mathrm{i} \cdot \mathrm{x})^2 \alpha_x^2 + (\mathrm{i} \cdot \mathrm{y})^2 \alpha_y^2}} \tag{23}
+$$
+[8]中Smith项的实现就是这么来的，因此在最后计算$f_r$时才不需要做归一化。代码如下：
 
+```cpp
+inline double SmithG_GGX(double NdotV, double a2)
+{
+    return 1.0 / (NdotV + std::sqrt(sqr(a) + sqr(NdotV) - sqr(a * NdotV)));
+}
+
+inline double SmithG_GGX_aniso(double NdotV, double VdotX, double VdotY, double ax, double ay)
+{
+    return 1.0 / (NdotV + std::sqrt(sqr(VdotX * ax) + sqr(VdotY * ay) + sqr(NdotV)));
+}
+```
+
+### Sheen(Fabric)
+
+Disney观察到MERL中的织物材质都在处于掠射角的情况下展现出了很高的透射能力，并且不是消色差的，猜测是纤维本身的构造所导致的，光线在掠射时会更容易发生透射并且带上材质本身的漫反射颜色。Disney直接在漫反射的基础上添加了一个Sheen Lobe来近似这个现象，并仿照高光部分用`sheenTint`来控制sheen的颜色，额外lobe的公式与Fresnel类似，为$\text{sheen} \cdot (1-\cos\theta_d)^5$。
+
+### Clearcoat(Varnish)
+
+在对于$D$项的介绍中我们提到，Disney架设了清漆Clearcoat部分的BRDF是各向同性isotropic的，并将参数固定为：对于$D$项的$\gamma=1$，对于$F$项$F_0=0.04$（对应IOR=1.5），对于$G$项$roughness=0.25$。从代码中可以看到，clearcoat$D$项的$roughness$参数是由`clearcoatGloss`计算而来的，Disney使用该参数在$0.1$到$0.001$之间进行插值过渡，从而模拟从satin（锻）到gloss清漆材质的外观，具体效果请参考介绍部分的大图。
+
+Disney在论文中提到，由于会与清漆发生交互的光线能量总占比是很少的，同时为了尽可能保持计算的简单，他们直接把clearcoat lobe叠加到了diffuse lobe上。这样理论上是能量不守恒的，但是视觉上能说的过去。
+
+### Subsurface
+
+Disney在Future work部分坦言最大的问题缺少一个更直观可控的次表面散射模型，因此2012年的Principled BRDF直接用了Hanrahan-Krueger subsurface BRDF来做了近似。2015年的新版本给出了更好的解决方案，因此这里就不再赘述了。
+
+### 多重重要性采样 MIS
+
+我们已经知道了对于Specular lobe和Clearcoat lobe要根据$D$进行重要性采样，那么如何选择三个波瓣对应的lobe呢？答案仍然是多重重要性采样。
 
 # Disney Principled BSDF
 
@@ -243,7 +459,7 @@ inline Color CalculateF0(const Color &base_color, const Color &tint_color, doubl
 
 # 杂记
 
-
+- 关于GGX的称谓，Matt Pharr大佬写过[一篇博客](https://pharr.org/matt/blog/2022/05/06/trowbridge-reitz)建议大家将名称纠正为TR
 
 # 参考
 
@@ -256,3 +472,6 @@ inline Color CalculateF0(const Color &base_color, const Color &tint_color, doubl
 7. [Why do metals reflect most light?](https://www.reddit.com/r/AskPhysics/comments/zh9cc8/comment/izlloyd/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
 8. [BRDF Explorer Source Code](https://github.com/wdas/brdf/blob/main/src/brdfs/disney.brdf)
 9. [Implementing the Disney BSDF](https://schuttejoe.github.io/post/disneybsdf/)
+10. [Building an Orthonormal Basis, Revisited](https://graphics.pixar.com/library/OrthonormalB/paper.pdf)
+11. [PBR Diffuse Lighting for GGX+Smith](https://gdcvault.com/play/1024478/PBR-Diffuse-Lighting-for-GGX)
+12. [Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs](https://jcgt.org/published/0003/02/03/paper.pdf)
