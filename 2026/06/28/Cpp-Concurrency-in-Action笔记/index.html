@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"dummyummy.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Chapter 1: Hello, world of concurrency in C++! Chapter 2: Managing threads Chapter 3: Sharing data between threads Mutex  虽然std::mutex提供了lock&#x2F;try_lock&#x2F;unlock，但是在实际使用时还是尽可能使用std::lock_guard，利用RA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cpp Concurrency in Action笔记">
+<meta property="og:url" content="https://dummyummy.github.io/2026/06/28/Cpp-Concurrency-in-Action%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="dummyummy的博客">
+<meta property="og:description" content="Chapter 1: Hello, world of concurrency in C++! Chapter 2: Managing threads Chapter 3: Sharing data between threads Mutex  虽然std::mutex提供了lock&#x2F;try_lock&#x2F;unlock，但是在实际使用时还是尽可能使用std::lock_guard，利用RA">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-28T10:41:58.000Z">
+<meta property="article:modified_time" content="2026-06-28T10:41:58.205Z">
+<meta property="article:author" content="dummyummy">
+<meta property="article:tag" content="Concurrency">
+<meta property="article:tag" content="并发编程">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://dummyummy.github.io/2026/06/28/Cpp-Concurrency-in-Action%E7%AC%94%E8%AE%B0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://dummyummy.github.io/2026/06/28/Cpp-Concurrency-in-Action%E7%AC%94%E8%AE%B0/","path":"2026/06/28/Cpp-Concurrency-in-Action笔记/","title":"Cpp Concurrency in Action笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Cpp Concurrency in Action笔记 | dummyummy的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">dummyummy的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-1-hello-world-of-concurrency-in-c"><span class="nav-number">1.</span> <span class="nav-text">Chapter 1: Hello,
+world of concurrency in C++!</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-2-managing-threads"><span class="nav-number">2.</span> <span class="nav-text">Chapter 2: Managing threads</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-3-sharing-data-between-threads"><span class="nav-number">3.</span> <span class="nav-text">Chapter 3: Sharing data
+between threads</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mutex"><span class="nav-number">3.1.</span> <span class="nav-text">Mutex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84stack"><span class="nav-number">3.2.</span> <span class="nav-text">线程安全的Stack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88push%E6%8E%A5%E5%8F%A3%E8%A6%81%E9%80%89%E7%94%A8%E6%8C%89%E5%80%BC%E4%BC%A0%E9%80%92"><span class="nav-number">3.2.1.</span> <span class="nav-text">为什么push接口要选用按值传递</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%BB%E9%94%81"><span class="nav-number">3.3.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stdunique_lock"><span class="nav-number">3.4.</span> <span class="nav-text">std::unique_lock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%94%AF%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">3.5.</span> <span class="nav-text">唯一初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BD%8E%E9%A2%91%E6%9B%B4%E6%96%B0%E5%8A%A0%E9%80%9F"><span class="nav-number">3.6.</span> <span class="nav-text">为低频更新加速</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reentrant-lock%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81"><span class="nav-number">3.7.</span> <span class="nav-text">Reentrant lock可重入锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#chapter-4-synchronizing-concurrent-operations"><span class="nav-number">4.</span> <span class="nav-text">Chapter 4:
+Synchronizing concurrent operations</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#miscellaneous"><span class="nav-number">5.</span> <span class="nav-text">Miscellaneous</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#rvo%E5%92%8Cnrvo"><span class="nav-number">5.1.</span> <span class="nav-text">RVO和NRVO</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dummyummy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2026/06/28/Cpp-Concurrency-in-Action%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Cpp Concurrency in Action笔记 | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Cpp Concurrency in Action笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-28 18:41:58" itemprop="dateCreated datePublished" datetime="2026-06-28T18:41:58+08:00">2026-06-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="chapter-1-hello-world-of-concurrency-in-c">Chapter 1: Hello,
+world of concurrency in C++!</h1>
+<h1 id="chapter-2-managing-threads">Chapter 2: Managing threads</h1>
+<h1 id="chapter-3-sharing-data-between-threads">Chapter 3: Sharing data
+between threads</h1>
+<h2 id="mutex">Mutex</h2>
+<ul>
+<li><p>虽然std::mutex提供了<code>lock/try_lock/unlock</code>，但是在实际使用时还是尽可能使用std::lock_guard，利用RAII来完成加锁和解锁。std::lock_guard在C++
+17还有一个升级版本叫std::scoped_lock。</p></li>
+<li><p>竞态条件完全不是直接上锁就能避免的，还需遵从如下的几个原则。也就是说，必须严格把对于被mutex保护的内存的访问局限在同于个critical
+section，一点也不能泄露出去，因此在<strong>接口的设计</strong>上必须特别小心。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Don’t pass pointers and references to protected data outside the scope of the lock, whether by returning them from a function, storing them in externally visible memory, or passing them as arguments to user-supplied functions.</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="线程安全的stack">线程安全的Stack</h2>
+<p>以std::stack提供的功能为例，它提供了独立的<code>empty/top/pop</code>接口。这样做在单线程环境下是没有问题的，但是到了多线程环境下，任何的empty和top，以及top和pop之间都可能会有其他的栈操作。比如线程AB都先使用top得到栈顶的值，然后分别pop，结果就是栈顶下面的值在被读取之前就被pop了，显然不行。书中也提到了，这种设计的出发点是防止拷贝时因为内存不足抛出exception导致栈顶的值被丢弃，但是它在多线程环境下反而成了阻碍。</p>
+<p>为了让stack能够在并发环境下工作，首先要对这三个接口进行一定程度上的合并。如果允许top和pop在栈空时抛出异常，那么empty基本就可以省略了。另外top和pop必须进行合并，为了能够正常出栈，需要把top删除，仅保留pop。所以，一个线程安全的栈仅具有pop和一个empty接口，保留empty接口是为了方便使用。</p>
+<p>pop接口的设计也值得斟酌。避免bad_alloc导致操作不完整的最简单方式就是要求调用者预先在外界做好分配并传入引用，但是这种方法的局限性很大，比如某些情况下调用者无从得知要预留多大的空间。如果栈中元素类型有noexcept的拷贝或移动构造的话，说明bad_alloc根本不会出现，方法可以放心地返回一个值。另外容易看出，如果能在出栈之前就预留空间，这样即便有bad_alloc也不会造成操作不完整，因此还可以在pop内部分配一块动态内存用于缓存栈顶的值，然后将指针作为返回值。</p>
+<p>书中给出的设计提供了传引用和返回指针两种接口，pop在栈为空时会抛出异常。</p>
+<h3 id="为什么push接口要选用按值传递">为什么push接口要选用按值传递</h3>
+<p>在并发环境下，我们希望critical
+section能够尽可能地小，因此要保证耗时操作尽可能地在未上锁时进行。如果不是按值传递而是使用左值常引用的话，接口看起来会是下面的样子，导致拷贝在上锁后才发生。而使用按值传递的话，拷贝在push开始执行前就完成了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">push</span><span class="params">(<span class="type">const</span> T &amp;new_value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(m)</span></span>;</span><br><span class="line">    data.<span class="built_in">push</span>(new_value); <span class="comment">// copy作为耗时操作被留在了critical section内</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="死锁">死锁</h2>
+<p>避免死锁的几条通用方针：</p>
+<ol type="1">
+<li>避免嵌套加锁，尽量不要在持有锁的情况下继续尝试上锁，如果不可避免的话就使用std::lock。</li>
+<li>尽量避免在持有锁时调用用户代码，除非确定整条调用链都不会再额外加锁。</li>
+<li>按照各线程统一的顺序去获取锁。本规则是第一条的下位，如果能一次性上锁就优先用规则一。</li>
+<li>将锁划分到不同的层级，示例代码见原书，值得注意的地方就是使用thread_local的变量保留当前线程的优先级。</li>
+</ol>
+<p>thread的join也有可能导致死锁，因此最好不要在持有锁时启动线程，这一点要注意。</p>
+<h2 id="stdunique_lock">std::unique_lock</h2>
+<p>std::unique_lock在mutex上做了一层封装，支持defer_lock模式，通过维护一个额外的标志位换取更大的灵活性，可以随时判断现在是否持有锁而非使用try_lock。如果不是必须要利用这一点，用std::scoped_lock或是std::lock_guard就够了。</p>
+<p>std::unique_lock的典型应用场景就是哪些需要在中途解锁的场景，比如搭配下一章的conditional
+variable使用，在线程进入睡眠之前先行解锁。</p>
+<h2 id="唯一初始化">唯一初始化</h2>
+<ul>
+<li>可以使用std::once_flag搭配std::call_once来保证某个初始化函数只被任何一个线程调用一次，相比使用mutex的额外开销要小很多。如果是C++11及以上的话，标准保证了局部静态变量只会进行唯一的初始化，其他线程在初始化完成之前都会被阻塞。</li>
+</ul>
+<h2 id="为低频更新加速">为低频更新加速</h2>
+<p>当writer仅有一个但reader有多个时，可以考虑使用reader-writer
+mutex，C++17提供了std::shared_mutex和std::shared_timed_mutex。std::shared_timed_mutex额外支持一些时间相关的操作。writer通过std::unique_lock&lt;std::shared_mutex&gt;或std::lock_guard&lt;std::shared_mutex&gt;来加锁，而reader则通过std::shared_lock&lt;std::shared_mutex&gt;来加锁。一旦有writer加锁，所有的reader都会被block，而一旦还有reader持有锁，则writer想要独占锁就会被阻塞。</p>
+<h2 id="reentrant-lock可重入锁">Reentrant lock可重入锁</h2>
+<p>C++通过std::recursive_mutex提供了可重入锁，可以多次加锁，但是必须有相应次数的解锁。书中提到，为了设计上的直观，尽量不要使用可重入锁。</p>
+<h1 id="chapter-4-synchronizing-concurrent-operations">Chapter 4:
+Synchronizing concurrent operations</h1>
+<p>第四章主要内容为C++中实现响应式并发的基础设施。</p>
+<h1 id="miscellaneous">Miscellaneous</h1>
+<h2 id="rvo和nrvo">RVO和NRVO</h2>
+<p>当函数返回一个左值(NRVO)或者是右值(RVO)时，如果接收者是一个constructor，编译器首先会尝试进行就地构造，直接在接收者的内存地址上调用构造函数，相当于函数内部和外部一共就只调用了一次构造函数。如果就地构造失败的话，比如多个返回路径的情况，编译器则会尝试做一次Implicit
+Move，将返回值转换为右值，这样如果接收者有移动构造函数的话就调用，否则就fallback到拷贝构造函数上。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Concurrency/" rel="tag"># Concurrency</a>
+              <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag"># 并发编程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/02/24/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E7%A7%AF%E5%88%86/" rel="prev" title="重要性采样">
+                  <i class="fa fa-angle-left"></i> 重要性采样
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">dummyummy</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

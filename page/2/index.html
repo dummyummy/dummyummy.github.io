@@ -111,16 +111,16 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -137,6 +137,114 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://dummyummy.github.io/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dummyummy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | dummyummy的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/" class="post-title-link" itemprop="url">GAMES202-作业3</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-10 22:14:51" itemprop="dateCreated datePublished" datetime="2025-03-10T22:14:51+08:00">2025-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-11 00:52:27" itemprop="dateModified" datetime="2025-03-11T00:52:27+08:00">2025-03-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/CG/" itemprop="url" rel="index"><span itemprop="name">CG</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>GAMES202 HW3的完成记录~</p>
+<h1 id="总览">总览</h1>
+<p>在延迟渲染管线下，为一个光源为方向光，材质为漫反射 (Diffuse)
+的场景实现屏幕空间下的全局光照效果（两次反射）。</p>
+<p>作业3共分为三个部分： 1. 实现对场景直接光照的着色 (考虑阴影)。 2.
+实现屏幕空间下光线的求交 (SSR)。 3. 实现对场景间接光照的着色。</p>
+<p>作业文档里使用的术语是BSDF，不过既然本次作业只会涉及到漫反射材质，下文可能会出现BSDF和BRDF的互换。</p>
+<h1 id="part-1直接光照">Part 1：直接光照</h1>
+<p>这部分的两个子任务是计算漫反射材质BSDF的值以及光照的强度（包含可见性），非常简单。</p>
+<p>首先是EvalDiffuse函数的实现。虽然EvalDiffuse接收了三个参数<span class="math inline">\(w_i, w_o\)</span>和<span class="math inline">\(uv\)</span>，但是对于漫反射材质来说，前两个代表方向的参数都是不需要的。作业说明中提示要用到保存在G-Buffer中的法线信息，意味着计算出来的BSDF是cosine
+weighted的。知道了这些之后，实现EvalDiffuse就是随手的事啦：</p>
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">vec3</span> EvalDiffuse(<span class="type">vec3</span> wi, <span class="type">vec3</span> wo, <span class="type">vec2</span> uv) &#123;</span><br><span class="line">  <span class="type">vec3</span> albedo = GetGBufferDiffuse(uv);</span><br><span class="line">  <span class="type">vec3</span> n = GetGBufferNormalWorld(uv);</span><br><span class="line">  <span class="type">float</span> cos_theta = <span class="built_in">dot</span>(n, wi);</span><br><span class="line">  <span class="type">vec3</span> bsdf = albedo * <span class="built_in">max</span>(<span class="number">0.0</span>, cos_theta) * INV_PI;</span><br><span class="line">  <span class="keyword">return</span> bsdf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="漫反射bsdf">漫反射BSDF</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/03/10/GAMES202-%E4%BD%9C%E4%B8%9A3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
