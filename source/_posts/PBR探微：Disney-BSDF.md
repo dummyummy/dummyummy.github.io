@@ -1,6 +1,12 @@
 ---
 title: PBR探微：Disney BSDF
 tags:
+  - Disney BRDF
+  - PBR
+  - 离线渲染
+categories:
+  - 计算机图形学
+  - CG
 mathjax: true
 ---
 
