@@ -1,12 +1,14 @@
 ---
 title: Cpp Concurrency in Action笔记
 tags:
-  - Concurrency	
+  - Concurrency
   - 并发编程
 categories:
   - C++
   - 学习笔记
+date: 2026-06-28 18:41:58
 ---
+
 
 # Chapter 1: Hello, world of concurrency in C++!
 
